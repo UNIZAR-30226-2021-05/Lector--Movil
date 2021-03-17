@@ -10,7 +10,8 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'ComponentesApp',
       // home: HomePage(),
-      initialRoute: '/',
+      //initialRoute: '/',
+      initialRoute: 'home',
       routes: getPages(),
     );
   }
