@@ -15,6 +15,6 @@ Map<String, WidgetBuilder> getPages() {
     //HomePage se encarga internamente de hacer slide entre
     //ReadingPage, LibraryPage, SearchPage y ProfilePage.
     //Permite que la barra de navegación sea consistente ¡!
-    'home' : (BuildContext context) => HomePage(),
+    // 'home' : (BuildContext context) => HomePage(),
   };
 }

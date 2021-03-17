@@ -8,10 +8,10 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'ComponentesApp',
+      title: 'BrainBook',
       // home: HomePage(),
       //initialRoute: '/',
-      initialRoute: 'home',
+      initialRoute: '/',
       routes: getPages(),
     );
   }

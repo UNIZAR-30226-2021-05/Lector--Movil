@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:libros/src/pages/home_page.dart';
 import 'package:libros/src/pages/login_page.dart';
 import 'package:libros/src/pages/registration_page.dart';
 
@@ -34,10 +35,8 @@ class FirstPage extends StatelessWidget {
               width: 150,
               child: RaisedButton(
                   onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => LoginPage()),
-                    );
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => LoginPage()));
                   },
                   elevation: 4,
                   textColor: Colors.white,

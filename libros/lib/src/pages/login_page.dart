@@ -73,7 +73,12 @@ class _LoginPageState extends State<LoginPage> {
                           shape: RoundedRectangleBorder(
                               borderRadius:
                                   BorderRadius.all(Radius.circular(20.0))),
-                          onPressed: () {},
+                          onPressed: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => LoginPage()));
+                          },
                           child: Text('Iniciar sesión'),
                         ),
                       ),
