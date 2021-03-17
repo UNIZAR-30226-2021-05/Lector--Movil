@@ -26,7 +26,7 @@ class FirstPage extends StatelessWidget {
             ),
             SizedBox(height: 35),
             Text(
-              'AppName',
+              'BrainBook',
               style: TextStyle(color: Colors.black, fontSize: 30.0),
             ),
             SizedBox(height: 40),
@@ -68,7 +68,7 @@ class FirstPage extends StatelessWidget {
             Container(
               margin: EdgeInsets.only(top: 100),
               child: Text(
-                'AppName ©',
+                'BrainBook ©',
                 style: TextStyle(color: Colors.white, fontSize: 10.0),
               ),
             ),

@@ -32,7 +32,7 @@ class _LoginPageState extends State<LoginPage> {
             ),
             SizedBox(height: 35),
             Text(
-              'AppName',
+              'BrainBook',
               style: TextStyle(color: Colors.black, fontSize: 30.0),
             ),
             SizedBox(height: 20),

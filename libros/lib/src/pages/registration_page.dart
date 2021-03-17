@@ -35,7 +35,7 @@ class _RegisterPageState extends State<RegisterPage> {
               Padding(
                 padding: const EdgeInsets.only(top: 90),
                 child: Text(
-                  'AppName',
+                  'BrainBook',
                   style: TextStyle(color: Colors.white, fontSize: 30.0),
                 ),
               ),
