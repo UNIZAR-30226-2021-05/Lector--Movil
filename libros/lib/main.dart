@@ -10,8 +10,8 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'BrainBook',
       // home: HomePage(),
+      initialRoute: 'home',
       //initialRoute: '/',
-      initialRoute: '/',
       routes: getPages(),
     );
   }

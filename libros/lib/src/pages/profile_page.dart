@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:libros/src/pages/profilePages/configuration_page.dart';
 /*
   Esta pantalla muestra el perfil del usuario
   Está gestionada por el módulo HomePage
@@ -42,9 +43,9 @@ class _ProfilePageState extends State<ProfilePage> {
                           decoration: new BoxDecoration(
                               shape: BoxShape.circle,
                               image: new DecorationImage(
-                                  fit: BoxFit.fill,
+                                  fit: BoxFit.cover,
                                   image: new NetworkImage(
-                                      'https://internationalpadel.com/wp-content/plugins/all-in-one-seo-pack/images/default-user-image.png')))),
+                                      'https://img.huffingtonpost.com/asset/5ead5c6e2500006912eb0beb.png?cache=VGVQqRsEJs&ops=1200_630')))),
                       SizedBox(height: 20),
                       Text("Facundo Garcia Pimienta", textScaleFactor: 1.8),
                       SizedBox(height: 10),
@@ -66,7 +67,12 @@ class _ProfilePageState extends State<ProfilePage> {
                       SizedBox(
                         width: 200,
                         child: RaisedButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => ConfigurationPage()));
+                          },
                           elevation: 4,
                           textColor: Colors.white,
                           color: Colors.blue[900],
