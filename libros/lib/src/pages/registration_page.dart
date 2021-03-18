@@ -106,7 +106,7 @@ class _RegisterPageState extends State<RegisterPage> {
                               print("Voy a registrar al usuario");
                               User usuario = new User(
                                   _nombreUsuario, _email, passFinal.toString());
-                              registrarUsuario(usuario);
+                              registrarUsuario(usuario, context);
                             }
                           },
                           child: Text('Registrarse'),

@@ -10,7 +10,7 @@ String apiUrlLogin = 'http://lectorbrainbook.herokuapp.com/rest-auth/login/';
 String apiUrlRegister =
     'http://lectorbrainbook.herokuapp.com/rest-auth/registration/';
 
-void registrarUsuario(User usuario) async {
+void registrarUsuario(User usuario, BuildContext context) async {
   final toSend = {
     "username": usuario.nombreUsuario,
     "email": usuario.email,
@@ -19,7 +19,32 @@ void registrarUsuario(User usuario) async {
   };
   Uri myUri = Uri.parse(apiUrlRegister);
   http.Response response = await http.post(myUri, body: toSend);
-  print('Response body: ${response.body}');
+  var jsonResponse = null;
+  jsonResponse = json.decode(response.body);
+  if (response.statusCode == 200) {
+    jsonResponse = json.decode(response.body);
+    if (jsonResponse != null) {
+      print(jsonResponse['key']);
+    }
+  } else {
+    print('Usuario o contraseña incorrecto');
+    return showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Vaya! Parece que ya tenemos un usuario registrado'),
+          actions: <Widget>[
+            FlatButton(
+              child: Text('OK'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
 }
 
 void loginUsuario(
