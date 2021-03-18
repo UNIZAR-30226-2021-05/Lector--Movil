@@ -10,8 +10,6 @@ class RegisterPage extends StatefulWidget {
 
 class _RegisterPageState extends State<RegisterPage> {
   String _nombreUsuario = '';
-  // String _apellido = '';
-  // String _fechaNacimiento = '';
   String _email = '';
   String _pass1 = '';
   String _passConfirm = '';
@@ -100,12 +98,12 @@ class _RegisterPageState extends State<RegisterPage> {
                             _validarPassword(_pass1, _passConfirm);
                             _validarEmail(_email);
                             if (okC && okE) {
-                              final passFinal = Crypt.sha256(
-                                  _pass1); //Encriptamos la contrasenya
-                              print(passFinal);
+                              // final passFinal = Crypt.sha256(
+                              //     _pass1); //Encriptamos la contrasenya
+                              print(_pass1);
                               print("Voy a registrar al usuario");
-                              User usuario = new User(
-                                  _nombreUsuario, _email, passFinal.toString());
+                              User usuario =
+                                  new User(_nombreUsuario, _email, _pass1);
                               registrarUsuario(usuario, context);
                             }
                           },

@@ -107,8 +107,7 @@ class _LoginPageState extends State<LoginPage> {
       keyboardType: TextInputType.emailAddress,
       decoration: InputDecoration(
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(20.0)),
-        hintText: 'Correo electrónico',
-        labelText: 'Email',
+        labelText: 'Email o nombre de usuario',
         suffixIcon: Icon(Icons.person),
       ),
       onChanged: (valor) {

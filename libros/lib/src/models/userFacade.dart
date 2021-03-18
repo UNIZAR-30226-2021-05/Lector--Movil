@@ -22,10 +22,10 @@ void registrarUsuario(User usuario, BuildContext context) async {
   http.Response response = await http.post(myUri, body: toSend);
   var jsonResponse = null;
   jsonResponse = json.decode(response.body);
-  // print("Esto es el response: " + response.body);
-  // print("Esto es el json response");
-  // print(jsonResponse);
-  // print("Esto era el json response");
+  print("Esto es el response: " + response.body);
+  print("Esto es el json response");
+  print(jsonResponse);
+  print("Esto era el json response");
   if (jsonResponse != null) {
     print(jsonResponse['key']);
   } else {
