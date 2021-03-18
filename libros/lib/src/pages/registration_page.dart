@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:crypt/crypt.dart';
+import 'package:libros/src/models/user.dart';
+import 'package:libros/src/models/userFacade.dart';
 
 class RegisterPage extends StatefulWidget {
   @override
@@ -7,9 +9,9 @@ class RegisterPage extends StatefulWidget {
 }
 
 class _RegisterPageState extends State<RegisterPage> {
-  String _nombre = '';
-  String _apellido = '';
-  String _fechaNacimiento = '';
+  String _nombreUsuario = '';
+  // String _apellido = '';
+  // String _fechaNacimiento = '';
   String _email = '';
   String _pass1 = '';
   String _passConfirm = '';
@@ -43,18 +45,18 @@ class _RegisterPageState extends State<RegisterPage> {
               Padding(
                 padding:
                     const EdgeInsets.symmetric(horizontal: 70, vertical: 10),
-                child: _crearNombre(),
+                child: _crearNombreUsuario(),
               ),
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 70, vertical: 10),
-                child: _crearApellidos(),
-              ),
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 70, vertical: 10),
-                child: _crearFecha(context),
-              ),
+              // Padding(
+              //   padding:
+              //       const EdgeInsets.symmetric(horizontal: 70, vertical: 10),
+              //   child: _crearApellidos(),
+              // ),
+              // Padding(
+              //   padding:
+              //       const EdgeInsets.symmetric(horizontal: 70, vertical: 10),
+              //   child: _crearFecha(context),
+              // ),
               Padding(
                 padding:
                     const EdgeInsets.symmetric(horizontal: 70, vertical: 10),
@@ -101,7 +103,10 @@ class _RegisterPageState extends State<RegisterPage> {
                               final passFinal = Crypt.sha256(
                                   _pass1); //Encriptamos la contrasenya
                               print(passFinal);
-                              //Puedo proceder a registrar el usuario
+                              print("Voy a registrar al usuario");
+                              User usuario = new User(
+                                  _nombreUsuario, _email, passFinal.toString());
+                              registrarUsuario(usuario);
                             }
                           },
                           child: Text('Registrarse'),
@@ -118,41 +123,41 @@ class _RegisterPageState extends State<RegisterPage> {
     );
   }
 
-  Widget _crearNombre() {
+  Widget _crearNombreUsuario() {
     return TextField(
       // autofocus: true,
       keyboardType: TextInputType.emailAddress,
       decoration: InputDecoration(
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(20.0)),
-        hintText: 'Nombre',
-        labelText: 'Nombre',
+        hintText: 'NombreUsuario',
+        labelText: 'NombreUsuario',
         suffixIcon: Icon(Icons.person),
       ),
       onChanged: (valor) {
         setState(() {
-          _nombre = valor;
+          _nombreUsuario = valor;
         });
       },
     );
   }
 
-  Widget _crearApellidos() {
-    return TextField(
-      // autofocus: true,
-      keyboardType: TextInputType.emailAddress,
-      decoration: InputDecoration(
-        border: OutlineInputBorder(borderRadius: BorderRadius.circular(20.0)),
-        hintText: 'Apellido',
-        labelText: 'Apellido',
-        suffixIcon: Icon(Icons.person),
-      ),
-      onChanged: (valor) {
-        setState(() {
-          _apellido = valor;
-        });
-      },
-    );
-  }
+  // Widget _crearApellidos() {
+  //   return TextField(
+  //     // autofocus: true,
+  //     keyboardType: TextInputType.emailAddress,
+  //     decoration: InputDecoration(
+  //       border: OutlineInputBorder(borderRadius: BorderRadius.circular(20.0)),
+  //       hintText: 'Apellido',
+  //       labelText: 'Apellido',
+  //       suffixIcon: Icon(Icons.person),
+  //     ),
+  //     onChanged: (valor) {
+  //       setState(() {
+  //         _apellido = valor;
+  //       });
+  //     },
+  //   );
+  // }
 
   Widget _crearEmail() {
     return TextField(
@@ -172,37 +177,37 @@ class _RegisterPageState extends State<RegisterPage> {
     );
   }
 
-  Widget _crearFecha(BuildContext context) {
-    return TextField(
-      enableInteractiveSelection: false,
-      controller: _inputFieldDate,
-      decoration: InputDecoration(
-        border: OutlineInputBorder(borderRadius: BorderRadius.circular(20.0)),
-        hintText: 'Fecha de nacimiento',
-        labelText: 'Fecha de nacimiento',
-        suffixIcon: Icon(Icons.calendar_today),
-      ),
-      onTap: () {
-        FocusScope.of(context).requestFocus(new FocusNode());
-        _selectDate(context);
-      },
-    );
-  }
+  // Widget _crearFecha(BuildContext context) {
+  //   return TextField(
+  //     enableInteractiveSelection: false,
+  //     controller: _inputFieldDate,
+  //     decoration: InputDecoration(
+  //       border: OutlineInputBorder(borderRadius: BorderRadius.circular(20.0)),
+  //       hintText: 'Fecha de nacimiento',
+  //       labelText: 'Fecha de nacimiento',
+  //       suffixIcon: Icon(Icons.calendar_today),
+  //     ),
+  //     onTap: () {
+  //       FocusScope.of(context).requestFocus(new FocusNode());
+  //       _selectDate(context);
+  //     },
+  //   );
+  // }
 
-  _selectDate(BuildContext context) async {
-    DateTime picked = await showDatePicker(
-        context: context,
-        initialDate: new DateTime.now(),
-        firstDate: new DateTime(2018),
-        lastDate: new DateTime(2025));
-    // locale: Locale('es', 'ES'));
-    if (picked != null) {
-      setState(() {
-        _fechaNacimiento = picked.toString();
-        _inputFieldDate.text = _fechaNacimiento;
-      });
-    }
-  }
+  // _selectDate(BuildContext context) async {
+  //   DateTime picked = await showDatePicker(
+  //       context: context,
+  //       initialDate: new DateTime.now(),
+  //       firstDate: new DateTime(2018),
+  //       lastDate: new DateTime(2025));
+  //   // locale: Locale('es', 'ES'));
+  //   if (picked != null) {
+  //     setState(() {
+  //       _fechaNacimiento = picked.toString();
+  //       _inputFieldDate.text = _fechaNacimiento;
+  //     });
+  //   }
+  // }
 
   Widget _crearPass1() {
     return TextField(

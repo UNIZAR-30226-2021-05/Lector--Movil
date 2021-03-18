@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:crypt/crypt.dart';
+import 'package:libros/src/models/userFacade.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -74,10 +76,11 @@ class _LoginPageState extends State<LoginPage> {
                               borderRadius:
                                   BorderRadius.all(Radius.circular(20.0))),
                           onPressed: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => LoginPage()));
+                            print("Voy a hacer login");
+                            final passFinal = Crypt.sha256(_pass);
+                            print(_email);
+                            print(passFinal);
+                            loginUsuario(_email, passFinal.toString());
                           },
                           child: Text('Iniciar sesión'),
                         ),

@@ -33,6 +33,7 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   crypt: ^4.0.1
+  http: ^0.13.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
