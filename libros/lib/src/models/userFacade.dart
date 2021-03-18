@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:core';
 import 'package:flutter/cupertino.dart';
@@ -21,13 +22,13 @@ void registrarUsuario(User usuario, BuildContext context) async {
   http.Response response = await http.post(myUri, body: toSend);
   var jsonResponse = null;
   jsonResponse = json.decode(response.body);
-  if (response.statusCode == 200) {
-    jsonResponse = json.decode(response.body);
-    if (jsonResponse != null) {
-      print(jsonResponse['key']);
-    }
+  // print("Esto es el response: " + response.body);
+  // print("Esto es el json response");
+  // print(jsonResponse);
+  // print("Esto era el json response");
+  if (jsonResponse != null) {
+    print(jsonResponse['key']);
   } else {
-    print('Usuario o contraseña incorrecto');
     return showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -62,11 +63,9 @@ void loginUsuario(
   http.Response response = await http.post(myUri, body: toSend);
   var jsonResponse = null;
   jsonResponse = json.decode(response.body);
-  if (response.statusCode == 200) {
-    jsonResponse = json.decode(response.body);
-    if (jsonResponse != null) {
-      print(jsonResponse['key']);
-    }
+  print(jsonResponse);
+  if (jsonResponse != null) {
+    print(jsonResponse['key']);
   } else {
     print('Usuario o contraseña incorrecto');
     return showDialog(

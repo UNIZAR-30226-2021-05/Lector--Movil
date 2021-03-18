@@ -55,6 +55,9 @@ class _ProfilePageState extends State<ProfilePage> {
                         width: 200,
                         child: RaisedButton(
                             onPressed: () {},
+                            shape: RoundedRectangleBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(12.0))),
                             elevation: 4,
                             textColor: Colors.white,
                             color: Colors.blue[900],
@@ -74,6 +77,9 @@ class _ProfilePageState extends State<ProfilePage> {
                                     builder: (context) => ConfigurationPage()));
                           },
                           elevation: 4,
+                          shape: RoundedRectangleBorder(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(12.0))),
                           textColor: Colors.white,
                           color: Colors.blue[900],
                           padding: const EdgeInsets.all(12.0),

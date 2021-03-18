@@ -80,10 +80,10 @@ class _LoginPageState extends State<LoginPage> {
                                   BorderRadius.all(Radius.circular(20.0))),
                           onPressed: () {
                             print("Voy a hacer login");
-                            final passFinal = Crypt.sha256(_pass);
+
                             print(_email);
-                            print(passFinal);
-                            loginUsuario(_email, passFinal.toString(), context,
+                            print(_pass);
+                            loginUsuario(_email, _pass, context,
                                 _controllerEmail, _controllerContrasenya);
                           },
                           child: Text('Iniciar sesión'),

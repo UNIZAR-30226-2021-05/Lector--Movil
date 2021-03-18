@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:libros/src/pages/profilePages/security_page.dart';
 /*
   Esta pantalla muestra la configuracion del usuario
  */
@@ -62,7 +63,10 @@ class _ConfigurationPageState extends State<ConfigurationPage> {
     return SizedBox(
       height: 100,
       child: InkWell(
-        onTap: () {},
+        onTap: () {
+          Navigator.push(
+              context, MaterialPageRoute(builder: (context) => SecurityPage()));
+        },
         child: Row(
           children: [
             Align(
