@@ -1,4 +1,7 @@
+import 'dart:convert';
 import 'dart:core';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'user.dart';
 
@@ -19,12 +22,45 @@ void registrarUsuario(User usuario) async {
   print('Response body: ${response.body}');
 }
 
-void loginUsuario(String username, String pass) async {
+void loginUsuario(
+    String username,
+    String pass,
+    BuildContext context,
+    TextEditingController controlEmail,
+    TextEditingController controlContra) async {
   final toSend = {
     "username": username,
     "password": pass,
   };
+
   Uri myUri = Uri.parse(apiUrlLogin);
   http.Response response = await http.post(myUri, body: toSend);
-  print('Response body: ${response.body}');
+  var jsonResponse = null;
+  jsonResponse = json.decode(response.body);
+  if (response.statusCode == 200) {
+    jsonResponse = json.decode(response.body);
+    if (jsonResponse != null) {
+      print(jsonResponse['key']);
+    }
+  } else {
+    print('Usuario o contraseña incorrecto');
+    return showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Email o contraseña incorrecto'),
+          actions: <Widget>[
+            FlatButton(
+              child: Text('OK'),
+              onPressed: () {
+                Navigator.of(context).pop();
+                controlContra.clear();
+                controlEmail.clear();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
 }

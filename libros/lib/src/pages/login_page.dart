@@ -10,6 +10,9 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   String _email = '';
   String _pass = '';
+  var _controllerEmail = TextEditingController();
+  var _controllerContrasenya = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -80,7 +83,8 @@ class _LoginPageState extends State<LoginPage> {
                             final passFinal = Crypt.sha256(_pass);
                             print(_email);
                             print(passFinal);
-                            loginUsuario(_email, passFinal.toString());
+                            loginUsuario(_email, passFinal.toString(), context,
+                                _controllerEmail, _controllerContrasenya);
                           },
                           child: Text('Iniciar sesión'),
                         ),
@@ -99,6 +103,7 @@ class _LoginPageState extends State<LoginPage> {
   Widget _ponerEmail() {
     return TextField(
       // autofocus: true,
+      controller: _controllerEmail,
       keyboardType: TextInputType.emailAddress,
       decoration: InputDecoration(
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(20.0)),
@@ -117,6 +122,7 @@ class _LoginPageState extends State<LoginPage> {
   Widget _ponerContrasenya() {
     return TextField(
       // autofocus: true,
+      controller: _controllerContrasenya,
       obscureText: true,
       keyboardType: TextInputType.visiblePassword,
       decoration: InputDecoration(
