@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:libros/src/pages/home_page.dart';
+import 'package:libros/src/pages/login_page.dart';
 import 'user.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -32,6 +33,23 @@ void registrarUsuario(User usuario, BuildContext context) async {
   print("Esto era el json response");
   if (response.statusCode == 200) {
     print(jsonResponse['key']);
+    return showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Usuario registrado satisfactoriamente. Bienvenido!'),
+          actions: <Widget>[
+            FlatButton(
+              child: Text('Iniciar sesión'),
+              onPressed: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => LoginPage()));
+              },
+            ),
+          ],
+        );
+      },
+    );
   } else {
     return showDialog(
       context: context,
