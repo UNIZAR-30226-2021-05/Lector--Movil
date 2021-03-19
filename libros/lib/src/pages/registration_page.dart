@@ -23,98 +23,105 @@ class _RegisterPageState extends State<RegisterPage> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: Center(
-        child: Container(
-          decoration: BoxDecoration(
-              gradient: LinearGradient(
-                  begin: Alignment.topRight,
-                  end: Alignment.bottomLeft,
-                  colors: [Colors.blue, Colors.red])),
-          child: Column(
-            mainAxisSize: MainAxisSize.max,
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(top: 90),
-                child: Text(
-                  'BrainBook',
-                  style: TextStyle(color: Colors.white, fontSize: 30.0),
+        child: SingleChildScrollView(
+          reverse: true,
+          child: Container(
+            decoration: BoxDecoration(
+                gradient: LinearGradient(
+                    begin: Alignment.topRight,
+                    end: Alignment.bottomLeft,
+                    colors: [Colors.blue, Colors.red])),
+            child: Column(
+              mainAxisSize: MainAxisSize.max,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(top: 90),
+                  child: Text(
+                    'BrainBook',
+                    style: TextStyle(color: Colors.white, fontSize: 30.0),
+                  ),
                 ),
-              ),
-              SizedBox(height: 50),
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 70, vertical: 10),
-                child: _crearNombreUsuario(),
-              ),
-              // Padding(
-              //   padding:
-              //       const EdgeInsets.symmetric(horizontal: 70, vertical: 10),
-              //   child: _crearApellidos(),
-              // ),
-              // Padding(
-              //   padding:
-              //       const EdgeInsets.symmetric(horizontal: 70, vertical: 10),
-              //   child: _crearFecha(context),
-              // ),
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 70, vertical: 10),
-                child: _crearEmail(),
-              ),
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 70, vertical: 10),
-                child: _crearPass1(),
-              ),
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 70, vertical: 10),
-                child: _crearPass2(),
-              ),
-              SizedBox(height: 30),
-              Padding(
-                padding: const EdgeInsets.all(20.0),
-                child: Align(
-                  alignment: Alignment.bottomLeft,
-                  child: Row(
-                    children: [
-                      RaisedButton(
-                        color: Colors.purpleAccent,
-                        shape: RoundedRectangleBorder(
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(20.0))),
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                        child: Icon(Icons.arrow_back_ios_sharp),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 175.0),
-                        child: RaisedButton(
-                          color: Colors.blue,
+                SizedBox(height: 50),
+                Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 70, vertical: 10),
+                  child: _crearNombreUsuario(),
+                ),
+                // Padding(
+                //   padding:
+                //       const EdgeInsets.symmetric(horizontal: 70, vertical: 10),
+                //   child: _crearApellidos(),
+                // ),
+                // Padding(
+                //   padding:
+                //       const EdgeInsets.symmetric(horizontal: 70, vertical: 10),
+                //   child: _crearFecha(context),
+                // ),
+                Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 70, vertical: 10),
+                  child: _crearEmail(),
+                ),
+                Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 70, vertical: 10),
+                  child: _crearPass1(),
+                ),
+                Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 70, vertical: 10),
+                  child: _crearPass2(),
+                ),
+                SizedBox(height: 30),
+                Padding(
+                  padding: const EdgeInsets.all(20.0),
+                  child: Align(
+                    alignment: Alignment.bottomLeft,
+                    child: Row(
+                      children: [
+                        RaisedButton(
+                          color: Colors.purpleAccent,
                           shape: RoundedRectangleBorder(
                               borderRadius:
                                   BorderRadius.all(Radius.circular(20.0))),
                           onPressed: () {
-                            _validarPassword(_pass1, _passConfirm);
-                            _validarEmail(_email);
-                            if (okC && okE) {
-                              // final passFinal = Crypt.sha256(
-                              //     _pass1); //Encriptamos la contrasenya
-                              print(_pass1);
-                              print("Voy a registrar al usuario");
-                              User usuario =
-                                  new User(_nombreUsuario, _email, _pass1);
-                              registrarUsuario(usuario, context);
-                            }
+                            Navigator.pop(context);
                           },
-                          child: Text('Registrarse'),
+                          child: Icon(Icons.arrow_back_ios_sharp),
                         ),
-                      ),
-                    ],
+                        Padding(
+                          padding: const EdgeInsets.only(left: 175.0),
+                          child: RaisedButton(
+                            color: Colors.blue,
+                            shape: RoundedRectangleBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(20.0))),
+                            onPressed: () {
+                              _validarPassword(_pass1, _passConfirm);
+                              _validarEmail(_email);
+                              if (okC && okE) {
+                                // final passFinal = Crypt.sha256(
+                                //     _pass1); //Encriptamos la contrasenya
+                                print(_pass1);
+                                print("Voy a registrar al usuario");
+                                User usuario =
+                                    new User(_nombreUsuario, _email, _pass1);
+                                registrarUsuario(usuario, context);
+                              }
+                            },
+                            child: Text('Registrarse'),
+                          ),
+                        ),
+                        SizedBox(
+                          //Este relleno evita que el teclado tape los campos
+                          height: MediaQuery.of(context).viewInsets.bottom,
+                        ),
+                      ],
+                    ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
