@@ -1,9 +1,12 @@
-
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import 'login_page.dart';
 import 'reading_page.dart';
 import 'library_page.dart';
 import 'search_page.dart';
 import 'profile_page.dart';
+
 /*
   Esta pantalla implementa el PageView y el BottomNavigatorBar
   Permite que el usuario pueda desplazarse entre las pantallas haciendo slide
@@ -26,7 +29,26 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   //Índice inicial del NavigationBar
   int currentIndex = 0;
+  SharedPreferences sharedPreferences;
 
+  @override
+  void initState() {
+    super.initState();
+    checkLoginStatus();
+  }
+
+  checkLoginStatus() async {
+    sharedPreferences = await SharedPreferences.getInstance();
+    print("Estoy comprobando si tengo que ir a un lado o a otro");
+    if (sharedPreferences.getString("key") == null) {
+      print("Te tengo que llevar al login que no estas logueado");
+      Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (BuildContext context) => LoginPage()),
+          (Route<dynamic> route) => false);
+    } else {
+      print("No bro, esta es tu key: " + sharedPreferences.getString("key"));
+    }
+  }
 
   PageController pageController = PageController(
     initialPage: 0,
@@ -53,6 +75,7 @@ class _HomePageState extends State<HomePage> {
       ),
     ];
   }
+
   Widget buildPageView() {
     return PageView(
       controller: pageController,
@@ -80,9 +103,11 @@ class _HomePageState extends State<HomePage> {
   void bottomTapped(int index) {
     setState(() {
       currentIndex = index;
-      pageController.animateToPage(index, duration: Duration(milliseconds: 500), curve: Curves.ease);
+      pageController.animateToPage(index,
+          duration: Duration(milliseconds: 500), curve: Curves.ease);
     });
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -98,5 +123,4 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
-
 }

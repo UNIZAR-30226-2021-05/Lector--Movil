@@ -2,6 +2,10 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:libros/src/pages/profilePages/security_page.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import '../login_page.dart';
+
 /*
   Esta pantalla muestra la configuracion del usuario
  */
@@ -13,6 +17,7 @@ class ConfigurationPage extends StatefulWidget {
 
 //No incluir Scaffold (lo añade HomePage)
 class _ConfigurationPageState extends State<ConfigurationPage> {
+  SharedPreferences sharedPreferences;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -153,7 +158,15 @@ class _ConfigurationPageState extends State<ConfigurationPage> {
           color: Colors.red,
           shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.all(Radius.circular(12.0))),
-          onPressed: () {},
+          onPressed: () async {
+            sharedPreferences = await SharedPreferences.getInstance();
+            sharedPreferences.clear();
+            sharedPreferences.commit();
+            Navigator.of(context).pushAndRemoveUntil(
+                MaterialPageRoute(
+                    builder: (BuildContext context) => LoginPage()),
+                (Route<dynamic> route) => false);
+          },
           child: Text(
             'Cerrar sesión',
             style: TextStyle(color: Colors.white, fontSize: 18),

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:libros/src/app_routes.dart';
+import 'package:libros/src/pages/first_page.dart';
+import 'package:libros/src/pages/login_page.dart';
 
 void main() => runApp(MyApp());
 
@@ -10,8 +12,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'BrainBook',
       // home: HomePage(),
-      initialRoute: '/',
-      //initialRoute: '/',
+      initialRoute: 'home',
       routes: getPages(),
     );
   }
