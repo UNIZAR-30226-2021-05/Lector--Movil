@@ -26,6 +26,8 @@ class _RegisterPageState extends State<RegisterPage> {
         child: SingleChildScrollView(
           reverse: true,
           child: Container(
+            width: MediaQuery.of(context).size.width,
+            height: MediaQuery.of(context).size.height,
             decoration: BoxDecoration(
                 gradient: LinearGradient(
                     begin: Alignment.topRight,

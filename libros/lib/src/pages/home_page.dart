@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:libros/src/pages/first_page.dart';
+import 'package:libros/src/pages/registration_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'login_page.dart';
@@ -43,7 +45,7 @@ class _HomePageState extends State<HomePage> {
     if (sharedPreferences.getString("key") == null) {
       print("Te tengo que llevar al login que no estas logueado");
       Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(builder: (BuildContext context) => LoginPage()),
+          MaterialPageRoute(builder: (BuildContext context) => FirstPage()),
           (Route<dynamic> route) => false);
     } else {
       print("No bro, esta es tu key: " + sharedPreferences.getString("key"));

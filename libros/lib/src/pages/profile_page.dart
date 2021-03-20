@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:libros/src/pages/profilePages/configuration_page.dart';
+import 'package:libros/src/pages/profilePages/edit_profile.dart';
 /*
   Esta pantalla muestra el perfil del usuario
   Está gestionada por el módulo HomePage
@@ -54,7 +55,12 @@ class _ProfilePageState extends State<ProfilePage> {
                       SizedBox(
                         width: 200,
                         child: RaisedButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => EditProfile()));
+                            },
                             shape: RoundedRectangleBorder(
                                 borderRadius:
                                     BorderRadius.all(Radius.circular(12.0))),

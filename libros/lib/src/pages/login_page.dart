@@ -19,14 +19,16 @@ class _LoginPageState extends State<LoginPage> {
       resizeToAvoidBottomInset: false,
       body: Center(
           child: SingleChildScrollView(
-            reverse:true,
-            child: Container(
-        decoration: BoxDecoration(
+        reverse: true,
+        child: Container(
+          width: MediaQuery.of(context).size.width,
+          height: MediaQuery.of(context).size.height,
+          decoration: BoxDecoration(
               gradient: LinearGradient(
                   begin: Alignment.bottomCenter,
                   end: Alignment.topCenter,
                   colors: [Colors.blue, Colors.green])),
-        child: Column(
+          child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
@@ -44,11 +46,13 @@ class _LoginPageState extends State<LoginPage> {
               ),
               SizedBox(height: 20),
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 70, vertical: 10),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 70, vertical: 10),
                 child: _ponerEmail(),
               ),
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 70, vertical: 10),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 70, vertical: 10),
                 child: _ponerContrasenya(),
               ),
               SizedBox(height: 30),
@@ -101,9 +105,9 @@ class _LoginPageState extends State<LoginPage> {
                 height: MediaQuery.of(context).viewInsets.bottom,
               ),
             ],
+          ),
         ),
-      ),
-          )),
+      )),
     );
   }
 

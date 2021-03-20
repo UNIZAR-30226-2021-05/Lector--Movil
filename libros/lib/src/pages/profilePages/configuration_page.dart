@@ -1,10 +1,12 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:libros/src/pages/first_page.dart';
 import 'package:libros/src/pages/profilePages/security_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../login_page.dart';
+import '../registration_page.dart';
 
 /*
   Esta pantalla muestra la configuracion del usuario
@@ -164,7 +166,7 @@ class _ConfigurationPageState extends State<ConfigurationPage> {
             sharedPreferences.commit();
             Navigator.of(context).pushAndRemoveUntil(
                 MaterialPageRoute(
-                    builder: (BuildContext context) => LoginPage()),
+                    builder: (BuildContext context) => FirstPage()),
                 (Route<dynamic> route) => false);
           },
           child: Text(
