@@ -15,6 +15,7 @@ String apiUrlRegister =
     'http://lectorbrainbook.herokuapp.com/rest-auth/registration/';
 
 void registrarUsuario(User usuario, BuildContext context) async {
+  SharedPreferences sp;
   final toSend = {
     "username": usuario.nombreUsuario,
     "email": usuario.email,
@@ -33,6 +34,8 @@ void registrarUsuario(User usuario, BuildContext context) async {
   print("Esto era el json response");
   if (response.statusCode == 200) {
     print(jsonResponse['key']);
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    sharedPreferences.setString("email", usuario.email);
     return showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -93,6 +96,9 @@ void loginUsuario(
   if (response.statusCode == 200) {
     print(jsonResponse['key']);
     sharedPreferences.setString("key", jsonResponse['key']);
+    sharedPreferences.setString("nombreUsuario", username);
+    // sharedPreferences.setString("email", email);
+    sharedPreferences.setString("contrasenya", pass);
     print("Te mando al homepage");
     Navigator.of(context).pushAndRemoveUntil(
         MaterialPageRoute(builder: (BuildContext context) => HomePage()),

@@ -1,12 +1,33 @@
 import 'package:flutter/material.dart';
 import 'package:libros/src/pages/profilePages/configuration_page.dart';
 import 'package:libros/src/pages/profilePages/edit_profile.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
 /*
   Esta pantalla muestra el perfil del usuario
   Está gestionada por el módulo HomePage
  */
+String _username = '';
+String _email = '';
 
 class ProfilePage extends StatefulWidget {
+  SharedPreferences _sp;
+
+  ProfilePage() {
+    _obtenerNombreUsuario();
+    _obtenerEmail();
+  }
+
+  _obtenerNombreUsuario() async {
+    _sp = await SharedPreferences.getInstance();
+    _username = _sp.getString("nombreUsuario");
+  }
+
+  _obtenerEmail() async {
+    _sp = await SharedPreferences.getInstance();
+    _email = _sp.getString("email");
+  }
+
   @override
   _ProfilePageState createState() => _ProfilePageState();
 }
@@ -48,9 +69,9 @@ class _ProfilePageState extends State<ProfilePage> {
                                   image: new NetworkImage(
                                       'https://img.huffingtonpost.com/asset/5ead5c6e2500006912eb0beb.png?cache=VGVQqRsEJs&ops=1200_630')))),
                       SizedBox(height: 20),
-                      Text("Facundo Garcia Pimienta", textScaleFactor: 1.8),
+                      Text(_username, textScaleFactor: 1.8),
                       SizedBox(height: 10),
-                      Text("facundo@gmail.com", textScaleFactor: 1.3),
+                      Text(_email, textScaleFactor: 1.3),
                       SizedBox(height: 50),
                       SizedBox(
                         width: 200,

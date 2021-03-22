@@ -49,6 +49,9 @@ class _HomePageState extends State<HomePage> {
           (Route<dynamic> route) => false);
     } else {
       print("No bro, esta es tu key: " + sharedPreferences.getString("key"));
+      print("Este es tu username: " +
+          sharedPreferences.getString("nombreUsuario"));
+      print("Este es tu pass: " + sharedPreferences.getString("contrasenya"));
     }
   }
 

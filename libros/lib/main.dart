@@ -1,9 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:libros/src/app_routes.dart';
-import 'package:libros/src/pages/first_page.dart';
-import 'package:libros/src/pages/login_page.dart';
 
-void main() => runApp(MyApp());
+import 'package:shared_preferences/shared_preferences.dart';
+
+SharedPreferences sp;
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  sp = await SharedPreferences.getInstance();
+  runApp(MyApp());
+}
 
 class MyApp extends StatelessWidget {
   @override
