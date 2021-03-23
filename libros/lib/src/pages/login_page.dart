@@ -16,77 +16,6 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
-<<<<<<< HEAD
-      body: Center(
-          child: Form(
-        key: _formKey,
-        child: SingleChildScrollView(
-          reverse: true,
-          child: Container(
-            width: MediaQuery.of(context).size.width,
-            height: MediaQuery.of(context).size.height,
-            /*decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                        begin: Alignment.bottomCenter,
-                        end: Alignment.topCenter,
-                        colors: [Colors.blue, Colors.green])),*/
-            decoration: BoxDecoration(
-              image: DecorationImage(
-                image: AssetImage("assets/bg.jpg"),
-                fit: BoxFit.fill,
-              ),
-            ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                SizedBox(height: 150),
-                Align(
-                  child: Image(
-                    image: AssetImage('assets/logo.png'),
-                    height: 120,
-                  ),
-                ),
-                SizedBox(height: 35),
-                Text(
-                  'BrainBook',
-                  style: TextStyle(color: Colors.black, fontSize: 30.0),
-                ),
-                SizedBox(height: 20),
-                Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 70, vertical: 10),
-                  child: _ponerEmailOrUsername(),
-                ),
-                Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 70, vertical: 10),
-                  child: _ponerContrasenya(),
-                ),
-                SizedBox(height: 30),
-                Padding(
-                  padding: const EdgeInsets.all(20.0),
-                  child: Align(
-                    alignment: Alignment.bottomLeft,
-                    child: Row(
-                      children: [
-                        SizedBox(
-                          width: 140,
-                          child: RaisedButton(
-                            color: Colors.white,
-                            shape: RoundedRectangleBorder(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(20.0))),
-                            onPressed: () {
-                              Navigator.pop(context);
-                            },
-                            child: Icon(Icons.arrow_back_ios_sharp),
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 80),
-                          child: SizedBox(
-=======
       body: SafeArea(
         child: Container(
           width: MediaQuery.of(context).size.width,
@@ -135,42 +64,16 @@ class _LoginPageState extends State<LoginPage> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           SizedBox(
->>>>>>> 116a689a6168c1cc5c1ae281836ed03513cf3bf2
                             width: 140,
                             child: RaisedButton(
                               color: Colors.white,
                               shape: RoundedRectangleBorder(
                                   borderRadius:
-<<<<<<< HEAD
-                                      BorderRadius.all(Radius.circular(20.0))),
-                              onPressed: () async {
-                                print("Voy a hacer login");
-                                if (_formKey.currentState.validate()) {
-                                  //Caso formulario correcto
-                                  print(_controllerEmailOrUsername);
-                                  print(_controllerContrasenya);
-                                  //Comprobación login correcto en backend
-                                  bool backendOk = await loginUsuario(
-                                      _controllerEmailOrUsername.text,
-                                      _controllerContrasenya.text);
-                                  if (backendOk) {
-                                    //Caso login correcto en backend
-                                    print("Te mando al homepage");
-                                    Navigator.pushReplacementNamed(
-                                        context, 'home');
-                                  } else {
-                                    _errorLoginBackend();
-                                  }
-                                }
-                              },
-                              child: Text('Iniciar sesión'),
-=======
                                   BorderRadius.all(Radius.circular(20.0))),
                               onPressed: () {
                                 Navigator.pop(context);
                                 },
                               child: Icon(Icons.arrow_back_ios_sharp),
->>>>>>> 116a689a6168c1cc5c1ae281836ed03513cf3bf2
                             ),
                           ),
                           SizedBox(
@@ -212,11 +115,7 @@ class _LoginPageState extends State<LoginPage> {
             ),
           ),
         ),
-<<<<<<< HEAD
-      )),
-=======
       ),
->>>>>>> 116a689a6168c1cc5c1ae281836ed03513cf3bf2
     );
   }
 
