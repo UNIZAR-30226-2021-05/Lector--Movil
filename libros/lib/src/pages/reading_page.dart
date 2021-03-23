@@ -48,7 +48,6 @@ class _ReadingPageState extends State<ReadingPage> {
                     child: ListView.builder(
                       itemCount: readingBooks.length,
                       physics: BouncingScrollPhysics(),
-                      //shrinkWrap: true,
                       itemBuilder: (context, index) {
                         return  _bookCard(readingBooks[index]);
                       },
@@ -66,17 +65,56 @@ class _ReadingPageState extends State<ReadingPage> {
   //TODO: Hacer las card pulsables
   Widget _bookCard(Book book) {
     return Container(
-      height:150,
+      height:180,
+      padding: EdgeInsets.all(4.0),
       child: Card(
+        elevation: 0.0,
         child:Row(
           children: <Widget>[
-           Padding(
-             padding: EdgeInsets.all(4.0),
-             child: Image.network(book.pathCover,
+           Material(
+             elevation: 10.0,
+             borderRadius: BorderRadius.circular(10.0),
+             child:ClipRRect(
+               borderRadius: BorderRadius.all(
+                 Radius.circular(10.0),
+               ),
+               child: Image.network(book.pathCover,
+               ),
              ),
            ),
            SizedBox(width: 10),
-           Text(book.title),
+           Flexible(
+             child: Column(
+               mainAxisAlignment: MainAxisAlignment.center,
+               crossAxisAlignment: CrossAxisAlignment.start,
+               children: <Widget>[
+                 Text(
+                   book.title,
+                   overflow: TextOverflow.ellipsis,
+                   style: TextStyle(
+                     fontSize: 20.0,
+                     fontWeight: FontWeight.bold,
+                   ),
+                 ),
+                 SizedBox(height: 10.0),
+                 Text(
+                   book.author,
+                   overflow: TextOverflow.ellipsis,
+                   style: TextStyle(
+                     fontSize: 17.0,
+                     fontWeight: FontWeight.bold,
+                     color:Colors.blue,
+                   ),
+                 ),
+                 SizedBox(height: 10.0),
+                 Text(book.synopsis,
+                   overflow: TextOverflow.ellipsis,
+                   maxLines: 3,
+                 )
+               ],
+             ),
+           )
+
           ],
         )
       ),

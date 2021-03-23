@@ -12,9 +12,11 @@ List<Book> ReadingBooksList(String username) {
   for (var i = 0; i < 10; i += 1) {
     readingBooks.add(Book(
         "The Arrivals",
+        "Patrick Jordan",
         "https://d1csarkz8obe9u.cloudfront"
             ".net/posterpreviews/sci-fi-book-cover-template-a1ec26573b7a71617c38ffc6e356eef9_screen.jpg?ts=1561547637",
-        ''));
+        'Hace mucho tiempo en una ciudad muy lejana un niño se encontraba'
+            ' paseando cuando derepente...', ));
   }
   return readingBooks;
 }
