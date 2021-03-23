@@ -19,7 +19,7 @@ class MyApp extends StatelessWidget {
       title: 'BrainBook',
       theme: ThemeConfig.lightTheme,
       // home: HomePage(),
-      initialRoute: '/',
+      initialRoute: 'home',
       routes: getPages(),
     );
   }

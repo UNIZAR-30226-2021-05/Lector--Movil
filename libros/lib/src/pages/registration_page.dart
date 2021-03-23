@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:crypt/crypt.dart';
+import 'package:flutter/painting.dart';
 import 'package:libros/src/models/user.dart';
 import 'package:libros/src/models/userFacade.dart';
 
@@ -9,108 +10,94 @@ class RegisterPage extends StatefulWidget {
 }
 
 class _RegisterPageState extends State<RegisterPage> {
-
-  final _formKey = GlobalKey<FormState>();
+  final _registerKey = GlobalKey<FormState>();
   var _controllerUsername = TextEditingController();
   var _controllerEmail = TextEditingController();
   var _controllerPass1 = TextEditingController();
   var _controllerPass2 = TextEditingController();
 
-
-
-
-  TextEditingController _inputFieldDate = new TextEditingController();
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      body: Center(
-        child: Form(
-          key: _formKey,
+      body: SafeArea(
+        child: Container(
+          width: MediaQuery.of(context).size.width,
+          height: MediaQuery.of(context).size.height,
+          /*decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                        begin: Alignment.topRight,
+                        end: Alignment.bottomLeft,
+                        colors: [Colors.blue, Colors.red])),*/
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage("assets/bg.jpg"),
+              fit: BoxFit.fill,
+            ),
+          ),
           child: SingleChildScrollView(
             reverse: true,
-            child: Container(
-              width: MediaQuery.of(context).size.width,
-              height: MediaQuery.of(context).size.height,
-              /*decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                      begin: Alignment.topRight,
-                      end: Alignment.bottomLeft,
-                      colors: [Colors.blue, Colors.red])),*/
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                  image: AssetImage("assets/bg.jpg"),
-                  fit: BoxFit.fill,
-                ),
-              ),
-              child: Column(
-                mainAxisSize: MainAxisSize.max,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(top: 90),
-                    child: Text(
-                      'BrainBook',
-                      style: TextStyle(color: Colors.white, fontSize: 30.0),
-                    ),
-                  ),
-                  SizedBox(height: 50),
-                  Padding(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 70, vertical: 10),
-                    child: _crearNombreUsuario(),
-                  ),
-                  // Padding(
-                  //   padding:
-                  //       const EdgeInsets.symmetric(horizontal: 70, vertical: 10),
-                  //   child: _crearApellidos(),
-                  // ),
-                  // Padding(
-                  //   padding:
-                  //       const EdgeInsets.symmetric(horizontal: 70, vertical: 10),
-                  //   child: _crearFecha(context),
-                  // ),
-                  Padding(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 70, vertical: 10),
-                    child: _crearEmail(),
-                  ),
-                  Padding(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 70, vertical: 10),
-                    child: _crearPass1(),
-                  ),
-                  Padding(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 70, vertical: 10),
-                    child: _crearPass2(_controllerPass1),
-                  ),
-                  SizedBox(height: 30),
-                  Padding(
-                    padding: const EdgeInsets.all(20.0),
-                    child: Align(
-                      alignment: Alignment.bottomLeft,
-                      child: Row(
+            child: Padding(
+              //Relleno necesario para hacer scroll
+              padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(50.0, 0.0, 50.0, 50.0),
+                child: Form(
+                  key: _registerKey,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      SizedBox(height: 150),
+                      Text(
+                        'BrainBook',
+                        style: TextStyle(color: Colors.black, fontSize: 30.0),
+                        textAlign: TextAlign.center,
+                      ),
+                      SizedBox(height: 50),
+                      _crearNombreUsuario(),
+                      SizedBox(height: 15),
+                      // Padding(
+                      //   padding:
+                      //       const EdgeInsets.symmetric(horizontal: 70, vertical: 10),
+                      //   child: _crearApellidos(),
+                      // ),
+                      // Padding(
+                      //   padding:
+                      //       const EdgeInsets.symmetric(horizontal: 70, vertical: 10),
+                      //   child: _crearFecha(context),
+                      // ),
+                      _crearEmail(),
+                      SizedBox(height: 15),
+                      _crearPass1(),
+                      SizedBox(height: 15),
+                      _crearPass2(_controllerPass1),
+                      SizedBox(height: 80),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          RaisedButton(
-                            color: Colors.purpleAccent,
-                            shape: RoundedRectangleBorder(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(20.0))),
-                            onPressed: () {
-                              Navigator.pop(context);
-                            },
-                            child: Icon(Icons.arrow_back_ios_sharp),
+                          SizedBox(
+                            width: 140,
+                            child: RaisedButton(
+                              elevation: 4,
+                              color: Colors.white,
+                              shape: RoundedRectangleBorder(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(20.0))),
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                              child: Icon(Icons.arrow_back_ios_sharp),
+                            ),
                           ),
-                          Padding(
-                            padding: const EdgeInsets.only(left: 175.0),
+                          SizedBox(
+                            width: 140,
                             child: RaisedButton(
                               color: Colors.blue,
                               shape: RoundedRectangleBorder(
                                   borderRadius:
                                       BorderRadius.all(Radius.circular(20.0))),
                               onPressed: () async {
-                                if(_formKey.currentState.validate()) {
+                                if(_registerKey.currentState.validate()) {
                                   //Caso formulario correcto
                                   // final passFinal = Crypt.sha256(
                                   //     _pass1); //Encriptamos la contrasenya
@@ -136,15 +123,11 @@ class _RegisterPageState extends State<RegisterPage> {
                               child: Text('Registrarse'),
                             ),
                           ),
-                          SizedBox(
-                            //Este relleno evita que el teclado tape los campos
-                            height: MediaQuery.of(context).viewInsets.bottom,
-                          ),
                         ],
                       ),
-                    ),
+                    ],
                   ),
-                ],
+                ),
               ),
             ),
           ),
