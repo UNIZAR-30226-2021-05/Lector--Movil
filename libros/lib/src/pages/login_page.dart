@@ -8,7 +8,7 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  final _formKey = GlobalKey<FormState>();
+  final _loginKey = GlobalKey<FormState>();
   var _controllerEmailOrUsername = TextEditingController();
   var _controllerContrasenya = TextEditingController();
 
@@ -16,6 +16,7 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
+<<<<<<< HEAD
       body: Center(
           child: Form(
         key: _formKey,
@@ -85,11 +86,62 @@ class _LoginPageState extends State<LoginPage> {
                         Padding(
                           padding: const EdgeInsets.only(left: 80),
                           child: SizedBox(
+=======
+      body: SafeArea(
+        child: Container(
+          width: MediaQuery.of(context).size.width,
+          height: MediaQuery.of(context).size.height,
+          /*decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                      begin: Alignment.bottomCenter,
+                      end: Alignment.topCenter,
+                      colors: [Colors.blue, Colors.green])),*/
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage("assets/bg.jpg"),
+              fit: BoxFit.fill,
+            ),
+          ),
+          child: SingleChildScrollView(
+            reverse:true,
+            child: Padding(
+              padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(50.0, 0.0, 50.0, 50.0),
+                child: Form(
+                  key: _loginKey,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      SizedBox(height: 150),
+                      Align(
+                        child: Image(
+                          image: AssetImage('assets/logo.png'),
+                          height: 120,
+                        ),
+                      ),
+                      SizedBox(height: 35),
+                      Text(
+                        'BrainBook',
+                        style: TextStyle(color: Colors.black, fontSize: 30.0),
+                        textAlign: TextAlign.center,
+                      ),
+                      SizedBox(height: 20),
+                      _ponerEmailOrUsername(),
+                      SizedBox(height: 15),
+                      _ponerContrasenya(),
+                      SizedBox(height: 80),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          SizedBox(
+>>>>>>> 116a689a6168c1cc5c1ae281836ed03513cf3bf2
                             width: 140,
                             child: RaisedButton(
-                              color: Colors.green,
+                              color: Colors.white,
                               shape: RoundedRectangleBorder(
                                   borderRadius:
+<<<<<<< HEAD
                                       BorderRadius.all(Radius.circular(20.0))),
                               onPressed: () async {
                                 print("Voy a hacer login");
@@ -112,22 +164,59 @@ class _LoginPageState extends State<LoginPage> {
                                 }
                               },
                               child: Text('Iniciar sesión'),
+=======
+                                  BorderRadius.all(Radius.circular(20.0))),
+                              onPressed: () {
+                                Navigator.pop(context);
+                                },
+                              child: Icon(Icons.arrow_back_ios_sharp),
+>>>>>>> 116a689a6168c1cc5c1ae281836ed03513cf3bf2
                             ),
+                          ),
+                          SizedBox(
+                            width: 140,
+                          child: RaisedButton(
+                          color: Colors.green,
+                          shape: RoundedRectangleBorder(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(20.0))),
+                          onPressed: () async{
+                            print("Voy a hacer login");
+                            if(_loginKey.currentState.validate()) {
+                              //Caso formulario correcto
+                              print(_controllerEmailOrUsername);
+                              print(_controllerContrasenya);
+                              //Comprobación login correcto en backend
+                              bool backendOk = await loginUsuario
+                                (_controllerEmailOrUsername.text,
+                                  _controllerContrasenya.text);
+                              if(backendOk) {
+                                //Caso login correcto en backend
+                                print("Te mando al homepage");
+                                Navigator.pushReplacementNamed(context,'home');
+                              } else {
+                                _errorLoginBackend();
+                              }
+                            }
+
+                          },
+                          child: Text('Iniciar sesión'),
                           ),
                         ),
                       ],
-                    ),
+                      ),
+                  ],
                   ),
                 ),
-                SizedBox(
-                  //Este relleno evita que el teclado tape los campos
-                  height: MediaQuery.of(context).viewInsets.bottom,
-                ),
-              ],
+              ),
             ),
           ),
         ),
+<<<<<<< HEAD
       )),
+=======
+      ),
+>>>>>>> 116a689a6168c1cc5c1ae281836ed03513cf3bf2
     );
   }
 
