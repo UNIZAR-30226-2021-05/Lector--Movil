@@ -9,7 +9,7 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   final _loginKey = GlobalKey<FormState>();
-  var _controllerEmailOrUsername = TextEditingController();
+  var _controllerUsername = TextEditingController();
   var _controllerContrasenya = TextEditingController();
 
   @override
@@ -32,9 +32,10 @@ class _LoginPageState extends State<LoginPage> {
             ),
           ),
           child: SingleChildScrollView(
-            reverse:true,
+            reverse: true,
             child: Padding(
-              padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+              padding: EdgeInsets.only(
+                  bottom: MediaQuery.of(context).viewInsets.bottom),
               child: Padding(
                 padding: const EdgeInsets.fromLTRB(50.0, 0.0, 50.0, 50.0),
                 child: Form(
@@ -56,7 +57,7 @@ class _LoginPageState extends State<LoginPage> {
                         textAlign: TextAlign.center,
                       ),
                       SizedBox(height: 20),
-                      _ponerEmailOrUsername(),
+                      _ponerUsername(),
                       SizedBox(height: 15),
                       _ponerContrasenya(),
                       SizedBox(height: 80),
@@ -69,46 +70,46 @@ class _LoginPageState extends State<LoginPage> {
                               color: Colors.white,
                               shape: RoundedRectangleBorder(
                                   borderRadius:
-                                  BorderRadius.all(Radius.circular(20.0))),
+                                      BorderRadius.all(Radius.circular(20.0))),
                               onPressed: () {
                                 Navigator.pop(context);
-                                },
+                              },
                               child: Icon(Icons.arrow_back_ios_sharp),
                             ),
                           ),
                           SizedBox(
                             width: 140,
-                          child: RaisedButton(
-                          color: Colors.green,
-                          shape: RoundedRectangleBorder(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(20.0))),
-                          onPressed: () async{
-                            print("Voy a hacer login");
-                            if(_loginKey.currentState.validate()) {
-                              //Caso formulario correcto
-                              print(_controllerEmailOrUsername);
-                              print(_controllerContrasenya);
-                              //Comprobación login correcto en backend
-                              bool backendOk = await loginUsuario
-                                (_controllerEmailOrUsername.text,
-                                  _controllerContrasenya.text);
-                              if(backendOk) {
-                                //Caso login correcto en backend
-                                print("Te mando al homepage");
-                                Navigator.pushReplacementNamed(context,'home');
-                              } else {
-                                _errorLoginBackend();
-                              }
-                            }
-
-                          },
-                          child: Text('Iniciar sesión'),
+                            child: RaisedButton(
+                              color: Colors.green,
+                              shape: RoundedRectangleBorder(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(20.0))),
+                              onPressed: () async {
+                                print("Voy a hacer login");
+                                if (_loginKey.currentState.validate()) {
+                                  //Caso formulario correcto
+                                  print(_controllerUsername);
+                                  print(_controllerContrasenya);
+                                  //Comprobación login correcto en backend
+                                  bool backendOk = await loginUsuario(
+                                      _controllerUsername.text,
+                                      _controllerContrasenya.text);
+                                  if (backendOk) {
+                                    //Caso login correcto en backend
+                                    print("Te mando al homepage");
+                                    Navigator.pushReplacementNamed(
+                                        context, 'home');
+                                  } else {
+                                    _errorLoginBackend();
+                                  }
+                                }
+                              },
+                              child: Text('Iniciar sesión'),
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
                       ),
-                  ],
+                    ],
                   ),
                 ),
               ),
@@ -120,25 +121,17 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   //Campo email o nombre de usuario
-  Widget _ponerEmailOrUsername() {
+  Widget _ponerUsername() {
     return TextFormField(
-        controller: _controllerEmailOrUsername,
+        controller: _controllerUsername,
         decoration: InputDecoration(
-          hintText: 'Email o nombre de usuario',
+          hintText: 'Nombre de usuario',
         ),
         validator: (value) {
           //Caso campo vacío
           if (value.isEmpty) {
             return 'Campo obligatorio';
           }
-          //Caso se introduce email pero no es válido
-          RegExp emailPattern = RegExp(
-              r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\"
-              r".[a-zA-Z]+");
-          if (value.contains('@') && !emailPattern.hasMatch(value)) {
-            return 'Email no válido';
-          }
-          return null;
         });
   }
 
@@ -172,7 +165,7 @@ class _LoginPageState extends State<LoginPage> {
               onPressed: () {
                 Navigator.of(context).pop();
                 _controllerContrasenya.clear();
-                _controllerEmailOrUsername.clear();
+                _controllerUsername.clear();
               },
             ),
           ],
