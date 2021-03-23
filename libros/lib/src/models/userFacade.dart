@@ -16,8 +16,7 @@ String apiUrlRegister =
 String apiUrlChangePass =
     "http://lectorbrainbook.herokuapp.com/rest-auth/password/change/";
 
-String apiUrlGetUser =
-    "http://lectorbrainbook.herokuapp.com/usuario/pruebasFront";
+String apiUrlGetUser = "http://lectorbrainbook.herokuapp.com/usuario/";
 
 Future<bool> registrarUsuario(User usuario, BuildContext context) async {
   SharedPreferences sp;
@@ -64,10 +63,9 @@ Future<bool> registrarUsuario(User usuario, BuildContext context) async {
   }
 }
 
-Future<bool> loginUsuario(String emailOrUsername, String pass) async {
-  String campo = emailOrUsername.contains('@') ? 'email' : 'username';
+Future<bool> loginUsuario(String username, String pass) async {
   final toSend = {
-    campo: emailOrUsername,
+    "username": username,
     "password": pass,
   };
 
@@ -82,8 +80,7 @@ Future<bool> loginUsuario(String emailOrUsername, String pass) async {
   if (response.statusCode == 200) {
     print(jsonResponse['key']);
     sharedPreferences.setString("key", jsonResponse['key']);
-    //El nombre de usuario hay que pedirlo al backend por si el usuario
-    //se ha logeado con el email
+    sharedPreferences.setString("nombreUsuario", username);
     sharedPreferences.setString("contrasenya", pass);
     return true;
   } else {
@@ -121,9 +118,12 @@ Future<bool> updatePass(String pass1, String pass2) async {
 }
 
 void getUserInfo() async {
-  Uri myUri = Uri.parse(apiUrlGetUser);
   SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
   String key = sharedPreferences.getString("key");
+  String nombre = sharedPreferences.getString("nombreUsuario");
+  apiUrlGetUser = apiUrlGetUser + nombre;
+  Uri myUri = Uri.parse(apiUrlGetUser);
+
   http.Response response =
       await http.get(myUri, headers: {'Authorization': 'Token $key'});
   var jsonResponse = null;
