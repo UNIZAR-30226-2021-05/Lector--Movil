@@ -1,13 +1,28 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import 'package:libros/src/models/userFacade.dart';
+
 /*
   Esta pantalla muestra la configuracion del usuario
  */
+String passAnterior = '';
 
 class ChangePassword extends StatefulWidget {
+  SharedPreferences _sp;
+
   @override
   _ChangePasswordState createState() => _ChangePasswordState();
+  ChangePassword() {
+    _obtenerPass();
+  }
+
+  _obtenerPass() async {
+    _sp = await SharedPreferences.getInstance();
+    passAnterior = _sp.getString("contrasenya");
+  }
 }
 
 //No incluir Scaffold (lo añade HomePage)
@@ -18,6 +33,7 @@ class _ChangePasswordState extends State<ChangePassword> {
   var _controllerActual = TextEditingController();
   var _controllerNueva1 = TextEditingController();
   var _controllerNueva2 = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -107,7 +123,7 @@ class _ChangePasswordState extends State<ChangePassword> {
         SizedBox(height: 20),
         TextField(
           // autofocus: true,
-          controller: _controllerNueva2,
+          controller: _controllerNueva1,
           obscureText: true,
           keyboardType: TextInputType.visiblePassword,
           decoration: InputDecoration(
@@ -119,14 +135,14 @@ class _ChangePasswordState extends State<ChangePassword> {
           ),
           onChanged: (valor) {
             setState(() {
-              _passActual = valor;
+              _passNueva1 = valor;
             });
           },
         ),
         SizedBox(height: 20),
         TextField(
           // autofocus: true,
-          controller: _controllerNueva1,
+          controller: _controllerNueva2,
           obscureText: true,
           keyboardType: TextInputType.visiblePassword,
           decoration: InputDecoration(
@@ -138,7 +154,7 @@ class _ChangePasswordState extends State<ChangePassword> {
           ),
           onChanged: (valor) {
             setState(() {
-              _passActual = valor;
+              _passNueva2 = valor;
             });
           },
         ),
@@ -147,7 +163,13 @@ class _ChangePasswordState extends State<ChangePassword> {
           child: SizedBox(
             width: 200,
             child: RaisedButton(
-              onPressed: () {},
+              onPressed: () async {
+                if (passAnterior == _passActual) {
+                  _cambiarContrasenya(_passNueva1, _passNueva2);
+                } else {
+                  _mostrarMensajeDeErrorContrasenya();
+                }
+              },
               elevation: 4,
               textColor: Colors.white,
               color: Colors.green[600],
@@ -160,5 +182,75 @@ class _ChangePasswordState extends State<ChangePassword> {
         )
       ],
     );
+  }
+
+  _mostrarMensajeDeErrorContrasenya() {
+    return showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('La contraseña actual es incorrecta'),
+          actions: <Widget>[
+            FlatButton(
+              child: Text('OK'),
+              onPressed: () {
+                Navigator.of(context).pop();
+                _controllerActual.clear();
+                _controllerNueva1.clear();
+                _controllerNueva2.clear();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  _cambiarContrasenya(String pass1, String pass2) async {
+    bool cambioOk = await updatePass(pass1, pass2);
+    if (cambioOk) {
+      return showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('La contraseña ha sido modificada'),
+            actions: <Widget>[
+              FlatButton(
+                child: Text('OK'),
+                onPressed: () async {
+                  SharedPreferences sp = await SharedPreferences.getInstance();
+                  sp.setString("contrasenya", pass2);
+                  _controllerActual.clear();
+                  _controllerNueva1.clear();
+                  _controllerNueva2.clear();
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
+        },
+      );
+    } else {
+      return showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text(
+                'La contraseña no ha sido modificada. Recuerda que no debe ser parecida al nombre de usuario, deben coincidir y tener más de 8 letras.'),
+            actions: <Widget>[
+              FlatButton(
+                child: Text('OK'),
+                onPressed: () async {
+                  _controllerActual.clear();
+                  _controllerNueva1.clear();
+                  _controllerNueva2.clear();
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
+        },
+      );
+    }
   }
 }
