@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:libros/src/app_routes.dart';
-
+import 'package:libros/src/pages/theme/theme_config.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 SharedPreferences sp;
@@ -17,9 +17,12 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'BrainBook',
+      theme: ThemeConfig.lightTheme,
       // home: HomePage(),
-      initialRoute: 'home',
+      initialRoute: '/',
       routes: getPages(),
     );
   }
 }
+
+

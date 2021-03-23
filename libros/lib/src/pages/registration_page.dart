@@ -9,12 +9,15 @@ class RegisterPage extends StatefulWidget {
 }
 
 class _RegisterPageState extends State<RegisterPage> {
-  String _nombreUsuario = '';
-  String _email = '';
-  String _pass1 = '';
-  String _passConfirm = '';
-  bool okC = false;
-  bool okE = false;
+
+  final _formKey = GlobalKey<FormState>();
+  var _controllerUsername = TextEditingController();
+  var _controllerEmail = TextEditingController();
+  var _controllerPass1 = TextEditingController();
+  var _controllerPass2 = TextEditingController();
+
+
+
 
   TextEditingController _inputFieldDate = new TextEditingController();
 
@@ -23,106 +26,126 @@ class _RegisterPageState extends State<RegisterPage> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: Center(
-        child: SingleChildScrollView(
-          reverse: true,
-          child: Container(
-            width: MediaQuery.of(context).size.width,
-            height: MediaQuery.of(context).size.height,
-            decoration: BoxDecoration(
-                gradient: LinearGradient(
-                    begin: Alignment.topRight,
-                    end: Alignment.bottomLeft,
-                    colors: [Colors.blue, Colors.red])),
-            child: Column(
-              mainAxisSize: MainAxisSize.max,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(top: 90),
-                  child: Text(
-                    'BrainBook',
-                    style: TextStyle(color: Colors.white, fontSize: 30.0),
+        child: Form(
+          key: _formKey,
+          child: SingleChildScrollView(
+            reverse: true,
+            child: Container(
+              width: MediaQuery.of(context).size.width,
+              height: MediaQuery.of(context).size.height,
+              /*decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                      begin: Alignment.topRight,
+                      end: Alignment.bottomLeft,
+                      colors: [Colors.blue, Colors.red])),*/
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  image: AssetImage("assets/bg.jpg"),
+                  fit: BoxFit.fill,
+                ),
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.max,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(top: 90),
+                    child: Text(
+                      'BrainBook',
+                      style: TextStyle(color: Colors.white, fontSize: 30.0),
+                    ),
                   ),
-                ),
-                SizedBox(height: 50),
-                Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 70, vertical: 10),
-                  child: _crearNombreUsuario(),
-                ),
-                // Padding(
-                //   padding:
-                //       const EdgeInsets.symmetric(horizontal: 70, vertical: 10),
-                //   child: _crearApellidos(),
-                // ),
-                // Padding(
-                //   padding:
-                //       const EdgeInsets.symmetric(horizontal: 70, vertical: 10),
-                //   child: _crearFecha(context),
-                // ),
-                Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 70, vertical: 10),
-                  child: _crearEmail(),
-                ),
-                Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 70, vertical: 10),
-                  child: _crearPass1(),
-                ),
-                Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 70, vertical: 10),
-                  child: _crearPass2(),
-                ),
-                SizedBox(height: 30),
-                Padding(
-                  padding: const EdgeInsets.all(20.0),
-                  child: Align(
-                    alignment: Alignment.bottomLeft,
-                    child: Row(
-                      children: [
-                        RaisedButton(
-                          color: Colors.purpleAccent,
-                          shape: RoundedRectangleBorder(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(20.0))),
-                          onPressed: () {
-                            Navigator.pop(context);
-                          },
-                          child: Icon(Icons.arrow_back_ios_sharp),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 175.0),
-                          child: RaisedButton(
-                            color: Colors.blue,
+                  SizedBox(height: 50),
+                  Padding(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 70, vertical: 10),
+                    child: _crearNombreUsuario(),
+                  ),
+                  // Padding(
+                  //   padding:
+                  //       const EdgeInsets.symmetric(horizontal: 70, vertical: 10),
+                  //   child: _crearApellidos(),
+                  // ),
+                  // Padding(
+                  //   padding:
+                  //       const EdgeInsets.symmetric(horizontal: 70, vertical: 10),
+                  //   child: _crearFecha(context),
+                  // ),
+                  Padding(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 70, vertical: 10),
+                    child: _crearEmail(),
+                  ),
+                  Padding(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 70, vertical: 10),
+                    child: _crearPass1(),
+                  ),
+                  Padding(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 70, vertical: 10),
+                    child: _crearPass2(_controllerPass1),
+                  ),
+                  SizedBox(height: 30),
+                  Padding(
+                    padding: const EdgeInsets.all(20.0),
+                    child: Align(
+                      alignment: Alignment.bottomLeft,
+                      child: Row(
+                        children: [
+                          RaisedButton(
+                            color: Colors.purpleAccent,
                             shape: RoundedRectangleBorder(
                                 borderRadius:
                                     BorderRadius.all(Radius.circular(20.0))),
                             onPressed: () {
-                              _validarPassword(_pass1, _passConfirm);
-                              _validarEmail(_email);
-                              if (okC && okE) {
-                                // final passFinal = Crypt.sha256(
-                                //     _pass1); //Encriptamos la contrasenya
-                                print(_pass1);
-                                print("Voy a registrar al usuario");
-                                User usuario =
-                                    new User(_nombreUsuario, _email, _pass1);
-                                registrarUsuario(usuario, context);
-                              }
+                              Navigator.pop(context);
                             },
-                            child: Text('Registrarse'),
+                            child: Icon(Icons.arrow_back_ios_sharp),
                           ),
-                        ),
-                        SizedBox(
-                          //Este relleno evita que el teclado tape los campos
-                          height: MediaQuery.of(context).viewInsets.bottom,
-                        ),
-                      ],
+                          Padding(
+                            padding: const EdgeInsets.only(left: 175.0),
+                            child: RaisedButton(
+                              color: Colors.blue,
+                              shape: RoundedRectangleBorder(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(20.0))),
+                              onPressed: () async {
+                                if(_formKey.currentState.validate()) {
+                                  //Caso formulario correcto
+                                  // final passFinal = Crypt.sha256(
+                                  //     _pass1); //Encriptamos la contrasenya
+                                  //print(_pass1);
+                                  print("Voy a registrar al usuario");
+                                  //Comprobación registro correcto en backend
+                                  User usuario =
+                                      new User(_controllerUsername.text,
+                                          _controllerEmail.text,
+                                          _controllerPass1.text);
+                                  bool backendOK = await registrarUsuario
+                                    (usuario,
+                                      context);
+                                  if (backendOK) {
+                                    //Caso login correcto en backend
+                                    print("Te mando al homepage");
+                                    Navigator.pushReplacementNamed(context,'home');
+                                  } else {
+                                    _errorRegisterBackend();
+                                  }
+                                }
+                              },
+                              child: Text('Registrarse'),
+                            ),
+                          ),
+                          SizedBox(
+                            //Este relleno evita que el teclado tape los campos
+                            height: MediaQuery.of(context).viewInsets.bottom,
+                          ),
+                        ],
+                      ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),
@@ -130,21 +153,26 @@ class _RegisterPageState extends State<RegisterPage> {
     );
   }
 
-  Widget _crearNombreUsuario() {
-    return TextField(
-      // autofocus: true,
-      keyboardType: TextInputType.emailAddress,
-      decoration: InputDecoration(
-        border: OutlineInputBorder(borderRadius: BorderRadius.circular(20.0)),
-        hintText: 'NombreUsuario',
-        labelText: 'NombreUsuario',
-        suffixIcon: Icon(Icons.person),
-      ),
-      onChanged: (valor) {
-        setState(() {
-          _nombreUsuario = valor;
-        });
-      },
+  //Campo "Nombre de usuario"
+   Widget _crearNombreUsuario() {
+    return TextFormField(
+      controller: _controllerUsername,
+        decoration: InputDecoration(
+          hintText: 'NombreUsuario',
+          suffixIcon: Icon(Icons.person),
+        ),
+        validator: (value){
+          //Caso campo vacío
+          if (value.isEmpty) {
+            return 'Campo obligatorio';
+          }
+          //Caso contiene caracteres no alfanumericos
+          RegExp usernamePattern = RegExp(r'^[a-zA-Z0-9&%=]+$');
+          if(!usernamePattern.hasMatch(value)) {
+            return 'El nombre de usuario solo puede contener letras y números';
+          }
+          return null;
+        }
     );
   }
 
@@ -167,20 +195,27 @@ class _RegisterPageState extends State<RegisterPage> {
   // }
 
   Widget _crearEmail() {
-    return TextField(
-      // autofocus: true,
-      keyboardType: TextInputType.emailAddress,
-      decoration: InputDecoration(
-        border: OutlineInputBorder(borderRadius: BorderRadius.circular(20.0)),
-        hintText: 'Correo electrónico',
-        labelText: 'Email',
-        suffixIcon: Icon(Icons.person),
-      ),
-      onChanged: (valor) {
-        setState(() {
-          _email = valor;
-        });
-      },
+    return TextFormField(
+        controller: _controllerEmail,
+        keyboardType: TextInputType.emailAddress,
+        decoration: InputDecoration(
+          hintText: 'Correo electrónico',
+          suffixIcon: Icon(Icons.person),
+        ),
+        validator: (value){
+          //Caso campo vacío
+          if (value.isEmpty) {
+            return 'Campo obligatorio';
+          }
+          //Caso email no valido
+          RegExp emailPattern = RegExp(
+              r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\"
+              r".[a-zA-Z]+");
+          if(!emailPattern.hasMatch(value)){
+            return 'Email no válido';
+          }
+          return null;
+        }
     );
   }
 
@@ -216,121 +251,79 @@ class _RegisterPageState extends State<RegisterPage> {
   //   }
   // }
 
-  Widget _crearPass1() {
-    return TextField(
-      // autofocus: true,
-      obscureText: true,
-      keyboardType: TextInputType.emailAddress,
+  //Campo "Contraseña"
+   Widget _crearPass1() {
+    return TextFormField(
+      controller: _controllerPass1,
       decoration: InputDecoration(
-        border: OutlineInputBorder(borderRadius: BorderRadius.circular(20.0)),
         hintText: 'Contraseña',
-        labelText: 'Contraseña',
         suffixIcon: Icon(Icons.person),
       ),
-      onChanged: (valor) {
-        setState(() {
-          _pass1 = valor;
-        });
+      validator: (value){
+        //Caso campo vacío
+        if (value.isEmpty) {
+          return 'Campo obligatorio';
+        }
+        //Caso longitud < 8
+        if(value.length < 8) {
+          return 'La contraseña debe tener al menos 8 caracteres';
+        }
+        //Caso no tiene al menos una mayúscula, una minúscula y un dígito
+        if (!(value.contains(new RegExp(r'[A-Z]')) ||
+            value.contains(new RegExp(r'[0-9]')) ||
+            value.contains(new RegExp(r'[a-z]'))
+        )) {
+          return 'La contraseña debe contener al menos una minúscula, '
+              'mayúscula y dígito';
+        }
+        return null;
       },
+      obscureText: true,
     );
   }
 
-  Widget _crearPass2() {
-    return TextField(
-      // autofocus: true,
-      obscureText: true,
-      keyboardType: TextInputType.emailAddress,
+  //Campo "Repite la contraseña"
+   Widget _crearPass2(TextEditingController pass1) {
+    return TextFormField(
+      controller:_controllerPass2,
       decoration: InputDecoration(
-        border: OutlineInputBorder(borderRadius: BorderRadius.circular(20.0)),
-        hintText: 'Contraseña',
-        labelText: 'Repita contraseña',
+        hintText: 'Repite la contraseña',
         suffixIcon: Icon(Icons.person),
       ),
-      onChanged: (valor) {
-        setState(() {
-          _passConfirm = valor;
-        });
+      validator: (value){
+        //Caso campo vacío
+        if (value.isEmpty) {
+          return 'Campo obligatorio';
+        }
+        if (value != pass1.text) {
+          return 'Las contraseñas no coinciden';
+        }
+        return null;
       },
+      obscureText: true,
     );
   }
 
-  void _validarEmail(String _email) async {
-    bool emailValid = RegExp(
-            r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
-        .hasMatch(_email);
-    if (!emailValid) {
-      okE = false;
-      return showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: Text('Email incorrecto'),
-            actions: <Widget>[
-              FlatButton(
-                child: Text('OK'),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-              ),
-            ],
-          );
-        },
-      );
-    } else {
-      okE = true;
-    }
-  }
-
-  void _validarPassword(String _pass1, String _pass2) async {
-    if (_pass1 == null || _pass1.isEmpty) {
-      okC = false;
-    }
-
-    bool hasUppercase = _pass1.contains(new RegExp(r'[A-Z]'));
-    bool hasDigits = _pass1.contains(new RegExp(r'[0-9]'));
-    bool hasLowercase = _pass1.contains(new RegExp(r'[a-z]'));
-
-    bool hasMinLength = _pass1.length > 7;
-    bool equals = _pass1 == _pass2;
-
-    if (!(hasDigits & hasUppercase & hasLowercase & hasMinLength)) {
-      okC = false;
-      return showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: Text('Contraseña no segura, cree una contraseña más segura'),
-            actions: <Widget>[
-              FlatButton(
-                child: Text('OK'),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-              ),
-            ],
-          );
-        },
-      );
-    } else if (!equals) {
-      okC = false;
-      return showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: Text('Las contraseñas no coinciden'),
-            actions: <Widget>[
-              FlatButton(
-                child: Text('OK'),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-              ),
-            ],
-          );
-        },
-      );
-    } else {
-      okC = true;
-    }
+  Future<dynamic> _errorRegisterBackend() {
+    return showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Vaya! Parece que ya tenemos un usuario registrado con las mismas credenciales'),
+          actions: <Widget>[
+            FlatButton(
+              child: Text('OK'),
+              onPressed: () {
+                Navigator.of(context).pop();
+                _controllerUsername.clear();
+                _controllerEmail.clear();
+                _controllerPass1.clear();
+                _controllerPass2.clear();
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 }

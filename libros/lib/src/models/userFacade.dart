@@ -14,7 +14,7 @@ String apiUrlLogin = 'http://lectorbrainbook.herokuapp.com/rest-auth/login/';
 String apiUrlRegister =
     'http://lectorbrainbook.herokuapp.com/rest-auth/registration/';
 
-void registrarUsuario(User usuario, BuildContext context) async {
+Future<bool> registrarUsuario(User usuario, BuildContext context) async {
   SharedPreferences sp;
   final toSend = {
     "username": usuario.nombreUsuario,
@@ -32,29 +32,14 @@ void registrarUsuario(User usuario, BuildContext context) async {
   print(response.statusCode);
 
   print("Esto era el json response");
-  if (response.statusCode == 200) {
+  if (response.statusCode == 201) {
     print(jsonResponse['key']);
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    sharedPreferences.setString("email", usuario.email);
-    return showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('Usuario registrado satisfactoriamente. Bienvenido!'),
-          actions: <Widget>[
-            FlatButton(
-              child: Text('Iniciar sesión'),
-              onPressed: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => LoginPage()));
-              },
-            ),
-          ],
-        );
-      },
-    );
+    sharedPreferences.setString("key", jsonResponse['key']);
+    return true;
   } else {
-    return showDialog(
+    return false;
+   /* return showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
@@ -70,18 +55,14 @@ void registrarUsuario(User usuario, BuildContext context) async {
           ],
         );
       },
-    );
+    );*/
   }
 }
 
-void loginUsuario(
-    String username,
-    String pass,
-    BuildContext context,
-    TextEditingController controlEmail,
-    TextEditingController controlContra) async {
+Future<bool> loginUsuario(String emailOrUsername, String pass) async {
+  String campo = emailOrUsername.contains('@') ? 'email' : 'username';
   final toSend = {
-    "username": username,
+    campo : emailOrUsername,
     "password": pass,
   };
 
@@ -96,32 +77,14 @@ void loginUsuario(
   if (response.statusCode == 200) {
     print(jsonResponse['key']);
     sharedPreferences.setString("key", jsonResponse['key']);
-    sharedPreferences.setString("nombreUsuario", username);
+    //El nombre de usuario hay que pedirlo al backend por si el usuario
+    //se ha logeado con el email
+    //sharedPreferences.setString("nombreUsuario", username);
     // sharedPreferences.setString("email", email);
     sharedPreferences.setString("contrasenya", pass);
-    print("Te mando al homepage");
-    Navigator.of(context).pushAndRemoveUntil(
-        MaterialPageRoute(builder: (BuildContext context) => HomePage()),
-        (Route<dynamic> route) => false);
+    return true;
   } else {
     print('Usuario o contraseña incorrecto');
-    return showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('Email o contraseña incorrecto'),
-          actions: <Widget>[
-            FlatButton(
-              child: Text('OK'),
-              onPressed: () {
-                Navigator.of(context).pop();
-                controlContra.clear();
-                controlEmail.clear();
-              },
-            ),
-          ],
-        );
-      },
-    );
+    return false;
   }
 }
