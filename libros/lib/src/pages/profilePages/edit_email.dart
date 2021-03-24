@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:libros/src/storeUserInfo/SessionManager.dart';
 /*
   Esta pantalla muestra la configuracion del usuario
  */
@@ -13,6 +14,25 @@ class EditEmail extends StatefulWidget {
 //No incluir Scaffold (lo añade HomePage)
 class _EditEmailState extends State<EditEmail> {
   String _email = '';
+  SessionManager session = new SessionManager();
+  String _nombreUsuario = '';
+  String _emailMostrar = '';
+  _EditEmailState() {
+    getUserInfo();
+  }
+
+  getUserInfo() async {
+    session.getNombreUsuario().then((String result) {
+      setState(() {
+        _nombreUsuario = result;
+      });
+    });
+    session.getEmail().then((String result) {
+      setState(() {
+        _emailMostrar = result;
+      });
+    });
+  }
 
   var _controllerEmail = TextEditingController();
   @override
@@ -67,9 +87,9 @@ class _EditEmailState extends State<EditEmail> {
                                         'https://img.huffingtonpost.com/asset/5ead5c6e2500006912eb0beb.png?cache=VGVQqRsEJs&ops=1200_630')))),
                       ),
                       SizedBox(height: 20),
-                      Text("Facundo Garcia Pimienta", textScaleFactor: 1.4),
+                      Text(_nombreUsuario, textScaleFactor: 1.4),
                       SizedBox(height: 10),
-                      Text("facundo@gmail.com", textScaleFactor: 1.1),
+                      Text(_emailMostrar, textScaleFactor: 1.1),
                       SizedBox(height: 55),
                       _crearCamposDeTexto(),
                     ],

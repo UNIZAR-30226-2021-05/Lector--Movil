@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:libros/src/storeUserInfo/SessionManager.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:libros/src/models/userFacade.dart';
@@ -33,6 +34,26 @@ class _ChangePasswordState extends State<ChangePassword> {
   var _controllerActual = TextEditingController();
   var _controllerNueva1 = TextEditingController();
   var _controllerNueva2 = TextEditingController();
+
+  SessionManager session = new SessionManager();
+  String _nombreUsuario = '';
+  String _email = '';
+  _ChangePasswordState() {
+    getUserInfo();
+  }
+
+  getUserInfo() async {
+    session.getNombreUsuario().then((String result) {
+      setState(() {
+        _nombreUsuario = result;
+      });
+    });
+    session.getEmail().then((String result) {
+      setState(() {
+        _email = result;
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -86,9 +107,9 @@ class _ChangePasswordState extends State<ChangePassword> {
                                         'https://img.huffingtonpost.com/asset/5ead5c6e2500006912eb0beb.png?cache=VGVQqRsEJs&ops=1200_630')))),
                       ),
                       SizedBox(height: 20),
-                      Text("Facundo Garcia Pimienta", textScaleFactor: 1.4),
+                      Text(_nombreUsuario, textScaleFactor: 1.4),
                       SizedBox(height: 10),
-                      Text("facundo@gmail.com", textScaleFactor: 1.1),
+                      Text(_email, textScaleFactor: 1.1),
                       SizedBox(height: 15),
                       _crearCamposDeTexto()
                     ],

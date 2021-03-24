@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:libros/src/pages/profilePages/configuration_page.dart';
 import 'package:libros/src/pages/profilePages/edit_email.dart';
-import 'package:libros/src/pages/profilePages/edit_name.dart';
 import 'package:libros/src/pages/profilePages/edit_photo.dart';
+import 'package:libros/src/storeUserInfo/SessionManager.dart';
 /*
   Esta pantalla muestra el perfil del usuario
   Está gestionada por el módulo HomePage
@@ -15,6 +14,26 @@ class EditProfile extends StatefulWidget {
 
 //No incluir Scaffold (lo añade HomePage)
 class _EditProfileState extends State<EditProfile> {
+  SessionManager session = new SessionManager();
+  String _nombreUsuario = '';
+  String _email = '';
+  _EditProfileState() {
+    getUserInfo();
+  }
+
+  getUserInfo() async {
+    session.getNombreUsuario().then((String result) {
+      setState(() {
+        _nombreUsuario = result;
+      });
+    });
+    session.getEmail().then((String result) {
+      setState(() {
+        _email = result;
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -66,30 +85,10 @@ class _EditProfileState extends State<EditProfile> {
                                         'https://img.huffingtonpost.com/asset/5ead5c6e2500006912eb0beb.png?cache=VGVQqRsEJs&ops=1200_630')))),
                       ),
                       SizedBox(height: 20),
-                      Text("Facundo Garcia Pimienta", textScaleFactor: 1.8),
+                      Text(_nombreUsuario, textScaleFactor: 1.4),
                       SizedBox(height: 10),
-                      Text("facundo@gmail.com", textScaleFactor: 1.3),
-                      Padding(
-                        padding: const EdgeInsets.only(top: 50.0),
-                        child: SizedBox(
-                          width: 200,
-                          child: RaisedButton(
-                            onPressed: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => EditName()));
-                            },
-                            elevation: 4,
-                            textColor: Colors.white,
-                            color: Colors.blue[900],
-                            padding: const EdgeInsets.all(12.0),
-                            child: Text(
-                              'Editar nombre',
-                            ),
-                          ),
-                        ),
-                      ),
+                      Text(_email, textScaleFactor: 1.1),
+                      SizedBox(height: 70),
                       Padding(
                         padding: const EdgeInsets.only(top: 15.0),
                         child: SizedBox(

@@ -39,7 +39,8 @@ class _RegisterPageState extends State<RegisterPage> {
             reverse: true,
             child: Padding(
               //Relleno necesario para hacer scroll
-              padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+              padding: EdgeInsets.only(
+                  bottom: MediaQuery.of(context).viewInsets.bottom),
               child: Padding(
                 padding: const EdgeInsets.fromLTRB(50.0, 0.0, 50.0, 50.0),
                 child: Form(
@@ -97,24 +98,25 @@ class _RegisterPageState extends State<RegisterPage> {
                                   borderRadius:
                                       BorderRadius.all(Radius.circular(20.0))),
                               onPressed: () async {
-                                if(_registerKey.currentState.validate()) {
+                                if (_registerKey.currentState.validate()) {
                                   //Caso formulario correcto
                                   // final passFinal = Crypt.sha256(
                                   //     _pass1); //Encriptamos la contrasenya
                                   //print(_pass1);
                                   print("Voy a registrar al usuario");
                                   //Comprobación registro correcto en backend
-                                  User usuario =
-                                      new User(_controllerUsername.text,
-                                          _controllerEmail.text,
-                                          _controllerPass1.text);
-                                  bool backendOK = await registrarUsuario
-                                    (usuario,
-                                      context);
+                                  User usuario = new User(
+                                      nombreUsuario: _controllerUsername.text,
+                                      email: _controllerEmail.text,
+                                      pass: _controllerPass1.text,
+                                      pathPhoto: null);
+                                  bool backendOK =
+                                      await registrarUsuario(usuario, context);
                                   if (backendOK) {
                                     //Caso login correcto en backend
                                     print("Te mando al homepage");
-                                    Navigator.pushReplacementNamed(context,'home');
+                                    Navigator.pushReplacementNamed(
+                                        context, 'home');
                                   } else {
                                     _errorRegisterBackend();
                                   }
@@ -137,26 +139,25 @@ class _RegisterPageState extends State<RegisterPage> {
   }
 
   //Campo "Nombre de usuario"
-   Widget _crearNombreUsuario() {
+  Widget _crearNombreUsuario() {
     return TextFormField(
-      controller: _controllerUsername,
+        controller: _controllerUsername,
         decoration: InputDecoration(
           hintText: 'NombreUsuario',
           suffixIcon: Icon(Icons.person),
         ),
-        validator: (value){
+        validator: (value) {
           //Caso campo vacío
           if (value.isEmpty) {
             return 'Campo obligatorio';
           }
           //Caso contiene caracteres no alfanumericos
           RegExp usernamePattern = RegExp(r'^[a-zA-Z0-9&%=]+$');
-          if(!usernamePattern.hasMatch(value)) {
+          if (!usernamePattern.hasMatch(value)) {
             return 'El nombre de usuario solo puede contener letras y números';
           }
           return null;
-        }
-    );
+        });
   }
 
   // Widget _crearApellidos() {
@@ -185,7 +186,7 @@ class _RegisterPageState extends State<RegisterPage> {
           hintText: 'Correo electrónico',
           suffixIcon: Icon(Icons.person),
         ),
-        validator: (value){
+        validator: (value) {
           //Caso campo vacío
           if (value.isEmpty) {
             return 'Campo obligatorio';
@@ -194,12 +195,11 @@ class _RegisterPageState extends State<RegisterPage> {
           RegExp emailPattern = RegExp(
               r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\"
               r".[a-zA-Z]+");
-          if(!emailPattern.hasMatch(value)){
+          if (!emailPattern.hasMatch(value)) {
             return 'Email no válido';
           }
           return null;
-        }
-    );
+        });
   }
 
   // Widget _crearFecha(BuildContext context) {
@@ -235,27 +235,26 @@ class _RegisterPageState extends State<RegisterPage> {
   // }
 
   //Campo "Contraseña"
-   Widget _crearPass1() {
+  Widget _crearPass1() {
     return TextFormField(
       controller: _controllerPass1,
       decoration: InputDecoration(
         hintText: 'Contraseña',
         suffixIcon: Icon(Icons.person),
       ),
-      validator: (value){
+      validator: (value) {
         //Caso campo vacío
         if (value.isEmpty) {
           return 'Campo obligatorio';
         }
         //Caso longitud < 8
-        if(value.length < 8) {
+        if (value.length < 8) {
           return 'La contraseña debe tener al menos 8 caracteres';
         }
         //Caso no tiene al menos una mayúscula, una minúscula y un dígito
         if (!(value.contains(new RegExp(r'[A-Z]')) ||
             value.contains(new RegExp(r'[0-9]')) ||
-            value.contains(new RegExp(r'[a-z]'))
-        )) {
+            value.contains(new RegExp(r'[a-z]')))) {
           return 'La contraseña debe contener al menos una minúscula, '
               'mayúscula y dígito';
         }
@@ -266,14 +265,14 @@ class _RegisterPageState extends State<RegisterPage> {
   }
 
   //Campo "Repite la contraseña"
-   Widget _crearPass2(TextEditingController pass1) {
+  Widget _crearPass2(TextEditingController pass1) {
     return TextFormField(
-      controller:_controllerPass2,
+      controller: _controllerPass2,
       decoration: InputDecoration(
         hintText: 'Repite la contraseña',
         suffixIcon: Icon(Icons.person),
       ),
-      validator: (value){
+      validator: (value) {
         //Caso campo vacío
         if (value.isEmpty) {
           return 'Campo obligatorio';
@@ -292,7 +291,8 @@ class _RegisterPageState extends State<RegisterPage> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Vaya! Parece que ya tenemos un usuario registrado con las mismas credenciales'),
+          title: Text(
+              'Vaya! Parece que ya tenemos un usuario registrado con las mismas credenciales'),
           actions: <Widget>[
             FlatButton(
               child: Text('OK'),

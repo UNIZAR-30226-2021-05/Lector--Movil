@@ -117,7 +117,7 @@ Future<bool> updatePass(String pass1, String pass2) async {
   }
 }
 
-void getUserInfo() async {
+void getAndStoreUserInfo() async {
   SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
   String key = sharedPreferences.getString("key");
   String nombre = sharedPreferences.getString("nombreUsuario");
@@ -128,5 +128,7 @@ void getUserInfo() async {
       await http.get(myUri, headers: {'Authorization': 'Token $key'});
   var jsonResponse = null;
   jsonResponse = json.decode(response.body);
-  print(jsonResponse);
+  User user = User.fromJson(jsonResponse);
+  sharedPreferences.setString("nombreUsuario", user.nombreUsuario);
+  sharedPreferences.setString("email", user.email);
 }

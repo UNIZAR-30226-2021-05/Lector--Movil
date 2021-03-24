@@ -38,7 +38,6 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     checkLoginStatus();
-    getUserInfo();
   }
 
   checkLoginStatus() async {
@@ -51,6 +50,7 @@ class _HomePageState extends State<HomePage> {
           (Route<dynamic> route) => false);
     } else {
       print("No bro, esta es tu key: " + sharedPreferences.getString("key"));
+      getAndStoreUserInfo();
     }
   }
 

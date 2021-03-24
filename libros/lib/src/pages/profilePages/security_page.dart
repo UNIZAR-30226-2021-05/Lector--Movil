@@ -2,6 +2,8 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:libros/src/pages/profilePages/change_password.dart';
+import 'package:libros/src/storeUserInfo/SessionManager.dart';
+
 /*
   Esta pantalla muestra la configuracion del usuario
  */
@@ -13,6 +15,26 @@ class SecurityPage extends StatefulWidget {
 
 //No incluir Scaffold (lo añade HomePage)
 class _SecurityPageState extends State<SecurityPage> {
+  SessionManager session = new SessionManager();
+  String _nombreUsuario = '';
+  String _email = '';
+  _SecurityPageState() {
+    getUserInfo();
+  }
+
+  getUserInfo() async {
+    session.getNombreUsuario().then((String result) {
+      setState(() {
+        _nombreUsuario = result;
+      });
+    });
+    session.getEmail().then((String result) {
+      setState(() {
+        _email = result;
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -64,9 +86,9 @@ class _SecurityPageState extends State<SecurityPage> {
                                         'https://img.huffingtonpost.com/asset/5ead5c6e2500006912eb0beb.png?cache=VGVQqRsEJs&ops=1200_630')))),
                       ),
                       SizedBox(height: 20),
-                      Text("Facundo Garcia Pimienta", textScaleFactor: 1.4),
+                      Text(_nombreUsuario, textScaleFactor: 1.4),
                       SizedBox(height: 10),
-                      Text("facundo@gmail.com", textScaleFactor: 1.1),
+                      Text(_email, textScaleFactor: 1.1),
                       SizedBox(height: 15),
                       Padding(
                         padding: const EdgeInsets.only(top: 90.0),

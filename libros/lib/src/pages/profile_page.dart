@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:libros/src/pages/profilePages/configuration_page.dart';
 import 'package:libros/src/pages/profilePages/edit_profile.dart';
+import 'package:libros/src/storeUserInfo/SessionManager.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 /*
@@ -9,16 +10,32 @@ import 'package:shared_preferences/shared_preferences.dart';
  */
 
 class ProfilePage extends StatefulWidget {
-  SharedPreferences _sp;
-
-  ProfilePage() {}
-
   @override
   _ProfilePageState createState() => _ProfilePageState();
 }
 
 //No incluir Scaffold (lo añade HomePage)
 class _ProfilePageState extends State<ProfilePage> {
+  SessionManager session = new SessionManager();
+  String _nombreUsuario = '';
+  String _email = '';
+  _ProfilePageState() {
+    getUserInfo();
+  }
+
+  getUserInfo() async {
+    session.getNombreUsuario().then((String result) {
+      setState(() {
+        _nombreUsuario = result;
+      });
+    });
+    session.getEmail().then((String result) {
+      setState(() {
+        _email = result;
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -54,9 +71,9 @@ class _ProfilePageState extends State<ProfilePage> {
                                   image: new NetworkImage(
                                       'https://img.huffingtonpost.com/asset/5ead5c6e2500006912eb0beb.png?cache=VGVQqRsEJs&ops=1200_630')))),
                       SizedBox(height: 20),
-                      Text("nombre", textScaleFactor: 1.8),
+                      Text(_nombreUsuario, textScaleFactor: 1.8),
                       SizedBox(height: 10),
-                      Text("email", textScaleFactor: 1.3),
+                      Text(_email, textScaleFactor: 1.3),
                       SizedBox(height: 50),
                       SizedBox(
                         width: 200,

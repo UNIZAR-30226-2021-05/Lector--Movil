@@ -1,15 +1,15 @@
 class User {
-  String _nombreUsuario = '';
-  String _email = '';
-  String _pass = '';
+  String nombreUsuario = '';
+  String email = '';
+  String pass = '';
+  String pathPhoto = '';
 
-  User(String username, String email, String pass) {
-    _nombreUsuario = username;
-    _email = email;
-    _pass = pass;
+  User({this.nombreUsuario, this.email, this.pass, this.pathPhoto});
+
+  factory User.fromJson(Map<String, dynamic> json) {
+    return User(
+        nombreUsuario: json['username'],
+        email: json['email'],
+        pathPhoto: json['pathPhoto']);
   }
-
-  String get nombreUsuario => _nombreUsuario;
-  String get email => _email;
-  String get pass => _pass;
 }

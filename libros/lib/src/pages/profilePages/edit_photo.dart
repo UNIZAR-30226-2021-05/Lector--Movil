@@ -2,6 +2,7 @@ import 'dart:ui';
 import 'package:image_picker/image_picker.dart';
 
 import 'package:flutter/material.dart';
+import 'package:libros/src/storeUserInfo/SessionManager.dart';
 /*
   Esta pantalla muestra la configuracion del usuario
  */
