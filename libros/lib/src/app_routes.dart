@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:libros/src/pages/book_page.dart';
 import 'package:libros/src/pages/first_page.dart';
 import 'package:libros/src/pages/home_page.dart';
+import 'package:libros/src/pages/theme/book_details_page.dart';
 
 Map<String, WidgetBuilder> getPages() {
   return <String, WidgetBuilder>{
@@ -11,5 +12,6 @@ Map<String, WidgetBuilder> getPages() {
     //Permite que la barra de navegación sea consistente ¡!
     'home': (BuildContext context) => HomePage(),
     'book':(BuildContext context) => BookPage(),
+    'bookDetails':(BuildContext context) => BookDetailsPage(),
   };
 }

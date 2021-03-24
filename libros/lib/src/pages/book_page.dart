@@ -20,7 +20,7 @@ class _BookPageState extends State<BookPage> {
     Map data = ModalRoute.of(context).settings.arguments;
     return Scaffold(
       body: SafeArea(
-        child: Center(child: Text(data["title"]))
+        child: Center(child: Text(data["book"].title))
       ) ,
     );
   }

@@ -62,7 +62,7 @@ class Library_State extends State<LibraryPage> {
                 itemCount: savedBooks.length,
                 physics: BouncingScrollPhysics(),
                 itemBuilder: (context, index) {
-                  return  bookCard(savedBooks[index], context);
+                  return  bookCard(savedBooks[index],"bookDetails", context);
                 },
               ),
             )
