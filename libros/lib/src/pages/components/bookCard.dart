@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:libros/src/models/book.dart';
-Widget bookCard(Book book, BuildContext context) {
+Widget bookCard(Book book, String pageName, BuildContext context) {
   return GestureDetector(
     onTap: () {
       print(book.title);
-      Navigator.pushNamed(context, "book", arguments: {
-        'title' : book.title,
+      Navigator.pushNamed(context, pageName, arguments: {
+        'book' : book,
       }
       );
     },

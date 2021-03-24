@@ -47,7 +47,7 @@ class _ReadingPageState extends State<ReadingPage> {
                       itemCount: readingBooks.length,
                       physics: BouncingScrollPhysics(),
                       itemBuilder: (context, index) {
-                        return  bookCard(readingBooks[index], context);
+                        return  bookCard(readingBooks[index],"book", context);
                       },
                     ),
                   )

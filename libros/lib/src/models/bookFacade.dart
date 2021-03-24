@@ -16,7 +16,7 @@ List<Book> ReadingBooksList(String username) {
         "https://d1csarkz8obe9u.cloudfront"
             ".net/posterpreviews/sci-fi-book-cover-template-a1ec26573b7a71617c38ffc6e356eef9_screen.jpg?ts=1561547637",
         'Hace mucho tiempo en una ciudad muy lejana un niño se encontraba'
-            ' paseando cuando derepente...', ));
+            ' paseando cuando derepente...', ["accion","comedia"]));
   }
   return readingBooks;
 }
@@ -36,7 +36,7 @@ List<Book> SavedBooksList(String username) {
       "https://d1csarkz8obe9u.cloudfront"
           ".net/posterpreviews/sci-fi-book-cover-template-a1ec26573b7a71617c38ffc6e356eef9_screen.jpg?ts=1561547637",
       'Hace mucho tiempo en una ciudad muy lejana un niño se encontraba'
-          ' paseando cuando derepente...', ));
+          ' paseando cuando derepente...', ["accion","comedia"]));
   }
   return savedBooks;
 }
