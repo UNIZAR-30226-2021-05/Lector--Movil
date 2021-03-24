@@ -11,7 +11,11 @@ List<Book> ReadingBooksList(String username) {
   //Simulación de libros recibidos
   for (var i = 0; i < 10; i += 1) {
     readingBooks.add(Book(
-        "The Arrivals",
+      //Al título se le concatena el índice, (hasta obtener los libros
+      //del backend). Esto se hace para que el título de cada libro devuelto
+      // sea único y así funcione el widget "Hero" (animación entre
+      // pantallas)
+        "The Arrivals" + i.toString(),
         "Patrick Jordan",
         "https://d1csarkz8obe9u.cloudfront"
             ".net/posterpreviews/sci-fi-book-cover-template-a1ec26573b7a71617c38ffc6e356eef9_screen.jpg?ts=1561547637",
@@ -31,7 +35,11 @@ List<Book> SavedBooksList(String username) {
   //Simulación de libros recibidos
   for (var i = 0; i < 10; i += 1) {
     savedBooks.add(Book(
-      "The Arrivals",
+      //Al título se le concatena el índice, (hasta obtener los libros
+      //del backend). Esto se hace para que el título de cada libro devuelto
+      // sea único y así funcione el widget "Hero" (animación entre
+      // pantallas)
+        "The Arrivals" + i.toString(),
       "Patrick Jordan",
       "https://d1csarkz8obe9u.cloudfront"
           ".net/posterpreviews/sci-fi-book-cover-template-a1ec26573b7a71617c38ffc6e356eef9_screen.jpg?ts=1561547637",

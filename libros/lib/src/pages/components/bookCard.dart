@@ -23,7 +23,10 @@ Widget bookCard(Book book, String pageName, BuildContext context) {
                   borderRadius: BorderRadius.all(
                     Radius.circular(10.0),
                   ),
-                  child: Image.network(book.pathCover,
+                  child: Hero(
+                    tag: book.title,
+                    child: Image.network(book.pathCover,
+                    ),
                   ),
                 ),
               ),

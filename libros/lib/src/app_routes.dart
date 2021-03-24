@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:libros/src/pages/book_page.dart';
 import 'package:libros/src/pages/first_page.dart';
 import 'package:libros/src/pages/home_page.dart';
-import 'package:libros/src/pages/theme/book_details_page.dart';
+import 'package:libros/src/pages/book_details_page.dart';
 
 Map<String, WidgetBuilder> getPages() {
   return <String, WidgetBuilder>{
