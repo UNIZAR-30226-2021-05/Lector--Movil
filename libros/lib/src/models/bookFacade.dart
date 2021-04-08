@@ -4,7 +4,7 @@ import 'book.dart';
   Devuelve una lista con los libros que está leyendo el
   usuario "user"
  */
-List<Book> ReadingBooksList(String username) {
+List<Book> GetBooksReading(String username) {
   List<Book> readingBooks = [];
   //TODO:Llamar a parser, recibir un Map e iterar
 
@@ -29,7 +29,7 @@ List<Book> ReadingBooksList(String username) {
   Devuelve una lista con los libros que guardados por el
   usuario "user"
  */
-List<Book> SavedBooksList(String username) {
+List<Book> GetBooksSaved(String username) {
   List<Book> savedBooks = [];
   //TODO:Llamar a parser, recibir un Map e iterar
   //Simulación de libros recibidos
@@ -47,4 +47,38 @@ List<Book> SavedBooksList(String username) {
           ' paseando cuando derepente...', ["accion","comedia"]));
   }
   return savedBooks;
+}
+
+//Simulación de colecciones guardadas
+Map collections = new Map<String,List<Book>>();
+/*
+  Devuelve una lista con los nombres de las
+  colecciones del usuario
+ */
+List<String> GetCollections(String username) {
+  print("collectionsList");
+  //Simulación de colecciones recibidas
+  print("bookFacade-getCollections");
+  print(collections.keys);
+  List<String> collectionsName = collections.keys.toList();
+  return collectionsName;
+}
+
+/*
+  Devuelve una lista con los libros pertenecientes a una
+  colección del usuario
+ */
+List<Book> GetCollectionBooks(String username, String collection) {
+  //Simulacion de coleccion devuelta
+  return collections[collection];
+}
+
+/*
+  Crea una nueva colección para el usuario
+ */
+void PostCollection(String username, String collection, List<Book> books) {
+  //Simulación de creación de colección
+  print("bookFacade-postcollection");
+  print(collection);
+  collections[collection] = books;
 }

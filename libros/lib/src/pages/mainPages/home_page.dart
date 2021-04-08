@@ -4,7 +4,7 @@ import 'package:libros/src/pages/first_page.dart';
 import 'package:libros/src/pages/registration_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'login_page.dart';
+import '../login_page.dart';
 import 'reading_page.dart';
 import 'library_page.dart';
 import 'search_page.dart';
@@ -62,12 +62,14 @@ class _HomePageState extends State<HomePage> {
   List<BottomNavigationBarItem> buildItems() {
     return [
       BottomNavigationBarItem(
-        icon: Icon(Icons.menu_book_outlined),
+        icon: Icon(Icons.home),
+        activeIcon: Icon(Icons.home),
         label: 'Leyendo',
       ),
       BottomNavigationBarItem(
-        icon: Icon(Icons.local_library),
-        label: 'Biblioteca',
+        icon: Icon(Icons.local_library_outlined),
+        activeIcon: Icon(Icons.local_library),
+        label: 'Mis libros',
       ),
       BottomNavigationBarItem(
         icon: Icon(Icons.search),
@@ -83,9 +85,10 @@ class _HomePageState extends State<HomePage> {
   Widget buildPageView() {
     return PageView(
       controller: pageController,
-      onPageChanged: (index) {
+      physics:new NeverScrollableScrollPhysics(),
+      /*onPageChanged: (index) {
         pageChanged(index);
-      },
+      },*/
       children: <Widget>[
         ReadingPage(),
         LibraryPage(),
@@ -96,11 +99,11 @@ class _HomePageState extends State<HomePage> {
   }
 
   //Actualiza toda la interfaz cuando el usuario hace "slide" sobre la misma
-  void pageChanged(int index) {
+ /* void pageChanged(int index) {
     setState(() {
       currentIndex = index;
     });
-  }
+  }*/
 
   //Actualiza toda la interfaz cuando el usuario selecciona un item del
   // NavigationBat

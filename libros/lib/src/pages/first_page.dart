@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:libros/src/pages/home_page.dart';
+import 'package:libros/src/pages/mainPages/home_page.dart';
 import 'package:libros/src/pages/login_page.dart';
 import 'package:libros/src/pages/registration_page.dart';
 

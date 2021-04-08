@@ -1,4 +1,12 @@
 import 'package:flutter/material.dart';
+
+
+/*
+  Este módulo
+    - Gestiona el estilo de los campos de los formularios
+    - TODO: Centralizar los colores de toda la aplicación
+ */
+
 class ThemeConfig {
   static Color lightPrimary = Colors.white;
   static Color lightAccent = Colors.blueGrey;

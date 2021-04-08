@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:libros/src/models/book.dart';
 import 'package:libros/src/models/bookFacade.dart';
-import 'components/bookCard.dart';
+import '../components/bookCard.dart';
 /*
   Esta pantalla muestra la lista de los libros que está leyendo el usuario
   Está gestionada por el módulo HomePage
@@ -19,7 +19,7 @@ class _ReadingPageState extends State<ReadingPage> {
     super.initState();
     //Actualizo los libros que está leyendo el usuario
     //TODO: Obtener el username de la sesion
-    readingBooks = ReadingBooksList("Pepe");
+    readingBooks = GetBooksReading("Pepe");
 
   }
 
@@ -27,19 +27,19 @@ class _ReadingPageState extends State<ReadingPage> {
   Widget build(BuildContext context) {
     return SafeArea(
           child: Padding(
-            padding: const EdgeInsets.fromLTRB(20.0, 30.0, 30.0, 0.0),
+            padding: const EdgeInsets.fromLTRB(20.0, 20.0, 30.0, 0.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   Text(
                       "Leyendo",
                       style: TextStyle(
-                        fontSize: 30.0,
-                        letterSpacing: 2.0,
+                        fontSize: 25.0,
+                        letterSpacing: 1.0,
                       ),
                   ),
                   Divider(
-                    height: 30,
+                    height: 20.0,
                     thickness: 2,
                   ),
                   Expanded(
