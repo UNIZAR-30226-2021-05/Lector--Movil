@@ -145,10 +145,9 @@ class _CollectionAddState extends State<CollectionAdd> {
               content: Text('Selecciona al menos un libro')
           );
         } else {
-          print("collection_add-createcollection");
-          print(data["collectionName"]);
           PostCollection("paco", data["collectionName"], selectedBooks);
-          Navigator.pushReplacementNamed(context, 'library');
+          Navigator.pushReplacementNamed(context, 'library',
+              arguments: {'tabIndex': 1});
           snackBar = SnackBar(
               backgroundColor: Colors.blue,
               content: Text('¡Nueva colección creada!')

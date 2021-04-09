@@ -18,6 +18,10 @@ class Library_State extends State<LibraryPage> {
 
   List<Book> _savedBooks = []; //Libros guardados por el usuario
   List<String> _collections = []; //Colecciones del usuario
+  String _selectedCollectionName = ""; //Nombre colección seleccionada
+  int tabIndex = 0; //Por defecto el tabBar muestra los libros (índice 0)
+  Map data = {}; //Índice del tabBar especificado como argumento
+
 
   final List<Tab> tabs = <Tab>[
     Tab(text: 'Libros'),
@@ -35,8 +39,21 @@ class Library_State extends State<LibraryPage> {
 
   @override
   Widget build(BuildContext context) {
+
+    data = ModalRoute
+        .of(context)
+        .settings
+        .arguments;
+
+    if (data != null && data.containsKey('tabIndex')) {
+      //Caso especifico el índice del tab que quiero mostrar
+      tabIndex = data['tabIndex'];
+      data.remove('tabIndex');
+    }
+
     return DefaultTabController(
       length: tabs.length,
+      initialIndex: tabIndex,
       child: Scaffold(
         appBar: AppBar(
           title: Padding(
@@ -127,7 +144,9 @@ class Library_State extends State<LibraryPage> {
                                 color: Colors.white,
                               ),
                               itemBuilder: (BuildContext context) {
-                                return {'Eliminar'}.map((String opcion) {
+                                _selectedCollectionName = _collections[index];
+                                return {'Renombrar','Eliminar'}.map((String
+                                opcion) {
                                   return PopupMenuItem<String>(
                                     value: opcion,
                                     child: Text(opcion),
@@ -154,8 +173,18 @@ class Library_State extends State<LibraryPage> {
   //Eliminar colección del usuario
   void handleClickCollectionCard(String value) {
     switch (value) {
+      case 'Renombrar':
+        _AlertRenameCollection(_selectedCollectionName);
+        break;
       case 'Eliminar':
         //TODO:ELIMINAR COLECCIÓN DEL USUARIO
+        setState(() {
+          DeleteCollection("paco", _selectedCollectionName);
+          //Actualizo las colecciones de la caché
+          _collections = GetCollections("Pepe");
+          Navigator.pushReplacementNamed(context,'library',
+              arguments: {'tabIndex': 1});
+        });
         final snackBar = SnackBar(
             backgroundColor: Colors.blue,
             content: Text('¡Eliminado correctamente!')
@@ -268,6 +297,52 @@ class Library_State extends State<LibraryPage> {
               ),
             ],
           );
+          });
+        }
+    );
+  }
+
+  dynamic _AlertRenameCollection(String oldName) {
+    String _newCollectionName = "";
+    return showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return StatefulBuilder(builder: (context, setState) {
+            return AlertDialog(
+              title: Text('Cambiar el nombre de la colección'),
+              content: TextFormField(
+                onChanged: (value) {
+                  setState(() {
+                    _newCollectionName = value;
+                  });
+                },
+                initialValue: oldName,
+              ),
+              actions: <Widget>[
+                FlatButton(
+                  child: Text('Cancelar'),
+                  onPressed: () {
+                    Navigator.of(context).pop(); //cerrar confirmación
+                  },
+                ),
+                TextButton(
+                  child: Text(
+                    'Hecho',
+                  ),
+                  onPressed: _newCollectionName.isEmpty ? null : () {
+                    //Mostrar libros que puede seleccionar el usuario
+                    //Le paso el título de la nueva colección como argumento
+                    setState(() {
+                      RenameCollection("Pepe", oldName, _newCollectionName);
+                      //Actualizo las colecciones de la caché
+                      _collections = GetCollections("Pepe");
+                      Navigator.pushReplacementNamed(context,'library',
+                          arguments: {'tabIndex': 1});
+                    });
+                  },
+                ),
+              ],
+            );
           });
         }
     );

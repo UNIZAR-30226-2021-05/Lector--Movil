@@ -67,7 +67,6 @@ Map collections = new Map<String,List<Book>>();
 
 //Lista con el nombre de las colecciones del usuario "username".
 List<String> GetCollections(String username) {
-  print("collectionsList");
   //Simulación de colecciones recibidas
   print("bookFacade-getCollections");
   print(collections.keys);
@@ -87,4 +86,21 @@ void PostCollection(String username, String collection, List<Book> books) {
   print("bookFacade-postcollection");
   print(collection);
   collections[collection] = books;
+}
+
+//Renombrar la coleccion "Oldcollection" del usuario "username" por
+// "NewCollectionName
+void RenameCollection(String username, String OldCollectionName,String
+NewCollectionName) {
+  //Simulación renombrar colección
+    List<Book> collectionBooks = [];
+    collectionBooks = collections[OldCollectionName];
+    collections.remove(OldCollectionName);
+    collections[NewCollectionName] = collectionBooks;
+}
+
+//Eliminar la coleccion "collectionName" del usuario "username"
+void DeleteCollection(String username, String collectionName) {
+  //Simulación renombrar colección
+  collections.remove(collectionName);
 }
