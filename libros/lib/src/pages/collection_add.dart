@@ -2,6 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:libros/src/models/bookFacade.dart';
 import 'package:libros/src/models/book.dart';
 
+/*
+  Interfaz. Lista todos los libros guardados por el usuario.
+  Permite que el usuario pueda hacer una selección de libros y los incluya en
+  una colección.
+ */
 
 class CollectionAdd extends StatefulWidget {
   @override
@@ -9,21 +14,20 @@ class CollectionAdd extends StatefulWidget {
 }
 
 class _CollectionAddState extends State<CollectionAdd> {
-  //Datos pasados como argumentos a la página
-  Map data = {};
-  List<Book> savedBooks = []; //Libros pertenecientes al usuario
-  List<Book> selectedBooks = []; //Libros para añadir a la colección
+
+  Map data = {}; //Nombre de la colección. Recibido como argumento.
+  List<Book> savedBooks = []; //Libros guardados por el usuario
+  List<Book> selectedBooks = []; //Libros seleccionados para ser añadidos.
 
   @override
   void initState() {
     super.initState();
-    //Actualizo los libros guardados por el usuario
+    //Peticiónes a backend
     //TODO: Obtener el username de la sesion
     savedBooks = GetBooksSaved("Pepe");
   }
   @override
   Widget build(BuildContext context) {
-    //Título de colección recibido desde library_page
     data = ModalRoute
         .of(context)
         .settings
@@ -60,6 +64,7 @@ class _CollectionAddState extends State<CollectionAdd> {
     );
   }
 
+  //Representación de un libro con el título y el autor.
   Widget _BookSelectionCard(Book book) {
     return Column(
       children: [
@@ -103,6 +108,8 @@ class _CollectionAddState extends State<CollectionAdd> {
     );
   }
 
+  //Muestra un icono pulsable y añade o elimina el libro "book" de la selección
+  //de libros del usuario.
   Widget _buttonSelectBook(Book book) {
     final alreadySelected = selectedBooks.contains(book);
     return IconButton(
@@ -121,6 +128,10 @@ class _CollectionAddState extends State<CollectionAdd> {
     );
   }
 
+  //Si el usuario no ha seleccionado ningún libro, se muestra un warning al
+  // usuario
+  //Si el usuario ha seleccionado al menos un libro, se crea una nueva
+  // colección
   Widget _CreateCollection() {
     return OutlineButton (
       splashColor:Colors.grey,
@@ -128,6 +139,7 @@ class _CollectionAddState extends State<CollectionAdd> {
       onPressed: () {
         SnackBar snackBar;
         if (selectedBooks.length == 0) {
+          //Caso no ha seleccionado ningún libro
            snackBar = SnackBar(
               backgroundColor: Colors.orange,
               content: Text('Selecciona al menos un libro')

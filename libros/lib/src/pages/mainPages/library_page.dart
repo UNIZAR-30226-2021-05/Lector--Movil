@@ -4,8 +4,8 @@ import '../components/bookCard.dart';
 import 'package:libros/src/models/bookFacade.dart';
 import 'package:libros/src/models/book.dart';
 /*
-  Esta pantalla muestra los libros que posee el usuario
-  Está gestionada por el módulo HomePage
+  Interfaz. Muestra libros guardados y colecciones del usuario.
+  Gestionada por el Widget PageView del módulo HomePage
  */
 
 
@@ -13,11 +13,13 @@ class LibraryPage extends StatefulWidget {
   @override
   Library_State createState() => Library_State();
 }
-//No incluir Scaffold (lo añade HomePage)
+
 class Library_State extends State<LibraryPage> {
-  List<Book> savedBooks = [];
-  List<String> collections = [];
-  final List<Tab> myTabs = <Tab>[
+
+  List<Book> _savedBooks = []; //Libros guardados por el usuario
+  List<String> _collections = []; //Colecciones del usuario
+
+  final List<Tab> tabs = <Tab>[
     Tab(text: 'Libros'),
     Tab(text: 'Colecciones'),
   ];
@@ -25,18 +27,16 @@ class Library_State extends State<LibraryPage> {
   @override
   void initState() {
     super.initState();
-    //Actualizo los libros guardados por el usuario
+    //Peticiónes a backend
     //TODO: Obtener el username de la sesion
-    savedBooks = GetBooksSaved("Pepe");
-    collections = GetCollections("Pepe");
-
+    _savedBooks = GetBooksSaved("Pepe");
+    _collections = GetCollections("Pepe");
   }
-
 
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: myTabs.length,
+      length: tabs.length,
       child: Scaffold(
         appBar: AppBar(
           title: Padding(
@@ -51,29 +51,38 @@ class Library_State extends State<LibraryPage> {
           ),
           bottom: TabBar(
             indicatorColor: Colors.blue,
-            tabs: myTabs
+            tabs: tabs
           ),
         ),
         body: Padding(
           padding: const EdgeInsets.fromLTRB(20.0, 0.0, 30.0, 0.0),
           child: TabBarView(
             children: [
-              ListView.builder(
-                itemCount: savedBooks.length,
-                physics: BouncingScrollPhysics(),
-                itemBuilder: (context, index) {
-                  return  bookCard(savedBooks[index],"bookDetails", context);
-                },
-              ),
-              _colecctions(),
+              _buildSavedBooks(),
+              _builColections(),
             ],
           )
         ),
       ),
     );
   }
-  Widget _colecctions() {
-    if(collections.isEmpty) {
+
+  //Muesta la lista de libros guardados por el usuario
+  Widget _buildSavedBooks() {
+    return ListView.builder(
+      itemCount: _savedBooks.length,
+      physics: BouncingScrollPhysics(),
+      itemBuilder: (context, index) {
+        return  bookCard(_savedBooks[index],"bookDetails", context);
+      },
+    );
+  }
+
+  // Si el usuario no tiene colecciones muestra un mensaje informativo
+  // Si el usuario tiene colecciones muestra la lista de colecciones del usuario
+  Widget _builColections() {
+    if(_collections.isEmpty) {
+      //Caso usuario no tiene colecciones
       return _EmptyCollectionMessage();
     } else {
       return Column(
@@ -81,17 +90,15 @@ class Library_State extends State<LibraryPage> {
           ListView.builder(
             scrollDirection: Axis.vertical,
             shrinkWrap: true,
-            itemCount: collections.length,
+            itemCount: _collections.length,
             physics: BouncingScrollPhysics(),
             itemBuilder: (context, index) {
               return  GestureDetector(
                 onTap: () {
-                  //Navegar a collection_books, pasando el título de la
-                  //colección seleccionada como argumento
-                  print("library_page-_collections");
-                  print(collections[index]);
+                  //Mostrar libros de la colección llamada _collections[index]
+                  //Se pasa el nombre de la colección como argumento
                   Navigator.pushNamed(context,'collectionBooks',arguments:
-                  {'collectionName': collections[index]});
+                  {'collectionName': _collections[index]});
                 },
                 child: Container(
                   margin: EdgeInsets.fromLTRB(30.0, 20.0, 30.0, 0.0),
@@ -107,7 +114,7 @@ class Library_State extends State<LibraryPage> {
                           children: <Widget>[
                             SizedBox(width: 30.0),
                             Text(
-                              collections[index],
+                              _collections[index],
                               style: TextStyle(
                                 fontSize: 20.0,
                                 color: Colors.white,
@@ -144,7 +151,7 @@ class Library_State extends State<LibraryPage> {
     }
   }
 
-  //Eliminar colección
+  //Eliminar colección del usuario
   void handleClickCollectionCard(String value) {
     switch (value) {
       case 'Eliminar':
@@ -157,6 +164,8 @@ class Library_State extends State<LibraryPage> {
         break;
     }
   }
+
+  //Mensaje informativo sobre las colecciones
   Widget _EmptyCollectionMessage() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -195,13 +204,14 @@ class Library_State extends State<LibraryPage> {
     );
   }
 
+  //Botón para crear una nueva colección
   Widget _buttonAddCollection() {
     return OutlineButton (
         splashColor:Colors.grey,
         highlightedBorderColor: Colors.black,
         onPressed: () {
-          //TODO:LLAMAR A PESTAÑA DE CREACIÓN DE COLECCIONES
-          _AlertAddCollection();
+          //Muestra un alert para insertar el nombre de la nueva colección
+          _AlertAddCollectionName();
         },
         highlightElevation: 0,
         borderSide: BorderSide(
@@ -218,7 +228,10 @@ class Library_State extends State<LibraryPage> {
     );
   }
 
-  dynamic _AlertAddCollection() {
+  //Permite ingresar al usuario el nombre de la nueva colección
+  //Si el título es vacío impide al usuario continuar con el proceso.
+  //Si el título no es vacío, muestra los libros que puede seleccionar.
+  dynamic _AlertAddCollectionName() {
     String _collectionName = "";
     String _hintText = "Nombre de la colección";
     return showDialog(
@@ -247,9 +260,8 @@ class Library_State extends State<LibraryPage> {
                   'Siguiente',
                 ),
                 onPressed: _collectionName.isEmpty ? null : () {
-                  //TODO: LLAMAR A BACKEND UPDATE ESTADO LIBRO
-                  //LLamo a página collection_add pasándole el título de la
-                  // colección
+                    //Mostrar libros que puede seleccionar el usuario
+                    //Le paso el título de la nueva colección como argumento
                     Navigator.pushNamed(context, 'collectionAdd', arguments:
                     {'collectionName': _collectionName});
                 },

@@ -54,13 +54,18 @@ List<Book> GetBooksSaved(String username) {
 //-------------------
 // COLECCIONES
 //-------------------
+//TODO: utilizar "collections" para cachear en un futuro
+//TODO: UPDATE de nombre de colección.
+//TODO: DELETE de colección.
+//TODO: ADD de libros  a colección
+//TODO: DELETE de libros pertenecientes a colección
 
-//Simulación de colecciones guardadas
+
+
+//Simulación almacenamiento colecciones
 Map collections = new Map<String,List<Book>>();
-/*
-  Devuelve una lista con los nombres de las
-  colecciones del usuario
- */
+
+//Lista con el nombre de las colecciones del usuario "username".
 List<String> GetCollections(String username) {
   print("collectionsList");
   //Simulación de colecciones recibidas
@@ -70,18 +75,13 @@ List<String> GetCollections(String username) {
   return collectionsName;
 }
 
-/*
-  Devuelve una lista con los libros pertenecientes a una
-  colección del usuario
- */
-List<Book> GetCollectionBooks(String username, String collection) {
+//Lista de libros de la colección llamada "collectionName" de usuario "username"
+List<Book> GetCollectionBooks(String username, String collectionName) {
   //Simulacion de coleccion devuelta
-  return collections[collection];
+  return collections[collectionName];
 }
 
-/*
-  Crea una nueva colección para el usuario
- */
+//Crear nueva colección "colection" con libros "books" para el usuario "username"
 void PostCollection(String username, String collection, List<Book> books) {
   //Simulación de creación de colección
   print("bookFacade-postcollection");

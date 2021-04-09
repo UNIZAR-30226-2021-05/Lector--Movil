@@ -3,16 +3,19 @@ import 'package:libros/src/models/bookFacade.dart';
 import 'package:libros/src/models/book.dart';
 import 'package:libros/src/pages/components/bookCard.dart';
 
+
+/*
+  Interfaz. Lista los libros pertenecientes a una colección.
+ */
 class CollectionBooks extends StatefulWidget {
   @override
   _CollectionBooksState createState() => _CollectionBooksState();
 }
 
 class _CollectionBooksState extends State<CollectionBooks> {
-  //Datos pasados como argumentos a la página
-  Map data = {};
-  List<Book> collectionBooks = []; //Libros de una collección del usuario
 
+  Map data = {}; //Nombre de la colección. Recibido como argumento.
+  List<Book> collectionBooks = []; //Libros de una colección del usuario
 
   @override
   Widget build(BuildContext context) {
@@ -22,10 +25,7 @@ class _CollectionBooksState extends State<CollectionBooks> {
         .settings
         .arguments;
 
-    print("collection_books-build");
-    print(data['collectionName']);
     collectionBooks = GetCollectionBooks("Pepe", data['collectionName']);
-    print(collectionBooks.length);
 
     return Scaffold(
         appBar: AppBar(
