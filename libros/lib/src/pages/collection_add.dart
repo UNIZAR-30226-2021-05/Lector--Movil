@@ -126,14 +126,22 @@ class _CollectionAddState extends State<CollectionAdd> {
       splashColor:Colors.grey,
       highlightedBorderColor: Colors.black,
       onPressed: () {
-        print("collection_add-createcollection");
-        print(data["collectionName"]);
-        PostCollection("paco",data["collectionName"], selectedBooks);
-        Navigator.pushReplacementNamed(context,'library');
-        final snackBar = SnackBar(
-            backgroundColor: Colors.blue,
-            content: Text('¡Nueva colección creada')
-        );
+        SnackBar snackBar;
+        if (selectedBooks.length == 0) {
+           snackBar = SnackBar(
+              backgroundColor: Colors.orange,
+              content: Text('Selecciona al menos un libro')
+          );
+        } else {
+          print("collection_add-createcollection");
+          print(data["collectionName"]);
+          PostCollection("paco", data["collectionName"], selectedBooks);
+          Navigator.pushReplacementNamed(context, 'library');
+          snackBar = SnackBar(
+              backgroundColor: Colors.blue,
+              content: Text('¡Nueva colección creada!')
+          );
+        }
         ScaffoldMessenger.of(context).showSnackBar(snackBar);
       },
       highlightElevation: 0,

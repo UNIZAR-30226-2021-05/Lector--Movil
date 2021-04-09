@@ -49,6 +49,12 @@ List<Book> GetBooksSaved(String username) {
   return savedBooks;
 }
 
+
+
+//-------------------
+// COLECCIONES
+//-------------------
+
 //Simulación de colecciones guardadas
 Map collections = new Map<String,List<Book>>();
 /*

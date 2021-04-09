@@ -17,7 +17,6 @@ class LibraryPage extends StatefulWidget {
 class Library_State extends State<LibraryPage> {
   List<Book> savedBooks = [];
   List<String> collections = [];
-
   final List<Tab> myTabs = <Tab>[
     Tab(text: 'Libros'),
     Tab(text: 'Colecciones'),
@@ -30,6 +29,7 @@ class Library_State extends State<LibraryPage> {
     //TODO: Obtener el username de la sesion
     savedBooks = GetBooksSaved("Pepe");
     collections = GetCollections("Pepe");
+
   }
 
 
@@ -219,18 +219,22 @@ class Library_State extends State<LibraryPage> {
   }
 
   dynamic _AlertAddCollection() {
-    String _collectionName;
+    String _collectionName = "";
+    String _hintText = "Nombre de la colección";
     return showDialog(
       context: context,
         builder: (BuildContext context) {
+        return StatefulBuilder(builder: (context, setState) {
           return AlertDialog(
             title: Text('Crear una nueva colección'),
             content: TextField(
-              onChanged: (value) {
-                _collectionName = value;
-              },
-              decoration: InputDecoration(hintText: "Nombre de la colección"),
-            ),
+                  onChanged: (value) {
+                    setState(() {
+                      _collectionName = value;
+                    });
+                  },
+                  decoration: InputDecoration(hintText: _hintText),
+                ),
             actions: <Widget>[
               FlatButton(
                 child: Text('Cancelar'),
@@ -238,21 +242,21 @@ class Library_State extends State<LibraryPage> {
                   Navigator.of(context).pop(); //cerrar confirmación
                 },
               ),
-              FlatButton(
+              TextButton(
                 child: Text(
                   'Siguiente',
                 ),
-                onPressed: () {
+                onPressed: _collectionName.isEmpty ? null : () {
                   //TODO: LLAMAR A BACKEND UPDATE ESTADO LIBRO
                   //LLamo a página collection_add pasándole el título de la
                   // colección
-                  Navigator.pushNamed(context,'collectionAdd',arguments:
-                  {'collectionName': _collectionName});
-                  },
+                    Navigator.pushNamed(context, 'collectionAdd', arguments:
+                    {'collectionName': _collectionName});
+                },
               ),
-
             ],
           );
+          });
         }
     );
   }
