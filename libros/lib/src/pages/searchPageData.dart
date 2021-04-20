@@ -161,7 +161,7 @@ class _SearchPageDataState extends State<SearchPageData> {
             itemCount: 3,
             scrollDirection: Axis.horizontal,
             itemBuilder: (context, index) {
-              return bookCardMin(listaAMostrar[index], "book", context);
+              return bookCardMin(listaAMostrar[index], "bookDetails", context);
             },
           ),
         ),
@@ -181,7 +181,7 @@ class _SearchPageDataState extends State<SearchPageData> {
             itemCount: 3,
             scrollDirection: Axis.horizontal,
             itemBuilder: (context, index) {
-              return bookCardMin(listaAMostrar[index], "book", context);
+              return bookCardMin(listaAMostrar[index], "bookDetails", context);
             },
           ),
         ),

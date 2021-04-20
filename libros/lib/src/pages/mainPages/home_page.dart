@@ -1,8 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:libros/src/models/userFacade.dart';
-import 'package:libros/src/pages/first_page.dart';
-import 'package:libros/src/pages/registration_page.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import 'reading_page.dart';
 import 'library_page.dart';
@@ -63,7 +59,7 @@ class _HomePageState extends State<HomePage> {
   Widget buildPageView() {
     return PageView(
       controller: pageController,
-      physics:new NeverScrollableScrollPhysics(),
+      physics: new NeverScrollableScrollPhysics(),
       /*onPageChanged: (index) {
         pageChanged(index);
       },*/
@@ -77,7 +73,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   //Actualiza toda la interfaz cuando el usuario hace "slide" sobre la misma
- /* void pageChanged(int index) {
+  /* void pageChanged(int index) {
     setState(() {
       currentIndex = index;
     });

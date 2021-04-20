@@ -15,12 +15,12 @@ Map<String, WidgetBuilder> getPages() {
     //ReadingPage, LibraryPage, SearchPage y ProfilePage.
     //Permite que la barra de navegación sea consistente ¡!
     'home': (BuildContext context) => HomePage(),
-    'book':(BuildContext context) => BookPage(),
-    'bookDetails':(BuildContext context) => BookDetailsPage(),
-    'collectionAdd':(BuildContext context) => CollectionAdd(),
-    'collectionBooks':(BuildContext context) => CollectionBooks(),
-    'library':(BuildContext context) => LibraryPage(),
-    'firstPage':(BuildContext context) => FirstPage(),
-    'loadingPage' :(BuildContext context) => Loading(),
+    'book': (BuildContext context) => BookPage(),
+    'bookDetails': (BuildContext context) => BookDetailsPage(),
+    'collectionAdd': (BuildContext context) => CollectionAdd(),
+    'collectionBooks': (BuildContext context) => CollectionBooks(),
+    'library': (BuildContext context) => LibraryPage(),
+    'firstPage': (BuildContext context) => FirstPage(),
+    'loadingPage': (BuildContext context) => Loading(),
   };
 }

@@ -41,6 +41,7 @@ Future<bool> registrarUsuario(User usuario, BuildContext context) async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     sharedPreferences.setString("key", jsonResponse['key']);
     sharedPreferences.setString("nombreUsuario", usuario.nombreUsuario);
+    sharedPreferences.setString("email", usuario.email);
     sharedPreferences.setString("contrasenya", usuario.pass);
 
     return true;
@@ -67,6 +68,7 @@ Future<bool> loginUsuario(String username, String pass) async {
     print(jsonResponse['key']);
     sharedPreferences.setString("key", jsonResponse['key']);
     sharedPreferences.setString("nombreUsuario", username);
+    getAndStoreUserInfo();
     sharedPreferences.setString("contrasenya", pass);
     return true;
   } else {

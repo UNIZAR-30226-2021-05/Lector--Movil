@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:libros/src/models/userFacade.dart';
-import 'package:libros/src/pages/first_page.dart';
 
 class Loading extends StatefulWidget {
   @override
@@ -14,7 +13,6 @@ class Loading extends StatefulWidget {
 }
 
 class _LoadingState extends State<Loading> {
-
   checkLoginStatus() async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     if (sharedPreferences.getString("key") == null) {
@@ -39,10 +37,9 @@ class _LoadingState extends State<Loading> {
       backgroundColor: Colors.white,
       body: Center(
           child: SpinKitSquareCircle(
-            color: Colors.blue,
-            size: 50.0,
-          )
-      ),
+        color: Colors.blue,
+        size: 50.0,
+      )),
     );
   }
 }

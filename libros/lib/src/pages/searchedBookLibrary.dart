@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:libros/src/models/book.dart';
 import 'package:libros/src/models/bookFacade.dart';
 import 'package:libros/src/pages/components/bookCard.dart';
-import 'package:libros/src/pages/components/bookCardMin.dart';
-import 'package:libros/src/pages/mainPages/search_page.dart';
 
 /*
   Esta pantalla permite hacer búsquedas de libros al usuario
@@ -96,7 +94,7 @@ class _SearchedBookLibraryState extends State<SearchedBookLibrary> {
           itemCount: listaAMostrar.length,
           scrollDirection: Axis.vertical,
           itemBuilder: (context, index) {
-            return bookCard(listaAMostrar[index], "book", context);
+            return bookCard(listaAMostrar[index], "bookDetails", context);
           },
         ),
       );

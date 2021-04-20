@@ -8,6 +8,7 @@ SharedPreferences sp;
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   sp = await SharedPreferences.getInstance();
+
   runApp(MyApp());
 }
 
