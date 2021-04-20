@@ -8,15 +8,15 @@ import 'package:http/http.dart' as http;
 import 'user.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-String apiUrlLogin = 'http://lectorbrainbook.herokuapp.com/rest-auth/login/';
+String apiUrlLogin = 'https://lectorbrainbook.herokuapp.com/rest-auth/login/';
 
 String apiUrlRegister =
-    'http://lectorbrainbook.herokuapp.com/rest-auth/registration/';
+    'https://lectorbrainbook.herokuapp.com/rest-auth/registration/';
 
 String apiUrlChangePass =
-    "http://lectorbrainbook.herokuapp.com/rest-auth/password/change/";
+    "https://lectorbrainbook.herokuapp.com/rest-auth/password/change/";
 
-String apiUrlGetUser = "http://lectorbrainbook.herokuapp.com/usuario/";
+String apiUrlGetUser = "https://lectorbrainbook.herokuapp.com/usuario/";
 
 Future<bool> registrarUsuario(User usuario, BuildContext context) async {
   SharedPreferences sp;
