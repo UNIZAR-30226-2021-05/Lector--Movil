@@ -40,26 +40,12 @@ Future<bool> registrarUsuario(User usuario, BuildContext context) async {
     print(jsonResponse['key']);
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     sharedPreferences.setString("key", jsonResponse['key']);
+    sharedPreferences.setString("nombreUsuario", usuario.nombreUsuario);
+    sharedPreferences.setString("contrasenya", usuario.pass);
+
     return true;
   } else {
     return false;
-    /* return showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text(
-              'Vaya! Parece que ya tenemos un usuario registrado con las mismas credenciales'),
-          actions: <Widget>[
-            FlatButton(
-              child: Text('OK'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
-    );*/
   }
 }
 
@@ -129,6 +115,7 @@ void getAndStoreUserInfo() async {
   var jsonResponse = null;
   jsonResponse = json.decode(response.body);
   User user = User.fromJson(jsonResponse);
+  //Aqui parece que hay un error
   sharedPreferences.setString("nombreUsuario", user.nombreUsuario);
   sharedPreferences.setString("email", user.email);
 }
