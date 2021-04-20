@@ -5,6 +5,7 @@ class SessionManager {
   String _email = '';
   String _pathPhoto = '';
 
+
   Future<void> setNombreUsuario(String nombre) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setString("nombreUsuario", nombre);

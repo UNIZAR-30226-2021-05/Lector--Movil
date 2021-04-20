@@ -111,7 +111,6 @@ class _EditEmailState extends State<EditEmail> {
               border:
                   OutlineInputBorder(borderRadius: BorderRadius.circular(12.0)),
               hintText: 'Email',
-              labelText: 'Email',
               suffixIcon: Icon(Icons.mail),
             ),
             onChanged: (valor) {

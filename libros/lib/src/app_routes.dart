@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:libros/src/pages/book_page.dart';
 import 'package:libros/src/pages/collection_books.dart';
 import 'package:libros/src/pages/first_page.dart';
+import 'package:libros/src/pages/loading_page.dart';
 import 'package:libros/src/pages/mainPages/home_page.dart';
 import 'package:libros/src/pages/book_details_page.dart';
 import 'package:libros/src/pages/collection_add.dart';
@@ -19,5 +20,7 @@ Map<String, WidgetBuilder> getPages() {
     'collectionAdd':(BuildContext context) => CollectionAdd(),
     'collectionBooks':(BuildContext context) => CollectionBooks(),
     'library':(BuildContext context) => LibraryPage(),
+    'firstPage':(BuildContext context) => FirstPage(),
+    'loadingPage' :(BuildContext context) => Loading(),
   };
 }

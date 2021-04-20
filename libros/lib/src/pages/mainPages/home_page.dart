@@ -4,7 +4,6 @@ import 'package:libros/src/pages/first_page.dart';
 import 'package:libros/src/pages/registration_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../login_page.dart';
 import 'reading_page.dart';
 import 'library_page.dart';
 import 'search_page.dart';
@@ -32,27 +31,6 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   //Índice inicial del NavigationBar
   int currentIndex = 0;
-  SharedPreferences sharedPreferences;
-
-  @override
-  void initState() {
-    super.initState();
-    checkLoginStatus();
-  }
-
-  checkLoginStatus() async {
-    sharedPreferences = await SharedPreferences.getInstance();
-    print("Estoy comprobando si tengo que ir a un lado o a otro");
-    if (sharedPreferences.getString("key") == null) {
-      print("Te tengo que llevar al login que no estas logueado");
-      Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(builder: (BuildContext context) => FirstPage()),
-          (Route<dynamic> route) => false);
-    } else {
-      print("No bro, esta es tu key: " + sharedPreferences.getString("key"));
-      getAndStoreUserInfo();
-    }
-  }
 
   PageController pageController = PageController(
     initialPage: 0,

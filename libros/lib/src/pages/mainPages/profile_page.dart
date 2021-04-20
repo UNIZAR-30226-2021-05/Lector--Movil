@@ -17,8 +17,8 @@ class ProfilePage extends StatefulWidget {
 //No incluir Scaffold (lo añade HomePage)
 class _ProfilePageState extends State<ProfilePage> {
   SessionManager session = new SessionManager();
-  String _nombreUsuario = '';
-  String _email = '';
+  String _nombreUsuario = 'Cargando...'; //Evita error de NULL
+  String _email = 'Cargando...'; //Evita error de NULL
   _ProfilePageState() {
     getUserInfo();
   }
