@@ -1,3 +1,5 @@
+import 'package:libros/src/storeUserInfo/SessionManager.dart';
+
 import 'book.dart';
 
 /*
@@ -73,7 +75,6 @@ List<Book> getBooksSearched(String username, String book) {
         ["accion", "comedia"]);
     libros.add(libro);
   }
-  print('Me has pedido ese libro: ' + book);
   for (var i = 0; i < 10; i += 1) {
     String titulo = libros[i].title;
     if (titulo.toLowerCase().contains(book.toLowerCase())) {
@@ -106,7 +107,6 @@ List<Book> getBooksDiscover(String book) {
         ["accion", "comedia"]);
     libros.add(libro);
   }
-  print('Me has pedido ese libro: ' + book);
   for (var i = 0; i < 10; i += 1) {
     String titulo = libros[i].title;
     if (titulo.toLowerCase().contains(book.toLowerCase())) {
@@ -166,4 +166,12 @@ void RenameCollection(
 void DeleteCollection(String username, String collectionName) {
   //Simulación renombrar colección
   collections.remove(collectionName);
+}
+
+void deleteBookFromUser(String titulo) async {
+  SessionManager s = new SessionManager();
+  String nombreUsuario = await s.getNombreUsuario();
+
+  print(
+      "Se  va a borrar el libro: " + titulo + " del usuario: " + nombreUsuario);
 }

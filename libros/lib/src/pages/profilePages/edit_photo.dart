@@ -75,7 +75,7 @@ class _EditPhotoState extends State<EditPhoto> {
                           width: 200,
                           child: RaisedButton(
                             onPressed: () async {
-                              // _showPicker(context);
+                              _showPicker(context);
                             },
                             elevation: 4,
                             textColor: Colors.white,
@@ -108,41 +108,41 @@ class _EditPhotoState extends State<EditPhoto> {
                 ]))));
   }
 
-  // void _showPicker(context) {
-  //   showModalBottomSheet(
-  //       context: context,
-  //       builder: (BuildContext bc) {
-  //         return SafeArea(
-  //           child: Container(
-  //             child: new Wrap(
-  //               children: <Widget>[
-  //                 new ListTile(
-  //                     leading: new Icon(Icons.photo_camera),
-  //                     title: new Text('Haz una foto'),
-  //                     onTap: () async {
-  //                       PickedFile image = await ImagePicker().getImage(
-  //                           source: ImageSource.camera, imageQuality: 50);
-  //                       Navigator.of(context).pop();
-  //                       setState(() {
-  //                         _image = image;
-  //                       });
-  //                     }),
-  //                 new ListTile(
-  //                   leading: new Icon(Icons.photo_library),
-  //                   title: new Text('Escoge una foto'),
-  //                   onTap: () async {
-  //                     PickedFile image = await ImagePicker().getImage(
-  //                         source: ImageSource.gallery, imageQuality: 50);
-  //                     setState(() {
-  //                       _image = image;
-  //                     });
-  //                     Navigator.of(context).pop();
-  //                   },
-  //                 ),
-  //               ],
-  //             ),
-  //           ),
-  //         );
-  //       });
-  // }
+  void _showPicker(context) {
+    showModalBottomSheet(
+        context: context,
+        builder: (BuildContext bc) {
+          return SafeArea(
+            child: Container(
+              child: new Wrap(
+                children: <Widget>[
+                  new ListTile(
+                      leading: new Icon(Icons.photo_camera),
+                      title: new Text('Haz una foto'),
+                      onTap: () async {
+                        PickedFile image = await ImagePicker().getImage(
+                            source: ImageSource.camera, imageQuality: 50);
+                        Navigator.of(context).pop();
+                        setState(() {
+                          _image = image;
+                        });
+                      }),
+                  new ListTile(
+                    leading: new Icon(Icons.photo_library),
+                    title: new Text('Escoge una foto'),
+                    onTap: () async {
+                      PickedFile image = await ImagePicker().getImage(
+                          source: ImageSource.gallery, imageQuality: 50);
+                      setState(() {
+                        _image = image;
+                      });
+                      Navigator.of(context).pop();
+                    },
+                  ),
+                ],
+              ),
+            ),
+          );
+        });
+  }
 }

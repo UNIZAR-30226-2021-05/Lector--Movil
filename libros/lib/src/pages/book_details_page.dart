@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:libros/src/models/bookFacade.dart';
+import 'package:libros/src/storeUserInfo/SessionManager.dart';
 
 class BookDetailsPage extends StatefulWidget {
   @override
@@ -14,11 +16,7 @@ class _BookDetailsPageState extends State<BookDetailsPage> {
   @override
   Widget build(BuildContext context) {
     //Libro recibido
-    data = ModalRoute
-        .of(context)
-        .settings
-        .arguments;
-
+    data = ModalRoute.of(context).settings.arguments;
 
     return Scaffold(
       appBar: AppBar(
@@ -78,46 +76,62 @@ class _BookDetailsPageState extends State<BookDetailsPage> {
                           ),
                           SizedBox(height: 10.0),
                           SizedBox(height: 5.0),
-                          for(var i = 0; i < data["book"].genres.length; i++)
+                          for (var i = 0; i < data["book"].genres.length; i++)
                             Container(
-                              padding: EdgeInsets.fromLTRB(20.0, 2.0, 20.0,
-                                  2.0),
+                              padding:
+                                  EdgeInsets.fromLTRB(20.0, 2.0, 20.0, 2.0),
                               decoration: BoxDecoration(
                                 border: Border.all(
                                   color: Colors.blue,
                                 ),
-                                borderRadius: BorderRadius.circular(10.0),
+                                borderRadius: BorderRadius.circular(8.0),
                               ),
                               child: Text(data["book"].genres[i]),
                             )
                           //Text( data["book"].genres.toString()),
                         ],
                       )
-                    ]
-                ),
+                    ]),
               ),
-              SizedBox(height: 10.0),
+              SizedBox(height: 20.0),
+              Text("Sinopsis"),
+              Divider(
+                height: 30,
+                thickness: 2,
+              ),
+              Text(
+                data["book"].synopsis,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(
+                  color: Colors.grey[600],
+                ),
+                maxLines: 10,
+              ),
+              SizedBox(height: 30.0),
               Row(
-                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
-                  /* TextButton(
-                      onPressed: () {
-                        //TODO: LLAMAR A BACKEND UPDATE ESTADO LIBRO
-                      },
-                      child: Text(
-                          "Eliminar de mi biblioteca",
-                        style: TextStyle(
-                          color: Colors.red,
-                        ),
-                      ),
-                  ),*/
-                  Expanded(
+                  SizedBox(
+                    width: 120,
                     child: ElevatedButton(
                       style: ButtonStyle(
-                        backgroundColor: MaterialStateProperty.all<Color>(Colors
-                            .blue),
+                        backgroundColor:
+                            MaterialStateProperty.all<Color>(Colors.red),
                       ),
-                      child: Text("Leer libro"),
+                      child: Text("Eliminar libro"),
+                      onPressed: () {
+                        deleteConfirmation();
+                      },
+                    ),
+                  ),
+                  SizedBox(
+                    width: 120,
+                    child: ElevatedButton(
+                      style: ButtonStyle(
+                        backgroundColor:
+                            MaterialStateProperty.all<Color>(Colors.blue),
+                      ),
+                      child: Text("Abrir libro"),
                       onPressed: () {
                         //TODO: LLAMAR A BACKEND UPDATE ESTADO LIBRO
                       },
@@ -125,19 +139,6 @@ class _BookDetailsPageState extends State<BookDetailsPage> {
                   ),
                 ],
               ),
-              SizedBox(height: 30.0),
-              Text("Sinopsis"),
-              Divider(
-                height: 30,
-                thickness: 2,
-              ),
-              Text(data["book"].synopsis,
-                overflow: TextOverflow.ellipsis,
-                style: TextStyle(
-                  color: Colors.grey[600],
-                ),
-                maxLines: 10,
-              )
             ],
           ),
         ),
@@ -162,7 +163,8 @@ class _BookDetailsPageState extends State<BookDetailsPage> {
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text('¿Seguro que desea eliminar ' +
-              data["book"].title + " de su biblioteca?"),
+              data["book"].title +
+              " de su biblioteca?"),
           actions: <Widget>[
             FlatButton(
               child: Text('Cancelar'),
@@ -171,25 +173,21 @@ class _BookDetailsPageState extends State<BookDetailsPage> {
               },
             ),
             FlatButton(
-              child: Text(
-                  'Eliminar',
+              child: Text('Eliminar',
                   style: TextStyle(
                     color: Colors.red,
-                  )
-              ),
+                  )),
               onPressed: () {
-                //TODO: LLAMAR A BACKEND UPDATE ESTADO LIBRO
+                deleteBookFromUser(data["book"].title);
                 //Mensaje ok
                 final snackBar = SnackBar(
                     backgroundColor: Colors.green,
-                    content: Text('¡Eliminado correctamente!')
-                );
+                    content: Text('¡Eliminado correctamente!'));
                 ScaffoldMessenger.of(context).showSnackBar(snackBar);
                 Navigator.of(context).pop(); //cerrar confirmación
                 Navigator.of(context).pop(); //volver a pantalla library_page
               },
             ),
-
           ],
         );
       },
