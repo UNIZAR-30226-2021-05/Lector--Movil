@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:libros/src/pages/book_details_discover_page.dart';
 import 'package:libros/src/pages/book_page.dart';
 import 'package:libros/src/pages/collection_books.dart';
 import 'package:libros/src/pages/first_page.dart';
@@ -17,6 +18,8 @@ Map<String, WidgetBuilder> getPages() {
     'home': (BuildContext context) => HomePage(),
     'book': (BuildContext context) => BookPage(),
     'bookDetails': (BuildContext context) => BookDetailsPage(),
+    'bookDetailsDiscoverPage': (BuildContext context) =>
+        BookDetailsDiscoverPage(),
     'collectionAdd': (BuildContext context) => CollectionAdd(),
     'collectionBooks': (BuildContext context) => CollectionBooks(),
     'library': (BuildContext context) => LibraryPage(),

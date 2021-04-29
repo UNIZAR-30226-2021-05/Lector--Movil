@@ -96,7 +96,8 @@ class _SearchedBookDiscoverState extends State<SearchedBookDiscover> {
           itemCount: listaAMostrar.length,
           scrollDirection: Axis.vertical,
           itemBuilder: (context, index) {
-            return bookCard(listaAMostrar[index], "bookDetails", context);
+            return bookCard(
+                listaAMostrar[index], "bookDetailsDiscoverPage", context);
           },
         ),
       );

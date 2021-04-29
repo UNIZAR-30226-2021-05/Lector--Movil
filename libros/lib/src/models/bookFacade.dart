@@ -175,3 +175,11 @@ void deleteBookFromUser(String titulo) async {
   print(
       "Se  va a borrar el libro: " + titulo + " del usuario: " + nombreUsuario);
 }
+
+void addBookFromUser(String titulo) async {
+  SessionManager s = new SessionManager();
+  String nombreUsuario = await s.getNombreUsuario();
+
+  print(
+      "Se  va a añadir el libro: " + titulo + " al usuario: " + nombreUsuario);
+}
