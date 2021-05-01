@@ -1,8 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:libros/src/models/bookFacade.dart';
-import 'package:libros/src/storeUserInfo/SessionManager.dart';
 
 class BookDetailsPage extends StatefulWidget {
   @override
@@ -76,18 +74,18 @@ class _BookDetailsPageState extends State<BookDetailsPage> {
                           ),
                           SizedBox(height: 10.0),
                           SizedBox(height: 5.0),
-                          for (var i = 0; i < data["book"].genres.length; i++)
-                            Container(
-                              padding:
-                                  EdgeInsets.fromLTRB(20.0, 2.0, 20.0, 2.0),
-                              decoration: BoxDecoration(
-                                border: Border.all(
-                                  color: Colors.blue,
-                                ),
-                                borderRadius: BorderRadius.circular(8.0),
-                              ),
-                              child: Text(data["book"].genres[i]),
-                            )
+                          // for (var i = 0; i < data["book"].genres.length; i++)
+                          //   Container(
+                          //     padding:
+                          //         EdgeInsets.fromLTRB(20.0, 2.0, 20.0, 2.0),
+                          //     decoration: BoxDecoration(
+                          //       border: Border.all(
+                          //         color: Colors.blue,
+                          //       ),
+                          //       borderRadius: BorderRadius.circular(8.0),
+                          //     ),
+                          //     child: Text(data["book"].genres[i]),
+                          //   )
                           //Text( data["book"].genres.toString()),
                         ],
                       )

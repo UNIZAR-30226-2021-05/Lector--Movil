@@ -1,6 +1,10 @@
 import 'package:libros/src/storeUserInfo/SessionManager.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 import 'book.dart';
+
+String apiUrlGetAllBooks = "http://lectorbrainbook.herokuapp.com/libro/todos/";
 
 /*
   Devuelve una lista con los libros que está leyendo el
@@ -23,8 +27,8 @@ List<Book> GetBooksReading(String username) {
         "https://d1csarkz8obe9u.cloudfront"
             ".net/posterpreviews/sci-fi-book-cover-template-a1ec26573b7a71617c38ffc6e356eef9_screen.jpg?ts=1561547637",
         'Hace mucho tiempo en una ciudad muy lejana un niño se encontraba'
-            ' paseando cuando derepente...',
-        ["accion", "comedia"]));
+            ' paseando cuando derepente...'));
+    // ["accion", "comedia"]));
   }
   return readingBooks;
 }
@@ -49,8 +53,8 @@ List<Book> GetBooksSaved(String username) {
         "https://d1csarkz8obe9u.cloudfront"
             ".net/posterpreviews/sci-fi-book-cover-template-a1ec26573b7a71617c38ffc6e356eef9_screen.jpg?ts=1561547637",
         'Hace mucho tiempo en una ciudad muy lejana un niño se encontraba'
-            ' paseando cuando derepente...',
-        ["accion", "comedia"]));
+            ' paseando cuando derepente...'));
+    // ["accion", "comedia"]));
   }
   return savedBooks;
 }
@@ -74,8 +78,8 @@ List<Book> getBooksSearched(String username, String book) {
         "https://d1csarkz8obe9u.cloudfront"
             ".net/posterpreviews/sci-fi-book-cover-template-a1ec26573b7a71617c38ffc6e356eef9_screen.jpg?ts=1561547637",
         'Hace mucho tiempo en una ciudad muy lejana un niño se encontraba'
-            ' paseando cuando derepente...',
-        ["accion", "comedia"]);
+            ' paseando cuando derepente...');
+    // ["accion", "comedia"]));
     libros.add(libro);
   }
   for (var i = 0; i < 10; i += 1) {
@@ -89,29 +93,48 @@ List<Book> getBooksSearched(String username, String book) {
 
 //Lista los libros que coinciden con book
 
-List<Book> getBooksDiscover(String book) {
-  List<Book> discoverBooks = [];
-  List<Book> libros = [];
+Future<List<Book>> getBooksDiscover(String book) async {
+  List<Book> discoverBooks = []; //Aqui se introducen aquellos que coinciden
+  List<Book> libros = []; //Aqui se reciben todos los libros
   //TODO:Llamar a parser, recibir un Map e iterar
 
-  //Simulación de libros recibidos
-  for (var i = 0; i < 10; i += 1) {
-    Book libro = Book(
-        //Al título se le concatena el índice, (hasta obtener los libros
-        //del backend). Esto se hace para que el título de cada libro devuelto
-        // sea único y así funcione el widget "Hero" (animación entre
-        // pantallas)
-        "123456789",
-        "The Arrivals" + i.toString(),
-        "Patrick Jordan",
-        "https://d1csarkz8obe9u.cloudfront"
-            ".net/posterpreviews/sci-fi-book-cover-template-a1ec26573b7a71617c38ffc6e356eef9_screen.jpg?ts=1561547637",
-        'Hace mucho tiempo en una ciudad muy lejana un niño se encontraba'
-            ' paseando cuando derepente...',
-        ["accion", "comedia"]);
-    libros.add(libro);
-  }
-  for (var i = 0; i < 10; i += 1) {
+  SessionManager s = new SessionManager();
+  String key = await s.getKey();
+
+  apiUrlGetAllBooks = apiUrlGetAllBooks;
+  Uri myUri = Uri.parse(apiUrlGetAllBooks);
+
+  http.Response response =
+      await http.get(myUri, headers: {'Authorization': 'Token $key'});
+  var jsonResponse = null;
+  jsonResponse = json.decode(response.body);
+  print(jsonResponse);
+
+  libros = (json.decode(response.body) as List)
+      .map((data) => Book.fromJson(data))
+      .toList();
+
+//ESTO ES UNA SIMULACION PARA PODER VER LOS LIBROS DE ALGUNA MANERA
+
+  // //Simulación de libros recibidos
+  // for (var i = 0; i < 10; i += 1) {
+  //   Book libro = Book(
+  //       //Al título se le concatena el índice, (hasta obtener los libros
+  //       //del backend). Esto se hace para que el título de cada libro devuelto
+  //       // sea único y así funcione el widget "Hero" (animación entre
+  //       // pantallas)
+  //       "123456789",
+  //       "The Arrivals" + i.toString(),
+  //       "Patrick Jordan",
+  //       "https://d1csarkz8obe9u.cloudfront"
+  //           ".net/posterpreviews/sci-fi-book-cover-template-a1ec26573b7a71617c38ffc6e356eef9_screen.jpg?ts=1561547637",
+  //       'Hace mucho tiempo en una ciudad muy lejana un niño se encontraba'
+  //           ' paseando cuando derepente...',
+  //       ["accion", "comedia"]);
+  //   libros.add(libro);
+  // }
+
+  for (var i = 0; i < libros.length; i += 1) {
     String titulo = libros[i].title;
     if (titulo.toLowerCase().contains(book.toLowerCase())) {
       discoverBooks.add(libros[i]);

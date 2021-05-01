@@ -22,6 +22,7 @@ class SearchedBookDiscover extends StatefulWidget {
 //No incluir Scaffold (lo añade HomePage)
 class _SearchedBookDiscoverState extends State<SearchedBookDiscover> {
   String libro = '';
+  List<Book> listaAMostrar = [];
   _SearchedBookDiscoverState({@required this.libro});
 
   @override
@@ -88,8 +89,7 @@ class _SearchedBookDiscoverState extends State<SearchedBookDiscover> {
   }
 
   Widget listarLibrosDiscover(String libro) {
-    List<Book> listaAMostrar = getBooksDiscover(libro);
-
+    getBooksAux();
     if (listaAMostrar.isNotEmpty) {
       return Expanded(
         child: ListView.builder(
@@ -104,5 +104,13 @@ class _SearchedBookDiscoverState extends State<SearchedBookDiscover> {
     } else {
       return Center(child: Text('No hay busquedas que coincidan :('));
     }
+  }
+
+  getBooksAux() {
+    getBooksDiscover(libro).then((List<Book> result) {
+      setState(() {
+        listaAMostrar = result;
+      });
+    });
   }
 }

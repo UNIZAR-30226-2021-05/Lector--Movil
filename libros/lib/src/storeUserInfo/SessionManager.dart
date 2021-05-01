@@ -1,9 +1,23 @@
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SessionManager {
+  String _key = "";
   String _nombreUsuario = '';
   String _email = '';
   String _pathPhoto = '';
+
+  dynamic setKey(String key) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString("key", key);
+    _key = key;
+  }
+
+  Future<String> getKey() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    _key = prefs.getString("key");
+
+    return _key;
+  }
 
   dynamic setNombreUsuario(String nombre) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();

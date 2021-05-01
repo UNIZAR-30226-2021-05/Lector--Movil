@@ -23,6 +23,8 @@ class SearchPageData extends StatefulWidget {
 //No incluir Scaffold (lo añade HomePage)
 class _SearchPageDataState extends State<SearchPageData> {
   String libro = '';
+  List<Book> listaAMostrar = [];
+
   _SearchPageDataState({@required this.libro});
 
   @override
@@ -172,13 +174,20 @@ class _SearchPageDataState extends State<SearchPageData> {
   }
 
   Widget listarLibrosDescubre(String libro) {
-    List<Book> listaAMostrar = getBooksDiscover(libro);
-
+    getBooksAux();
+    int count = 0;
     if (listaAMostrar.isNotEmpty) {
+      if (listaAMostrar.length >= 3) {
+        count = 3;
+      } else if (listaAMostrar.length == 2) {
+        count = 2;
+      } else {
+        count = 1;
+      }
       return Row(children: [
         Expanded(
           child: ListView.builder(
-            itemCount: 3,
+            itemCount: count,
             scrollDirection: Axis.horizontal,
             itemBuilder: (context, index) {
               return bookCardMin(listaAMostrar[index], "bookDetails", context);
@@ -189,5 +198,13 @@ class _SearchPageDataState extends State<SearchPageData> {
     } else {
       return Center(child: Text('No hay busquedas que coincidan :('));
     }
+  }
+
+  getBooksAux() {
+    getBooksDiscover(libro).then((List<Book> result) {
+      setState(() {
+        listaAMostrar = result;
+      });
+    });
   }
 }
