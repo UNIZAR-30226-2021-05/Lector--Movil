@@ -178,7 +178,7 @@ class _BookDetailsPageState extends State<BookDetailsPage> {
                     color: Colors.red,
                   )),
               onPressed: () {
-                deleteBookFromUser(data["book"].title);
+                deleteBookFromUser(data["book"].isbn);
                 //Mensaje ok
                 final snackBar = SnackBar(
                     backgroundColor: Colors.green,

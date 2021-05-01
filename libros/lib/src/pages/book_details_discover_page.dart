@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:libros/src/models/bookFacade.dart';
-import 'package:libros/src/storeUserInfo/SessionManager.dart';
 
 class BookDetailsDiscoverPage extends StatefulWidget {
   @override
@@ -163,7 +162,7 @@ class _BookDetailsDiscoverPage extends State<BookDetailsDiscoverPage> {
                   )),
               onPressed: () {
                 //Aqui hay que hablar con back para ver si se le pasa el titulo del libro o que otro paramaetro para que ellos hagan la busqueda
-                addBookFromUser(data['book'].title);
+                addBookFromUser(data['book'].isbn);
                 //Mensaje ok
                 final snackBar = SnackBar(
                     backgroundColor: Colors.green,

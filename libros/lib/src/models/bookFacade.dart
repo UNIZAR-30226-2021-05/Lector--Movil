@@ -17,6 +17,7 @@ List<Book> GetBooksReading(String username) {
         //del backend). Esto se hace para que el título de cada libro devuelto
         // sea único y así funcione el widget "Hero" (animación entre
         // pantallas)
+        "123456789",
         "The Arrivals" + i.toString(),
         "Patrick Jordan",
         "https://d1csarkz8obe9u.cloudfront"
@@ -42,6 +43,7 @@ List<Book> GetBooksSaved(String username) {
         //del backend). Esto se hace para que el título de cada libro devuelto
         // sea único y así funcione el widget "Hero" (animación entre
         // pantallas)
+        "123456789",
         "The Arrivals" + i.toString(),
         "Patrick Jordan",
         "https://d1csarkz8obe9u.cloudfront"
@@ -66,6 +68,7 @@ List<Book> getBooksSearched(String username, String book) {
         //del backend). Esto se hace para que el título de cada libro devuelto
         // sea único y así funcione el widget "Hero" (animación entre
         // pantallas)
+        "123456789",
         "The Arrivals" + i.toString(),
         "Patrick Jordan",
         "https://d1csarkz8obe9u.cloudfront"
@@ -98,6 +101,7 @@ List<Book> getBooksDiscover(String book) {
         //del backend). Esto se hace para que el título de cada libro devuelto
         // sea único y así funcione el widget "Hero" (animación entre
         // pantallas)
+        "123456789",
         "The Arrivals" + i.toString(),
         "Patrick Jordan",
         "https://d1csarkz8obe9u.cloudfront"
@@ -168,18 +172,16 @@ void DeleteCollection(String username, String collectionName) {
   collections.remove(collectionName);
 }
 
-void deleteBookFromUser(String titulo) async {
+void deleteBookFromUser(String isbn) async {
   SessionManager s = new SessionManager();
   String nombreUsuario = await s.getNombreUsuario();
 
-  print(
-      "Se  va a borrar el libro: " + titulo + " del usuario: " + nombreUsuario);
+  print("Se  va a borrar el libro: " + isbn + " del usuario: " + nombreUsuario);
 }
 
-void addBookFromUser(String titulo) async {
+void addBookFromUser(String isbn) async {
   SessionManager s = new SessionManager();
   String nombreUsuario = await s.getNombreUsuario();
 
-  print(
-      "Se  va a añadir el libro: " + titulo + " al usuario: " + nombreUsuario);
+  print("Se  va a añadir el libro: " + isbn + " al usuario: " + nombreUsuario);
 }
