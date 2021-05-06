@@ -4,18 +4,22 @@ import 'dart:convert';
 
 import 'book.dart';
 
-String apiUrlGetAllBooks = "http://lectorbrainbook.herokuapp.com/libro/todos/";
-
+String apiUrlGetAllBooks = "https://lectorbrainbook.herokuapp.com/libro/todos/";
+//TODO: ACTUALIZAR URL READING BOOKS
+String apiUrlGetReadingBooks = "https://lectorbrainbook.herokuapp"
+    ".com/libro/todos/";
 /*
   Devuelve una lista con los libros que está leyendo el
   usuario "user"
  */
-List<Book> GetBooksReading(String username) {
+Future<List<Book>> GetBooksReading() async {
   List<Book> readingBooks = [];
+  SessionManager s = new SessionManager();
+  String key = await s.getKey();
   //TODO:Llamar a parser, recibir un Map e iterar
 
   //Simulación de libros recibidos
-  for (var i = 0; i < 10; i += 1) {
+  /*for (var i = 0; i < 10; i += 1) {
     readingBooks.add(Book(
         //Al título se le concatena el índice, (hasta obtener los libros
         //del backend). Esto se hace para que el título de cada libro devuelto
@@ -29,9 +33,22 @@ List<Book> GetBooksReading(String username) {
         'Hace mucho tiempo en una ciudad muy lejana un niño se encontraba'
             ' paseando cuando derepente...'));
     // ["accion", "comedia"]));
-  }
+  }*/
+    Uri myUri = Uri.parse(apiUrlGetReadingBooks);
+    http.Response response = await http.get(myUri, headers: {'Authorization': 'Token $key'});
+    var jsonResponse = null;
+    jsonResponse = json.decode(response.body);
+    print(jsonResponse);
+
+    readingBooks = (json.decode(response.body) as List)
+      .map((data) => Book.fromJson(data))
+      .toList();
+    return readingBooks;
   return readingBooks;
 }
+
+
+
 
 /*
   Devuelve una lista con los libros que guardados por el
