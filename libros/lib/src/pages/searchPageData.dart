@@ -5,7 +5,6 @@ import 'package:libros/src/pages/components/bookCardMin.dart';
 import 'package:libros/src/pages/mainPages/search_page.dart';
 import 'package:libros/src/pages/searchedBookDiscover.dart';
 import 'package:libros/src/pages/searchedBookLibrary.dart';
-import 'package:material_floating_search_bar/material_floating_search_bar.dart';
 
 /*
   Esta pantalla permite hacer búsquedas de libros al usuario
