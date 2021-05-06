@@ -18,7 +18,8 @@ class BookPage extends StatefulWidget {
 }
 
 class _BookPageState extends State<BookPage> {
-  @override
+  Map data = {};
+  bool loaded = false;
   int pages = 0;
   int currentPage = 0;
   bool isReady = false;
@@ -32,32 +33,25 @@ class _BookPageState extends State<BookPage> {
   @override
   void initState() {
     super.initState();
-
-    createFileOfPdfUrl().then((f) {
-      setState(() {
-        remotePDFpath = f.path;
-      });
-    });
   }
 
   Future<File> createFileOfPdfUrl() async {
     Completer<File> completer = Completer();
-    print("Start download file from internet!");
     try {
-      final url = "http://www.pdf995.com/samples/pdf.pdf";
+      final url = data["book"].url;
+      print("Esta es la url del librooooo: " + url);
       final filename = url.substring(url.lastIndexOf("/") + 1);
       var request = await HttpClient().getUrl(Uri.parse(url));
       var response = await request.close();
       var bytes = await consolidateHttpClientResponseBytes(response);
       var dir = await getApplicationDocumentsDirectory();
-      print("Download files");
       print("${dir.path}/$filename");
       File file = File("${dir.path}/$filename");
 
       await file.writeAsBytes(bytes, flush: true);
       completer.complete(file);
     } catch (e) {
-      throw Exception('Error parsing asset file!');
+      throw Exception('Error al parsear el documento');
     }
 
     return completer.future;
@@ -65,83 +59,34 @@ class _BookPageState extends State<BookPage> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter PDF View',
-      debugShowCheckedModeBanner: false,
-      home: Scaffold(
-        appBar: AppBar(title: const Text('Plugin example app')),
-        body: Center(child: Builder(
-          builder: (BuildContext context) {
-            return Column(
-              children: <Widget>[
-                RaisedButton(
-                  child: Text("Open PDF"),
-                  onPressed: () {
-                    if (pathPDF != null || pathPDF.isNotEmpty) {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => PDFScreen(path: pathPDF),
-                        ),
-                      );
-                    }
-                  },
-                ),
-                RaisedButton(
-                  child: Text("Open Landscape PDF"),
-                  onPressed: () {
-                    if (landscapePathPdf != null ||
-                        landscapePathPdf.isNotEmpty) {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) =>
-                              PDFScreen(path: landscapePathPdf),
-                        ),
-                      );
-                    }
-                  },
-                ),
-                RaisedButton(
-                  child: Text("Remote PDF"),
-                  onPressed: () {
-                    if (remotePDFpath != null || remotePDFpath.isNotEmpty) {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => PDFScreen(path: remotePDFpath),
-                        ),
-                      );
-                    }
-                  },
-                ),
-                RaisedButton(
-                  child: Text("Open Corrupted PDF"),
-                  onPressed: () {
-                    if (pathPDF != null) {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) =>
-                              PDFScreen(path: corruptedPathPDF),
-                        ),
-                      );
-                    }
-                  },
-                )
-              ],
-            );
-          },
-        )),
-      ),
-    );
+    data = ModalRoute.of(context).settings.arguments;
+    print("El titulo eeeeeeeeeeeeeeeeeees: *******" + data["book"].title);
+    cargarFichero();
+    if (loaded) {
+      return Scaffold(
+          body: PDFScreen(path: remotePDFpath, titulo: data["book"].title));
+    } else {
+      return Scaffold(
+          backgroundColor: Colors.orange[200],
+          body: Center(child: CircularProgressIndicator()));
+    }
+  }
+
+  cargarFichero() {
+    createFileOfPdfUrl().then((f) {
+      setState(() {
+        remotePDFpath = f.path;
+        loaded = true;
+      });
+    });
   }
 }
 
 class PDFScreen extends StatefulWidget {
   final String path;
+  final String titulo;
 
-  PDFScreen({Key key, this.path}) : super(key: key);
+  PDFScreen({Key key, this.path, this.titulo}) : super(key: key);
 
   _PDFScreenState createState() => _PDFScreenState();
 }
@@ -158,7 +103,7 @@ class _PDFScreenState extends State<PDFScreen> with WidgetsBindingObserver {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Document"),
+        title: Text(widget.titulo),
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.share),

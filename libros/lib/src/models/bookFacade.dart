@@ -34,21 +34,19 @@ Future<List<Book>> GetBooksReading() async {
             ' paseando cuando derepente...'));
     // ["accion", "comedia"]));
   }*/
-    Uri myUri = Uri.parse(apiUrlGetReadingBooks);
-    http.Response response = await http.get(myUri, headers: {'Authorization': 'Token $key'});
-    var jsonResponse = null;
-    jsonResponse = json.decode(response.body);
-    print(jsonResponse);
+  Uri myUri = Uri.parse(apiUrlGetReadingBooks);
+  http.Response response =
+      await http.get(myUri, headers: {'Authorization': 'Token $key'});
+  var jsonResponse = null;
+  jsonResponse = json.decode(response.body);
+  print(jsonResponse);
 
-    readingBooks = (json.decode(response.body) as List)
+  readingBooks = (json.decode(response.body) as List)
       .map((data) => Book.fromJson(data))
       .toList();
-    return readingBooks;
+  return readingBooks;
   return readingBooks;
 }
-
-
-
 
 /*
   Devuelve una lista con los libros que guardados por el
@@ -67,6 +65,7 @@ List<Book> GetBooksSaved(String username) {
         "123456789",
         "The Arrivals" + i.toString(),
         "Patrick Jordan",
+        "url.com",
         "https://d1csarkz8obe9u.cloudfront"
             ".net/posterpreviews/sci-fi-book-cover-template-a1ec26573b7a71617c38ffc6e356eef9_screen.jpg?ts=1561547637",
         'Hace mucho tiempo en una ciudad muy lejana un niño se encontraba'
@@ -92,6 +91,7 @@ List<Book> getBooksSearched(String username, String book) {
         "123456789",
         "The Arrivals" + i.toString(),
         "Patrick Jordan",
+        "url.com",
         "https://d1csarkz8obe9u.cloudfront"
             ".net/posterpreviews/sci-fi-book-cover-template-a1ec26573b7a71617c38ffc6e356eef9_screen.jpg?ts=1561547637",
         'Hace mucho tiempo en una ciudad muy lejana un niño se encontraba'
