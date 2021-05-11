@@ -5,6 +5,9 @@ import 'dart:convert';
 import 'book.dart';
 
 String apiUrlGetAllBooks = "https://lectorbrainbook.herokuapp.com/libro/todos/";
+String apiUrlGetTextFromBook =
+    "http://lectorbrainbook.herokuapp.com/libro/offset/LPrueba.pdf";
+
 //TODO: ACTUALIZAR URL READING BOOKS
 String apiUrlGetReadingBooks = "https://lectorbrainbook.herokuapp"
     ".com/libro/todos/";
@@ -224,4 +227,29 @@ void addBookFromUser(String isbn) async {
   String nombreUsuario = await s.getNombreUsuario();
 
   print("Se  va a añadir el libro: " + isbn + " al usuario: " + nombreUsuario);
+}
+
+void getText(String path, int currentOffset, int offset, int realCharacters,
+    int finalOffset, String texto) async {
+  SessionManager s = new SessionManager();
+  String key = await s.getKey();
+
+  apiUrlGetTextFromBook = apiUrlGetTextFromBook +
+      "/" +
+      currentOffset.toString() +
+      "/" +
+      offset.toString();
+  print("Esto es donde voy a pedirrrrrrrr " + apiUrlGetTextFromBook);
+
+  Uri myUri = Uri.parse(apiUrlGetTextFromBook);
+
+  http.Response response =
+      await http.get(myUri, headers: {'Authorization': 'Token $key'});
+  var jsonResponse = null;
+  jsonResponse = json.decode(response.body);
+  print(jsonResponse);
+
+  texto = jsonResponse['text'];
+  finalOffset = jsonResponse['finalOffset'];
+  realCharacters = jsonResponse['realCharacters'];
 }
