@@ -234,20 +234,24 @@ Future<String> getText(String path, int currentOffset, int offset,
   SessionManager s = new SessionManager();
   String key = await s.getKey();
   String texto = "";
-  apiUrlGetTextFromBook = apiUrlGetTextFromBook +
+  String url = apiUrlGetTextFromBook +
       "/" +
       currentOffset.toString() +
       "/" +
       offset.toString();
-  print("Esto es donde voy a pedirrrrrrrr " + apiUrlGetTextFromBook);
+  print("Esto es donde voy a pedirrrrrrrr " + url);
 
-  Uri myUri = Uri.parse(apiUrlGetTextFromBook);
+  Uri myUri = Uri.parse(url);
 
   http.Response response =
       await http.get(myUri, headers: {'Authorization': 'Token $key'});
-  var jsonResponse = null;
-  jsonResponse = json.decode(response.body);
-  print(jsonResponse);
-  texto = jsonResponse['text'];
-  return texto;
+  if (response.statusCode == 200) {
+    var jsonResponse = null;
+    jsonResponse = json.decode(response.body);
+    print(jsonResponse);
+    texto = jsonResponse['text'];
+    return texto;
+  } else {
+    return null;
+  }
 }

@@ -19,7 +19,8 @@ class _BookPageState extends State<BookPage> {
 
   String texto = "";
 
-  int currentOffset; //Offset actual
+  int currentOffset = 0; //Offset actual
+  int finOffset = 0;
   String pathPDF = "";
 
   @override
@@ -33,8 +34,32 @@ class _BookPageState extends State<BookPage> {
     pedirTexto();
     if (loaded) {
       return Scaffold(
-        body: Center(
-          child: Text(texto),
+        body: GestureDetector(
+          onHorizontalDragUpdate: (details) {
+            int sensitivity = 8;
+            if (details.delta.dx < -sensitivity) {
+              print("Estoy desplazandome a la derachaaaaaaaa");
+              setState(() {
+                currentOffset = 900;
+                finOffset = finOffset + 900;
+                texto = mostrarTexto(texto, currentOffset, finOffset);
+              });
+            } else if (details.delta.dx > sensitivity) {
+              if (currentOffset >= 900)
+                setState(() {
+                  currentOffset -= 900;
+                  finOffset = finOffset - 900;
+                  texto = mostrarTexto(texto, currentOffset, finOffset);
+                });
+            }
+          },
+          child: Center(
+            child: SizedBox(
+              height: 610,
+              width: 350,
+              child: Text(texto),
+            ),
+          ),
         ),
       );
     } else {
@@ -46,9 +71,15 @@ class _BookPageState extends State<BookPage> {
     }
   }
 
+  String mostrarTexto(String text, int inicio, int fin) {
+    return text.substring(inicio, fin);
+  }
+
   void pedirTexto() {
+    currentOffset = 0;
+    finOffset = 900;
     String path = data["book"].url;
-    getText(path, 0, 500, 0, 0).then((String result) {
+    getText(path, 0, 15000, 0, 0).then((String result) {
       setState(() {
         texto = result;
       });
