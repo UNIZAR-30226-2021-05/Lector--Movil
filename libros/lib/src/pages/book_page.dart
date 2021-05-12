@@ -17,6 +17,8 @@ class _BookPageState extends State<BookPage> {
   Map data = {};
   bool loaded = false;
 
+  String texto = "";
+
   int currentOffset; //Offset actual
   String pathPDF = "";
 
@@ -28,20 +30,29 @@ class _BookPageState extends State<BookPage> {
   @override
   Widget build(BuildContext context) {
     data = ModalRoute.of(context).settings.arguments;
-    return Scaffold(
-      body: Center(
-        child: Text(pedirTexto()),
-      ),
-    );
+    pedirTexto();
+    if (loaded) {
+      return Scaffold(
+        body: Center(
+          child: Text(texto),
+        ),
+      );
+    } else {
+      return Scaffold(
+        body: Center(
+          child: CircularProgressIndicator(),
+        ),
+      );
+    }
   }
 
-  String pedirTexto() {
+  void pedirTexto() {
     String path = data["book"].url;
-    print("Este es el path: " + path);
-    int realCharacters;
-    int finalOffset;
-    String texto = "";
-    getText(path, 0, 500, realCharacters, finalOffset, texto);
-    return texto;
+    getText(path, 0, 500, 0, 0).then((String result) {
+      setState(() {
+        texto = result;
+      });
+    });
+    loaded = true;
   }
 }
