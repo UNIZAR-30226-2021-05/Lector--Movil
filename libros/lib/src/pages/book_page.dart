@@ -125,13 +125,7 @@ class _BookPageState extends State<BookPage> {
                 child: SizedBox(
                   height: 610,
                   width: 350,
-                  child: Text(
-                    texto,
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: Colors.blue[800],
-                        fontSize: 25),
-                  ),
+                  child: Text(texto),
                 ),
               ),
               Text(numPagina.toString()),
