@@ -229,17 +229,20 @@ void addBookFromUser(String isbn) async {
   print("Se  va a añadir el libro: " + isbn + " al usuario: " + nombreUsuario);
 }
 
-Future<String> getText(String path, int currentOffset, int offset,
-    int realCharacters, int finalOffset) async {
+// currentOffset: offset de lectura actual
+// characters: nº de caracteres pedidos a partir del currentOffset
+Future<Map<String,String>> getText(String path, int currentOffset, int
+characters)
+async {
+  Map map = new Map<String, String>();
   SessionManager s = new SessionManager();
   String key = await s.getKey();
-  String texto = "";
   String url = apiUrlGetTextFromBook +
       "/" +
       currentOffset.toString() +
       "/" +
-      offset.toString();
-  print("Esto es donde voy a pedirrrrrrrr " + url);
+      characters.toString();
+  //print("Esto es donde voy a pedirrrrrrrr " + url);
 
   Uri myUri = Uri.parse(url);
 
@@ -248,9 +251,10 @@ Future<String> getText(String path, int currentOffset, int offset,
   if (response.statusCode == 200) {
     var jsonResponse = null;
     jsonResponse = json.decode(response.body);
-    print(jsonResponse);
-    texto = jsonResponse['text'];
-    return texto;
+    //print(jsonResponse);
+    map['text'] = jsonResponse['text'];
+    map['realCharacters'] = jsonResponse['realCharacters'].toString();
+    return map;
   } else {
     return null;
   }

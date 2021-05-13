@@ -43,7 +43,7 @@ dev_dependencies:
   flutter_launcher_icons: ^0.9.0
   flutter_pdfview: ^1.0.4
   path_provider: any
-
+  synchronized: ^3.0.0
 
 
 
