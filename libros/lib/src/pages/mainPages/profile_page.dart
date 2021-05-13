@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:libros/src/pages/profilePages/PreferencesPage.dart';
 import 'package:libros/src/pages/profilePages/configuration_page.dart';
 import 'package:libros/src/pages/profilePages/edit_profile.dart';
 import 'package:libros/src/storeUserInfo/SessionManager.dart';
@@ -114,6 +115,28 @@ class _ProfilePageState extends State<ProfilePage> {
                           padding: const EdgeInsets.all(12.0),
                           child: Text(
                             'Configuracion de la cuenta',
+                          ),
+                        ),
+                      ),
+                      SizedBox(height: 15),
+                      SizedBox(
+                        width: 200,
+                        child: RaisedButton(
+                          onPressed: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => PreferencesPage()));
+                          },
+                          elevation: 4,
+                          shape: RoundedRectangleBorder(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(12.0))),
+                          textColor: Colors.white,
+                          color: Colors.blue[900],
+                          padding: const EdgeInsets.all(12.0),
+                          child: Text(
+                            'Preferencias',
                           ),
                         ),
                       )

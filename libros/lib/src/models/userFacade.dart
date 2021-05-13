@@ -4,6 +4,7 @@ import 'dart:core';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:libros/src/storeUserInfo/SessionManager.dart';
 
 import 'user.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -15,6 +16,10 @@ String apiUrlRegister =
 
 String apiUrlChangePass =
     "https://lectorbrainbook.herokuapp.com/rest-auth/password/change/";
+String apiUrlChangePreferences =
+    "http://lectorbrainbook.herokuapp.com/usuario/preferencias/";
+String apiUrlGetPreferences =
+    "http://lectorbrainbook.herokuapp.com/usuario/preferencias/";
 
 String apiUrlGetUser = "https://lectorbrainbook.herokuapp.com/usuario/";
 
@@ -101,6 +106,42 @@ Future<bool> updatePass(String pass1, String pass2) async {
   if (response.statusCode == 200) {
     return true;
   } else {
+    return false;
+  }
+}
+
+Future<bool> cambiarPreferenciasUsuario(
+    String bg, String letra, String tamanyo, String tipo) async {
+  print("Voy a poner esto: " + bg + letra + tamanyo + tipo);
+
+  final toSend = {
+    "colorBg": bg,
+    "colorLetra": letra,
+    "tamanoLeytra": tamanyo,
+    "tipoLetra": tipo
+  };
+  SessionManager s = new SessionManager();
+  String key = await s.getKey();
+  String usuario = await s.getNombreUsuario();
+
+  Uri myUri = Uri.parse(apiUrlChangePreferences + usuario);
+  print(myUri);
+
+  print("Voy a cambiar las preferencias de este token: " + key);
+
+  http.Response response = await http.put(
+    myUri,
+    body: toSend,
+    headers: {'Authorization': 'Token $key'},
+  );
+  var jsonResponse = null;
+  jsonResponse = json.decode(response.body);
+  print(jsonResponse);
+  if (response.statusCode == 200) {
+    print("TOdo ok");
+    return true;
+  } else {
+    print("Nad ok");
     return false;
   }
 }
