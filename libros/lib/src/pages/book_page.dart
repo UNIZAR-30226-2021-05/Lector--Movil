@@ -20,10 +20,11 @@ class BookPage extends StatefulWidget {
 class _BookPageState extends State<BookPage> {
   Map data = {};
   //Variables de preferencias del usuario
-  String colorBg = "Blanco";
-  String colorLetra = "Negro";
-  int tamanyoLetra = 12;
-  String tipoLetra = "Arial";
+  int colorBg;
+  int colorLetra;
+  int tamanyoLetra;
+  String tipoLetra;
+  bool loaded = false;
 
   _BookPageState() {
     getUserPreferences();
@@ -56,84 +57,99 @@ class _BookPageState extends State<BookPage> {
   @override
   Widget build(BuildContext context) {
     data = ModalRoute.of(context).settings.arguments;
-
-    return Scaffold(
-      body: SafeArea(
-        child: GestureDetector(
-          onHorizontalDragStart: (details) {
-            setState(() {
-              print("dragStart");
-              numRebotes = 0; //Reseteo rebotes
-              drag = true; //Permiso para hacer drag
-            });
-          },
-          onHorizontalDragUpdate: (details) {
-            int sensitivity = 8;
-            if (details.delta.dx < -sensitivity) {
+    if (loaded) {
+      return Scaffold(
+        body: SafeArea(
+          child: GestureDetector(
+            onHorizontalDragStart: (details) {
               setState(() {
-                if (drag)
-                  buffer.leerDcha().then((String t) {
-                    numPagina++;
-                    texto = t;
-                  });
-                numRebotes++; //Recibido rebote
-                drag = numRebotes < 1; //Actualizo permiso
+                print("dragStart");
+                numRebotes = 0; //Reseteo rebotes
+                drag = true; //Permiso para hacer drag
               });
-            } else if (details.delta.dx > sensitivity) {
-              setState(() {
-                if (drag) {
-                  buffer.leerIzda().then((String t) {
-                    texto = t;
-                    if (numPagina > 1) numPagina--;
-                  });
+            },
+            onHorizontalDragUpdate: (details) {
+              int sensitivity = 8;
+              if (details.delta.dx < -sensitivity) {
+                setState(() {
+                  if (drag)
+                    buffer.leerDcha().then((String t) {
+                      numPagina++;
+                      texto = t;
+                    });
                   numRebotes++; //Recibido rebote
                   drag = numRebotes < 1; //Actualizo permiso
-                }
-              });
-            }
-          },
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              SizedBox(height: 1),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  SizedBox(width: 1),
-                  IconButton(
-                      icon: Icon(Icons.arrow_back_ios),
-                      onPressed: () {
-                        Navigator.pop(context);
-                      }), //Este es el boton para ir hacia atrás
+                });
+              } else if (details.delta.dx > sensitivity) {
+                setState(() {
+                  if (drag) {
+                    buffer.leerIzda().then((String t) {
+                      texto = t;
+                      if (numPagina > 1) numPagina--;
+                    });
+                    numRebotes++; //Recibido rebote
+                    drag = numRebotes < 1; //Actualizo permiso
+                  }
+                });
+              }
+            },
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                SizedBox(height: 1),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    SizedBox(width: 1),
+                    IconButton(
+                        icon: Icon(Icons.arrow_back_ios),
+                        onPressed: () {
+                          Navigator.pop(context);
+                        }), //Este es el boton para ir hacia atrás
 
-                  Text(
-                    data["book"].title,
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: Colors.blue[800],
-                        fontSize: 25),
-                  ),
-                  IconButton(
-                      icon: Icon(Icons.bookmark),
-                      onPressed:
-                          () {}), //Este es el boton para añadir bookmarks
-                  SizedBox(width: 1),
-                ],
-              ),
-              SizedBox(height: 18),
-              Center(
-                child: SizedBox(
-                  height: 610,
-                  width: 350,
-                  child: Text(texto),
+                    Text(
+                      data["book"].title,
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: Colors.blue[800],
+                          fontSize: 25),
+                    ),
+                    IconButton(
+                        icon: Icon(Icons.bookmark),
+                        onPressed:
+                            () {}), //Este es el boton para añadir bookmarks
+                    SizedBox(width: 1),
+                  ],
                 ),
-              ),
-              Text(numPagina.toString()),
-            ],
+                SizedBox(height: 18),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Container(
+                    padding: EdgeInsets.all(12),
+                    decoration: BoxDecoration(
+                        color: Color(colorBg),
+                        borderRadius: BorderRadius.circular(12)),
+                    child: Center(
+                      child: SizedBox(
+                          height: 610,
+                          width: 350,
+                          child: Text(
+                            texto,
+                            style: TextStyle(color: Color(colorLetra)),
+                          )),
+                    ),
+                  ),
+                ),
+                SizedBox(height: 4),
+                Text(numPagina.toString()),
+              ],
+            ),
           ),
         ),
-      ),
-    );
+      );
+    } else {
+      return Center(child: CircularProgressIndicator());
+    }
   }
 
   void startBuffer() {
@@ -156,8 +172,34 @@ class _BookPageState extends State<BookPage> {
     setState(() {
       tamanyoLetra = jsonResponse["tamanoLetra"];
       tipoLetra = jsonResponse["tipoLetra"];
-      colorBg = jsonResponse["colorBg"];
-      colorLetra = jsonResponse["colorLetra"];
+      if (jsonResponse["colorBg"] == "Blanco") {
+        colorBg = Colors.white.value;
+      } else if (jsonResponse["colorBg"] == "Negro") {
+        colorBg = Colors.black.value;
+      } else if (jsonResponse["colorBg"] == "Verde") {
+        colorBg = Colors.green.value;
+      } else if (jsonResponse["colorBg"] == "Azul") {
+        colorBg = Colors.blue.value;
+      } else if (jsonResponse["colorBg"] == "Rojo") {
+        colorBg = Colors.red.value;
+      } else {
+        colorBg = Colors.orange.value;
+      }
+
+      if (jsonResponse["colorLetra"] == "Blanco") {
+        colorLetra = Colors.white.value;
+      } else if (jsonResponse["colorLetra"] == "Negro") {
+        colorLetra = Colors.black.value;
+      } else if (jsonResponse["colorLetra"] == "Verde") {
+        colorLetra = Colors.green.value;
+      } else if (jsonResponse["colorLetra"] == "Azul") {
+        colorLetra = Colors.blue.value;
+      } else if (jsonResponse["colorLetra"] == "Rojo") {
+        colorLetra = Colors.red.value;
+      } else {
+        colorLetra = Colors.orange.value;
+      }
+      loaded = true;
     });
   }
 }

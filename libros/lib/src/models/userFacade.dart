@@ -117,7 +117,7 @@ Future<bool> cambiarPreferenciasUsuario(
   final toSend = {
     "colorBg": bg,
     "colorLetra": letra,
-    "tamanoLeytra": tamanyo,
+    "tamanoLetra": tamanyo,
     "tipoLetra": tipo
   };
   SessionManager s = new SessionManager();
