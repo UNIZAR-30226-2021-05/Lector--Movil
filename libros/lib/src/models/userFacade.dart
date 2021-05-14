@@ -34,7 +34,7 @@ Future<bool> registrarUsuario(User usuario, BuildContext context) async {
   Uri myUri = Uri.parse(apiUrlRegister);
   http.Response response = await http.post(myUri, body: toSend);
   var jsonResponse = null;
-  jsonResponse = json.decode(response.body);
+  jsonResponse = json.decode(utf8.decode(response.bodyBytes));
   print("Esto es el response: " + response.body);
   print("Esto es el json response");
   print(jsonResponse);
@@ -65,7 +65,7 @@ Future<bool> loginUsuario(String username, String pass) async {
   SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
   http.Response response = await http.post(myUri, body: toSend);
   var jsonResponse = null;
-  jsonResponse = json.decode(response.body);
+  jsonResponse = json.decode(utf8.decode(response.bodyBytes));
   print(jsonResponse);
 
   //El codigo de respuesta para si hay usuario correcto o incorrecto, es 200 para OK y 400 para credenciales invalidas
@@ -135,13 +135,11 @@ Future<bool> cambiarPreferenciasUsuario(
     headers: {'Authorization': 'Token $key'},
   );
   var jsonResponse = null;
-  jsonResponse = json.decode(response.body);
+  jsonResponse = json.decode(utf8.decode(response.bodyBytes));
   print(jsonResponse);
   if (response.statusCode == 200) {
-    print("TOdo ok");
     return true;
   } else {
-    print("Nad ok");
     return false;
   }
 }
@@ -156,7 +154,7 @@ void getAndStoreUserInfo() async {
   http.Response response =
       await http.get(myUri, headers: {'Authorization': 'Token $key'});
   var jsonResponse = null;
-  jsonResponse = json.decode(response.body);
+  jsonResponse = json.decode(utf8.decode(response.bodyBytes));
   User user = User.fromJson(jsonResponse);
   //Aqui parece que hay un error
   sharedPreferences.setString("nombreUsuario", user.nombreUsuario);

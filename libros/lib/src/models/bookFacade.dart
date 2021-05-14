@@ -40,14 +40,10 @@ Future<List<Book>> GetBooksReading() async {
   Uri myUri = Uri.parse(apiUrlGetReadingBooks);
   http.Response response =
       await http.get(myUri, headers: {'Authorization': 'Token $key'});
-  var jsonResponse = null;
-  jsonResponse = json.decode(response.body);
-  print(jsonResponse);
 
-  readingBooks = (json.decode(response.body) as List)
+  readingBooks = (json.decode(utf8.decode(response.bodyBytes)) as List)
       .map((data) => Book.fromJson(data))
       .toList();
-  return readingBooks;
   return readingBooks;
 }
 
@@ -127,10 +123,10 @@ Future<List<Book>> getBooksDiscover(String book) async {
   http.Response response =
       await http.get(myUri, headers: {'Authorization': 'Token $key'});
   var jsonResponse = null;
-  jsonResponse = json.decode(response.body);
+  jsonResponse = json.decode(utf8.decode(response.bodyBytes));
   print(jsonResponse);
 
-  libros = (json.decode(response.body) as List)
+  libros = (json.decode(utf8.decode(response.bodyBytes)) as List)
       .map((data) => Book.fromJson(data))
       .toList();
 
@@ -231,9 +227,8 @@ void addBookFromUser(String isbn) async {
 
 // currentOffset: offset de lectura actual
 // characters: nº de caracteres pedidos a partir del currentOffset
-Future<Map<String,String>> getText(String path, int currentOffset, int
-characters)
-async {
+Future<Map<String, String>> getText(
+    String path, int currentOffset, int characters) async {
   Map map = new Map<String, String>();
   SessionManager s = new SessionManager();
   String key = await s.getKey();
@@ -250,8 +245,8 @@ async {
       await http.get(myUri, headers: {'Authorization': 'Token $key'});
   if (response.statusCode == 200) {
     var jsonResponse = null;
-    jsonResponse = json.decode(response.body);
-    //print(jsonResponse);
+    jsonResponse = json.decode(utf8.decode(response.bodyBytes));
+    print(jsonResponse);
     map['text'] = jsonResponse['text'];
     map['realCharacters'] = jsonResponse['realCharacters'].toString();
     return map;
