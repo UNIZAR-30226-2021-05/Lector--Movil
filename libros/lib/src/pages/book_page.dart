@@ -26,10 +26,6 @@ class _BookPageState extends State<BookPage> {
   String tipoLetra;
   bool loaded = false;
 
-  _BookPageState() {
-    getUserPreferences();
-  }
-
   String texto = "";
 
   int currentOffset = 0; //Offset actual
@@ -40,18 +36,12 @@ class _BookPageState extends State<BookPage> {
   int numRebotes; //Número de "rebotes" al hacer un drag update horizontal
   bool drag; //Permiso para hacer drag horizontal
   int numPagina; //Número actual de página
-  int pageCharacters = 900; //Número de caracteres por página
+  int pageCharacters = 850; //Nº caracteres/pagina para tamaño letra 14
 
   @override
   void initState() {
     super.initState();
     startBuffer();
-    numPagina = (buffer.GetCurrentOffset() / pageCharacters).floor() + 1;
-    buffer.leerDcha().then((String t) {
-      setState(() {
-        texto = t;
-      });
-    });
   }
 
   @override
@@ -127,7 +117,8 @@ class _BookPageState extends State<BookPage> {
                   child: Container(
                     padding: EdgeInsets.all(12),
                     decoration: BoxDecoration(
-                        color: Color(colorBg),
+                        //color: Color(colorBg),
+                        color: Colors.white,
                         borderRadius: BorderRadius.circular(12)),
                     child: Center(
                       child: SizedBox(
@@ -135,7 +126,8 @@ class _BookPageState extends State<BookPage> {
                           width: 350,
                           child: Text(
                             texto,
-                            style: TextStyle(color: Color(colorLetra)),
+                            style: TextStyle(color: Color(colorLetra),
+                                fontSize: 15.0),
                           )),
                     ),
                   ),
@@ -152,9 +144,16 @@ class _BookPageState extends State<BookPage> {
     }
   }
 
-  void startBuffer() {
+  void startBuffer() async{
+    await getUserPreferences();
     var currentOffset = 0; //TODO: Obtener el actual offset backend
-    buffer = new CircularBuffer("ljkl", currentOffset, pageCharacters);
+    buffer = new CircularBuffer("ljkl", currentOffset, getPageCharacters(tamanyoLetra));
+    numPagina = (buffer.GetCurrentOffset() / pageCharacters).floor() + 1;
+    buffer.leerDcha().then((String t) {
+      setState(() {
+        texto = t;
+      });
+    });
   }
 
   getUserPreferences() async {
@@ -170,7 +169,7 @@ class _BookPageState extends State<BookPage> {
     jsonResponse = json.decode(response.body);
     print(jsonResponse);
     setState(() {
-      tamanyoLetra = jsonResponse["tamanoLetra"];
+      tamanyoLetra = 14;//jsonResponse["tamanoLetra"];
       tipoLetra = jsonResponse["tipoLetra"];
       if (jsonResponse["colorBg"] == "Blanco") {
         colorBg = Colors.white.value;
@@ -201,5 +200,26 @@ class _BookPageState extends State<BookPage> {
       }
       loaded = true;
     });
+  }
+
+  int getPageCharacters(int tamanyoLetra) {
+    print("getPageCharacters");
+    int result = 900;
+    switch(tamanyoLetra) {
+      case 15: {result = 600;}
+      break;
+      case 14: {result = 600;}
+      break;
+      case 13: {result = 600;}
+      break;
+      case 12: {result = 600;}
+      break;
+      case 11: {result = 650;}
+      break;
+      case 10: {result = 700;}
+      break;
+      default: {print("ERROR getPageCharacters() " +  tamanyoLetra.toString());}
+    }
+    return result;
   }
 }

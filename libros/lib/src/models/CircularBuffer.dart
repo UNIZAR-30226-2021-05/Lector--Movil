@@ -148,6 +148,7 @@ class CircularBuffer {
       } else {
         print("leerIzda - ELSE normal");
         if (currentOffset - pageCharacters < 0) {
+          print("leerIzda - if3");
           page = buffer.substring(0, currentptr);
           currentptr = 0;
         } else {
@@ -168,7 +169,7 @@ class CircularBuffer {
   void borrarIzda() {
     print("BEGIN borrarIzda t:" + tailptr.toString() + " c:" +
         currentptr.toString() + " h:" + headptr.toString());
-    buffer = buffer.substring(tailptr + insertLength, headptr + 1);
+    buffer = buffer.substring(tailptr + insertLength, headptr);
     tailptr = 0;
     currentptr -= insertLength;
     currentOffset += insertLength;
