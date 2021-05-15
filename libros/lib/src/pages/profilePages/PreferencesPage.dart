@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:libros/src/models/userFacade.dart';
+import 'package:libros/src/pages/mainPages/profile_page.dart';
 import 'package:libros/src/storeUserInfo/SessionManager.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -36,7 +37,10 @@ class _PreferencesPageState extends State<PreferencesPage> {
                         icon:
                             new Icon(Icons.arrow_back_ios_rounded, size: 40.0),
                         onPressed: () {
-                          Navigator.pop(context);
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => ProfilePage()));
                         },
                       ),
                       Text(
@@ -186,10 +190,23 @@ class _PreferencesPageState extends State<PreferencesPage> {
                     onPressed: () {
                       cambiarPreferenciasUsuario(colorBg, colorLetra,
                           tamanyoLetra.toString(), tipoLetra);
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => PreferencesPage()));
+                      showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                              title: new Text(
+                                  "Preferencias cambiadas satisfactoriamente"),
+                              actions: <Widget>[
+                                // usually buttons at the bottom of the dialog
+                                new FlatButton(
+                                  child: new Text("Cerrar"),
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                ),
+                              ],
+                            );
+                          });
                     },
                     elevation: 4,
                     shape: RoundedRectangleBorder(
