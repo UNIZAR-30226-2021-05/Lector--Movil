@@ -20,6 +20,8 @@ class BookPage extends StatefulWidget {
 class _BookPageState extends State<BookPage> {
   Map data = {};
   int _stars = 0;
+  String tituloBookmark = "";
+  String cuerpoBookmark = "";
 
   //Variables de preferencias del usuario
   int colorBg;
@@ -27,6 +29,8 @@ class _BookPageState extends State<BookPage> {
   int tamanyoLetra;
   String tipoLetra;
   bool loaded = false;
+  TextEditingController _textFieldController = TextEditingController();
+  TextEditingController _textFieldController2 = TextEditingController();
 
   String texto = "";
 
@@ -85,8 +89,7 @@ class _BookPageState extends State<BookPage> {
                 });
               }
             },
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
+            child: ListView(
               children: [
                 SizedBox(height: 1),
                 Row(
@@ -108,15 +111,56 @@ class _BookPageState extends State<BookPage> {
                     ),
                     IconButton(
                         icon: Icon(Icons.bookmark),
-                        onPressed:
-                            () {}), //Este es el boton para añadir bookmarks
+                        onPressed: () {
+                          showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return AlertDialog(
+                                    title: Center(
+                                        child: Text("Añadir un bookmark")),
+                                    content: Column(
+                                      children: [
+                                        TextField(
+                                          onChanged: (value) {
+                                            tituloBookmark = value;
+                                          },
+                                          decoration: InputDecoration(
+                                              //border: OutlineInputBorder(),
+                                              hintText: 'Titulo'),
+                                        ),
+                                        SizedBox(height: 30),
+                                        TextField(
+                                          onChanged: (value) {
+                                            cuerpoBookmark = value;
+                                          },
+                                          decoration: InputDecoration(
+                                              //border: OutlineInputBorder(),
+                                              hintText: 'Cuerpo'),
+                                        ),
+                                      ],
+                                    ),
+                                    actions: <Widget>[
+                                      FlatButton(
+                                        child: Text('Cancelar'),
+                                        onPressed: Navigator.of(context).pop,
+                                      ),
+                                      FlatButton(
+                                        child: Text('Añadir'),
+                                        onPressed: () {
+                                          //AÑADIR EL BOOKMARK
+                                          Navigator.of(context).pop(_stars);
+                                        },
+                                      )
+                                    ]);
+                              });
+                        }), //Este es el boton para añadir bookmarks
                     SizedBox(width: 1),
                     IconButton(
                         icon: Icon(Icons.rate_review),
                         onPressed: () {
                           AlertDialog alert = AlertDialog(
                             title: Center(
-                              child: Text('Rate this post'),
+                              child: Text('Evalua este libro'),
                             ),
                             content: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -173,7 +217,7 @@ class _BookPageState extends State<BookPage> {
                   ),
                 ),
                 SizedBox(height: 4),
-                Text(numPagina.toString()),
+                Center(child: Text(numPagina.toString())),
               ],
             ),
           ),
@@ -207,6 +251,7 @@ class _BookPageState extends State<BookPage> {
       headers: {'Authorization': 'Token $key'},
     );
     var jsonResponse = null;
+
     jsonResponse = json.decode(response.body);
     print(jsonResponse);
     setState(() {
@@ -289,7 +334,7 @@ class _BookPageState extends State<BookPage> {
     return InkWell(
       child: Icon(
         Icons.star,
-        color: _stars >= starCount ? Colors.yellow[800] : Colors.grey,
+        color: _stars >= starCount ? Colors.yellow[700] : Colors.grey,
       ),
       onTap: () {
         setState(() {
