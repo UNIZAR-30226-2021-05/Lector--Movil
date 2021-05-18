@@ -19,6 +19,8 @@ class BookPage extends StatefulWidget {
 
 class _BookPageState extends State<BookPage> {
   Map data = {};
+  int _stars = 0;
+
   //Variables de preferencias del usuario
   int colorBg;
   int colorLetra;
@@ -109,6 +111,44 @@ class _BookPageState extends State<BookPage> {
                         onPressed:
                             () {}), //Este es el boton para añadir bookmarks
                     SizedBox(width: 1),
+                    IconButton(
+                        icon: Icon(Icons.rate_review),
+                        onPressed: () {
+                          AlertDialog alert = AlertDialog(
+                            title: Center(
+                              child: Text('Rate this post'),
+                            ),
+                            content: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: <Widget>[
+                                _buildStar(1),
+                                _buildStar(2),
+                                _buildStar(3),
+                                _buildStar(4),
+                                _buildStar(5),
+                              ],
+                            ),
+                            actions: <Widget>[
+                              FlatButton(
+                                child: Text('Cancelar'),
+                                onPressed: Navigator.of(context).pop,
+                              ),
+                              FlatButton(
+                                child: Text('OK'),
+                                onPressed: () {
+                                  Navigator.of(context).pop(_stars);
+                                },
+                              )
+                            ],
+                          );
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return alert;
+                            },
+                          );
+                        }), //Este es el boton para añadir bookmarks
+                    SizedBox(width: 1),
                   ],
                 ),
                 SizedBox(height: 18),
@@ -126,8 +166,8 @@ class _BookPageState extends State<BookPage> {
                           width: 350,
                           child: Text(
                             texto,
-                            style: TextStyle(color: Color(colorLetra),
-                                fontSize: 15.0),
+                            style: TextStyle(
+                                color: Color(colorLetra), fontSize: 15.0),
                           )),
                     ),
                   ),
@@ -144,10 +184,11 @@ class _BookPageState extends State<BookPage> {
     }
   }
 
-  void startBuffer() async{
+  void startBuffer() async {
     await getUserPreferences();
     var currentOffset = 0; //TODO: Obtener el actual offset backend
-    buffer = new CircularBuffer("ljkl", currentOffset, getPageCharacters(tamanyoLetra));
+    buffer = new CircularBuffer(
+        "ljkl", currentOffset, getPageCharacters(tamanyoLetra));
     numPagina = (buffer.GetCurrentOffset() / pageCharacters).floor() + 1;
     buffer.leerDcha().then((String t) {
       setState(() {
@@ -169,7 +210,7 @@ class _BookPageState extends State<BookPage> {
     jsonResponse = json.decode(response.body);
     print(jsonResponse);
     setState(() {
-      tamanyoLetra = 14;//jsonResponse["tamanoLetra"];
+      tamanyoLetra = 14; //jsonResponse["tamanoLetra"];
       tipoLetra = jsonResponse["tipoLetra"];
       if (jsonResponse["colorBg"] == "Blanco") {
         colorBg = Colors.white.value;
@@ -205,21 +246,56 @@ class _BookPageState extends State<BookPage> {
   int getPageCharacters(int tamanyoLetra) {
     print("getPageCharacters");
     int result = 900;
-    switch(tamanyoLetra) {
-      case 15: {result = 600;}
-      break;
-      case 14: {result = 600;}
-      break;
-      case 13: {result = 600;}
-      break;
-      case 12: {result = 600;}
-      break;
-      case 11: {result = 650;}
-      break;
-      case 10: {result = 700;}
-      break;
-      default: {print("ERROR getPageCharacters() " +  tamanyoLetra.toString());}
+    switch (tamanyoLetra) {
+      case 15:
+        {
+          result = 600;
+        }
+        break;
+      case 14:
+        {
+          result = 600;
+        }
+        break;
+      case 13:
+        {
+          result = 600;
+        }
+        break;
+      case 12:
+        {
+          result = 600;
+        }
+        break;
+      case 11:
+        {
+          result = 650;
+        }
+        break;
+      case 10:
+        {
+          result = 700;
+        }
+        break;
+      default:
+        {
+          print("ERROR getPageCharacters() " + tamanyoLetra.toString());
+        }
     }
     return result;
+  }
+
+  Widget _buildStar(int starCount) {
+    return InkWell(
+      child: Icon(
+        Icons.star,
+        color: _stars >= starCount ? Colors.yellow[800] : Colors.grey,
+      ),
+      onTap: () {
+        setState(() {
+          _stars = starCount;
+        });
+      },
+    );
   }
 }

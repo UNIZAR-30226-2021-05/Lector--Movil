@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:libros/src/pages/mainPages/feed_page.dart';
 
 import 'reading_page.dart';
 import 'library_page.dart';
@@ -50,6 +51,10 @@ class _HomePageState extends State<HomePage> {
         label: 'Búsqueda',
       ),
       BottomNavigationBarItem(
+        icon: Icon(Icons.public),
+        label: 'Feed',
+      ),
+      BottomNavigationBarItem(
         icon: Icon(Icons.account_circle_rounded),
         label: 'Perfil',
       ),
@@ -67,6 +72,7 @@ class _HomePageState extends State<HomePage> {
         ReadingPage(),
         LibraryPage(),
         SearchPage(),
+        FeedPage(),
         ProfilePage(),
       ],
     );
