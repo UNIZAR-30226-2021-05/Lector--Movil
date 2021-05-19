@@ -44,6 +44,7 @@ dev_dependencies:
   flutter_pdfview: ^1.0.4
   path_provider: any
   synchronized: ^3.0.0
+  dropbox_client: ^0.8.0
 
 
 

@@ -1,11 +1,22 @@
 import 'dart:ui';
 import 'package:image_picker/image_picker.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:path/path.dart' as path;
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:flutter/material.dart';
+import 'dart:io';
 import 'package:libros/src/storeUserInfo/SessionManager.dart';
+import 'package:dropbox_client/dropbox_client.dart';
+
 /*
   Esta pantalla muestra la configuracion del usuario
  */
+
+const String dropbox_clientId = 'y2s7oimvar9r3th';
+const String dropbox_key =
+    'Me56EUxeX0MAAAAAAAAAAXkCEw6O5oYINF1YCi5PoGZm9xjFhQxFswcp2o_Kla8L';
+const String dropbox_secret = 'bq9lgl4nfohe9s3';
 
 class EditPhoto extends StatefulWidget {
   @override
@@ -15,8 +26,34 @@ class EditPhoto extends StatefulWidget {
 //No incluir Scaffold (lo añade HomePage)
 class _EditPhotoState extends State<EditPhoto> {
   PickedFile _image;
+  File profilePicture;
+  String accessToken = "";
+  bool showInstruction = false;
 
   var _controllerEmail = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    initDropbox();
+  }
+
+  Future initDropbox() async {
+    if (dropbox_key ==
+        'Me56EUxeX0MAAAAAAAAAAXkCEw6O5oYINF1YCi5PoGZm9xjFhQxFswcp2o_Kla8L') {
+      showInstruction = true;
+      return;
+    }
+
+    await Dropbox.init(dropbox_clientId, dropbox_key, dropbox_secret);
+    print("He terminado el dropbox init");
+
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    accessToken = prefs.getString('dropboxAccessToken');
+
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -92,7 +129,11 @@ class _EditPhotoState extends State<EditPhoto> {
                         child: SizedBox(
                           width: 200,
                           child: RaisedButton(
-                            onPressed: () {},
+                            onPressed: () async {
+                              profilePicture = new File(_image.path);
+                              print("El path es: " + profilePicture.path);
+                              subirImagen(profilePicture);
+                            },
                             elevation: 4,
                             textColor: Colors.white,
                             color: Colors.green[600],
@@ -144,5 +185,49 @@ class _EditPhotoState extends State<EditPhoto> {
             ),
           );
         });
+  }
+
+  Future<bool> checkAuthorized(bool authorize) async {
+    final token = await Dropbox.getAccessToken();
+    if (token != null) {
+      if (accessToken == null || accessToken.isEmpty) {
+        accessToken = token;
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        prefs.setString('dropboxAccessToken', accessToken);
+      }
+      return true;
+    }
+    if (authorize) {
+      if (accessToken != null && accessToken.isNotEmpty) {
+        await Dropbox.authorizeWithAccessToken(accessToken);
+        final token = await Dropbox.getAccessToken();
+        if (token != null) {
+          print('authorizeWithAccessToken!');
+          return true;
+        }
+      } else {
+        await Dropbox.authorize();
+        print('authorize!');
+      }
+    }
+    return false;
+  }
+
+  Future authorize() async {
+    await Dropbox.authorize();
+  }
+
+  Future subirImagen(File image) async {
+    if (await checkAuthorized(true)) {
+      var filepath = image.path;
+      File(filepath).writeAsStringSync(
+          'contents.. from ' + (Platform.isIOS ? 'iOS' : 'Android') + '\n');
+
+      final result = await Dropbox.upload(filepath, '/subidaDePrueba.jpg',
+          (uploaded, total) {
+        print('progress $uploaded / $total');
+      });
+      print(result);
+    }
   }
 }

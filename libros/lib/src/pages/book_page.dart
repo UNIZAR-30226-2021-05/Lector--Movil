@@ -267,6 +267,10 @@ class _BookPageState extends State<BookPage> {
         colorBg = Colors.blue.value;
       } else if (jsonResponse["colorBg"] == "Rojo") {
         colorBg = Colors.red.value;
+      } else if (jsonResponse["colorBg"] == "white") {
+        colorBg = Colors.white.value;
+      } else if (jsonResponse["colorBg"] == "black") {
+        colorBg = Colors.black.value;
       } else {
         colorBg = Colors.orange.value;
       }
@@ -281,6 +285,10 @@ class _BookPageState extends State<BookPage> {
         colorLetra = Colors.blue.value;
       } else if (jsonResponse["colorLetra"] == "Rojo") {
         colorLetra = Colors.red.value;
+      } else if (jsonResponse["colorLetra"] == "white") {
+        colorLetra = Colors.white.value;
+      } else if (jsonResponse["colorLetra"] == "black") {
+        colorLetra = Colors.black.value;
       } else {
         colorLetra = Colors.orange.value;
       }
