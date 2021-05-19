@@ -27,7 +27,7 @@ class EditPhoto extends StatefulWidget {
 class _EditPhotoState extends State<EditPhoto> {
   PickedFile _image;
   File profilePicture;
-  String accessToken = "";
+  String accessToken;
   bool showInstruction = false;
 
   var _controllerEmail = TextEditingController();
@@ -35,23 +35,18 @@ class _EditPhotoState extends State<EditPhoto> {
   @override
   void initState() {
     super.initState();
-    initDropbox();
+    Dropbox.init(dropbox_clientId, dropbox_key, dropbox_secret);
+    Dropbox.authorizeWithAccessToken(
+        'Me56EUxeX0MAAAAAAAAAAXkCEw6O5oYINF1YCi5PoGZm9xjFhQxFswcp2o_Kla8L');
   }
 
-  Future initDropbox() async {
-    if (dropbox_key ==
-        'Me56EUxeX0MAAAAAAAAAAXkCEw6O5oYINF1YCi5PoGZm9xjFhQxFswcp2o_Kla8L') {
-      showInstruction = true;
-      return;
-    }
-
-    await Dropbox.init(dropbox_clientId, dropbox_key, dropbox_secret);
-    print("He terminado el dropbox init");
-
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    accessToken = prefs.getString('dropboxAccessToken');
-
-    setState(() {});
+  Future subirImagen(File image) async {
+    final filepath = image.path.toString();
+    debugPrint("lets try-------------------------------------------->");
+    final result =
+        await Dropbox.upload(filepath, '/file.txt', (uploaded, total) {
+      print('progress $uploaded / $total');
+    });
   }
 
   @override
@@ -185,49 +180,5 @@ class _EditPhotoState extends State<EditPhoto> {
             ),
           );
         });
-  }
-
-  Future<bool> checkAuthorized(bool authorize) async {
-    final token = await Dropbox.getAccessToken();
-    if (token != null) {
-      if (accessToken == null || accessToken.isEmpty) {
-        accessToken = token;
-        SharedPreferences prefs = await SharedPreferences.getInstance();
-        prefs.setString('dropboxAccessToken', accessToken);
-      }
-      return true;
-    }
-    if (authorize) {
-      if (accessToken != null && accessToken.isNotEmpty) {
-        await Dropbox.authorizeWithAccessToken(accessToken);
-        final token = await Dropbox.getAccessToken();
-        if (token != null) {
-          print('authorizeWithAccessToken!');
-          return true;
-        }
-      } else {
-        await Dropbox.authorize();
-        print('authorize!');
-      }
-    }
-    return false;
-  }
-
-  Future authorize() async {
-    await Dropbox.authorize();
-  }
-
-  Future subirImagen(File image) async {
-    if (await checkAuthorized(true)) {
-      var filepath = image.path;
-      File(filepath).writeAsStringSync(
-          'contents.. from ' + (Platform.isIOS ? 'iOS' : 'Android') + '\n');
-
-      final result = await Dropbox.upload(filepath, '/subidaDePrueba.jpg',
-          (uploaded, total) {
-        print('progress $uploaded / $total');
-      });
-      print(result);
-    }
   }
 }
