@@ -160,3 +160,30 @@ void getAndStoreUserInfo() async {
   sharedPreferences.setString("nombreUsuario", user.nombreUsuario);
   sharedPreferences.setString("email", user.email);
 }
+
+void updateUserInfo(String email, String pathPhoto, String username) async {
+  SessionManager s = new SessionManager();
+  String key = await s.getKey();
+
+  apiUrlGetUser = apiUrlGetUser + username;
+  final toSend = {
+    "email": email,
+    "pathFoto": pathPhoto,
+    "username": username,
+  };
+  apiUrlGetUser = apiUrlGetUser + username;
+  Uri myUri = Uri.parse(apiUrlGetUser);
+  print(myUri);
+
+  http.Response response = await http.put(
+    myUri,
+    body: toSend,
+    headers: {'Authorization': 'Token $key'},
+  );
+  var jsonResponse = null;
+  jsonResponse = json.decode(utf8.decode(response.bodyBytes));
+  print(jsonResponse);
+  // s.setEmail(jsonResponse["email"]);
+  // s.setNombreUsuario(jsonResponse["username"]);
+  // s.setPathPhoto(jsonResponse["pathPhoto"]);
+}

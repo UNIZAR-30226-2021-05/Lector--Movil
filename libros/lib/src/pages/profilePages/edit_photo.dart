@@ -1,12 +1,14 @@
 import 'dart:ui';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
+
 import 'package:path/path.dart' as path;
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:flutter/material.dart';
 import 'dart:io';
 import 'package:libros/src/storeUserInfo/SessionManager.dart';
+import 'package:libros/src/models/userFacade.dart';
 import 'package:dropbox_client/dropbox_client.dart';
 
 /*
@@ -40,11 +42,11 @@ class _EditPhotoState extends State<EditPhoto> {
         'Me56EUxeX0MAAAAAAAAAAXkCEw6O5oYINF1YCi5PoGZm9xjFhQxFswcp2o_Kla8L');
   }
 
-  Future subirImagen(File image) async {
+  Future subirImagen(File image, int now) async {
     final filepath = image.path.toString();
-    debugPrint("lets try-------------------------------------------->");
-    final result =
-        await Dropbox.upload(filepath, '/file.txt', (uploaded, total) {
+
+    final result = await Dropbox.upload(filepath, '/brainbook/image/$now.jpg',
+        (uploaded, total) {
       print('progress $uploaded / $total');
     });
   }
@@ -127,7 +129,18 @@ class _EditPhotoState extends State<EditPhoto> {
                             onPressed: () async {
                               profilePicture = new File(_image.path);
                               print("El path es: " + profilePicture.path);
-                              subirImagen(profilePicture);
+                              var now =
+                                  new DateTime.now().millisecondsSinceEpoch;
+                              subirImagen(profilePicture, now);
+                              SessionManager s = new SessionManager();
+                              String username = await s.getNombreUsuario();
+                              print(username);
+
+                              String email = await s.getEmail();
+                              print(email);
+
+                              updateUserInfo(email,
+                                  now.toString() + "." + "jpg", username);
                             },
                             elevation: 4,
                             textColor: Colors.white,
