@@ -1,10 +1,7 @@
 import 'dart:ui';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
-
-import 'package:path/path.dart' as path;
-import 'package:shared_preferences/shared_preferences.dart';
-
+import 'package:cool_alert/cool_alert.dart';
 import 'package:flutter/material.dart';
 import 'dart:io';
 import 'package:libros/src/storeUserInfo/SessionManager.dart';
@@ -58,10 +55,31 @@ class _EditPhotoState extends State<EditPhoto> {
   Future subirImagen(File image, int now) async {
     final filepath = image.path.toString();
 
-    final result = await Dropbox.upload(filepath, '/brainbook/image/$now.jpg',
-        (uploaded, total) {
-      print('progress $uploaded / $total');
-    });
+    try {
+      await Dropbox.upload(filepath, '/brainbook/image/$now.jpg',
+          (uploaded, total) {
+        print('progress $uploaded / $total');
+      });
+      CoolAlert.show(
+        context: context,
+        type: CoolAlertType.success,
+        text: 'Foto cambiada!',
+        autoCloseDuration: Duration(seconds: 2),
+      );
+      SessionManager s = new SessionManager();
+      String username = await s.getNombreUsuario();
+      String email = await s.getEmail();
+
+      updateUserInfo(email, now.toString() + "." + "jpg", username);
+    } on Exception catch (_) {
+      print("Error IMPOSIBLE TO UPLOAD");
+      CoolAlert.show(
+        context: context,
+        type: CoolAlertType.error,
+        text: 'Oops! Parece que ha habido un error... Intentalo mas tarde.',
+        autoCloseDuration: Duration(seconds: 2),
+      );
+    }
   }
 
   @override
@@ -114,7 +132,8 @@ class _EditPhotoState extends State<EditPhoto> {
                                 fit: BoxFit.cover,
                                 placeholder:
                                     AssetImage("assets/defaultProfile.png"),
-                                image: NetworkImage(_pathFoto)),
+                                image: NetworkImage(
+                                    "https://upload.wikimedia.org/wikipedia/commons/2/27/Pepe_Viyuela.jpg")),
                           ),
                         ),
                       ),
@@ -148,12 +167,6 @@ class _EditPhotoState extends State<EditPhoto> {
                               var now =
                                   new DateTime.now().millisecondsSinceEpoch;
                               subirImagen(profilePicture, now);
-                              SessionManager s = new SessionManager();
-                              String username = await s.getNombreUsuario();
-                              String email = await s.getEmail();
-
-                              updateUserInfo(email,
-                                  now.toString() + "." + "jpg", username);
                             },
                             elevation: 4,
                             textColor: Colors.white,

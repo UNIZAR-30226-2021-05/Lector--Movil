@@ -38,6 +38,7 @@ class _ProfilePageState extends State<ProfilePage> {
     session.getpathPhoto().then((String result) {
       setState(() {
         _pathFoto = result;
+        print("Este es el path de la foto" + _pathFoto);
       });
     });
   }
