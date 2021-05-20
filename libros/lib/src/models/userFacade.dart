@@ -23,6 +23,7 @@ String apiUrlGetPreferences =
 
 String apiUrlGetUser = "https://lectorbrainbook.herokuapp.com/usuario/";
 String apiUrlGetUserPhoto = "https://lectorbrainbook.herokuapp.com/usuario/";
+String obtenerFoto = "http://lectorbrainbook.herokuapp.com/usuario/image/";
 
 Future<bool> registrarUsuario(User usuario, BuildContext context) async {
   SharedPreferences sp;
@@ -49,6 +50,7 @@ Future<bool> registrarUsuario(User usuario, BuildContext context) async {
     sharedPreferences.setString("nombreUsuario", usuario.nombreUsuario);
     sharedPreferences.setString("email", usuario.email);
     sharedPreferences.setString("contrasenya", usuario.pass);
+    sharedPreferences.setString("pathFoto", "kk.jpg");
 
     return true;
   } else {
@@ -188,4 +190,23 @@ void updateUserInfo(String email, String pathPhoto, String username) async {
   s.setEmail(jsonResponse["email"]);
   s.setNombreUsuario(jsonResponse["username"]);
   s.setPathPhoto(jsonResponse["pathFoto"]);
+}
+
+void obtenerFotoDePerfil(String nombreFoto) async {
+  SessionManager s = new SessionManager();
+  String key = await s.getKey();
+
+  String api = obtenerFoto + nombreFoto + ".jpg";
+
+  Uri myUri = Uri.parse(api);
+  print(api);
+
+  http.Response response = await http.get(
+    myUri,
+    headers: {'Authorization': 'Token $key'},
+  );
+  var jsonResponse = null;
+  jsonResponse = json.decode(utf8.decode(response.bodyBytes));
+  print(jsonResponse);
+  s.setPathPhoto(jsonResponse["url"]);
 }

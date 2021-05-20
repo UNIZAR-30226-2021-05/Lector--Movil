@@ -71,6 +71,7 @@ class _EditPhotoState extends State<EditPhoto> {
       String email = await s.getEmail();
 
       updateUserInfo(email, now.toString() + "." + "jpg", username);
+      obtenerFotoDePerfil(now.toString());
     } on Exception catch (_) {
       print("Error IMPOSIBLE TO UPLOAD");
       CoolAlert.show(
@@ -132,8 +133,7 @@ class _EditPhotoState extends State<EditPhoto> {
                                 fit: BoxFit.cover,
                                 placeholder:
                                     AssetImage("assets/defaultProfile.png"),
-                                image: NetworkImage(
-                                    "https://upload.wikimedia.org/wikipedia/commons/2/27/Pepe_Viyuela.jpg")),
+                                image: NetworkImage(_pathFoto)),
                           ),
                         ),
                       ),

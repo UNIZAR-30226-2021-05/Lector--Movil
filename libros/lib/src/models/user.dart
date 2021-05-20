@@ -2,7 +2,7 @@ class User {
   String nombreUsuario = '';
   String email = '';
   String pass = '';
-  String pathFoto = '';
+  String pathFoto = 'nada.jpg';
 
   User({this.nombreUsuario, this.email, this.pass, this.pathFoto});
 
