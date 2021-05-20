@@ -195,6 +195,8 @@ void updateUserInfo(String email, String pathPhoto, String username) async {
 void obtenerFotoDePerfil(String nombreFoto) async {
   SessionManager s = new SessionManager();
   String key = await s.getKey();
+  String email = await s.getEmail();
+  String username = await s.getNombreUsuario();
 
   String api = obtenerFoto + nombreFoto + ".jpg";
 
@@ -208,5 +210,5 @@ void obtenerFotoDePerfil(String nombreFoto) async {
   var jsonResponse = null;
   jsonResponse = json.decode(utf8.decode(response.bodyBytes));
   print(jsonResponse);
-  s.setPathPhoto(jsonResponse["url"]);
+  updateUserInfo(email, jsonResponse["url"], username);
 }
