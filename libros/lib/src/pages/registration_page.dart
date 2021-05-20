@@ -109,7 +109,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                       nombreUsuario: _controllerUsername.text,
                                       email: _controllerEmail.text,
                                       pass: _controllerPass1.text,
-                                      pathPhoto: null);
+                                      pathFoto: null);
                                   bool backendOK =
                                       await registrarUsuario(usuario, context);
                                   if (backendOK) {

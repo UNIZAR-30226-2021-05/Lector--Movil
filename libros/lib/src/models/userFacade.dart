@@ -22,6 +22,7 @@ String apiUrlGetPreferences =
     "http://lectorbrainbook.herokuapp.com/usuario/preferencias/";
 
 String apiUrlGetUser = "https://lectorbrainbook.herokuapp.com/usuario/";
+String apiUrlGetUserPhoto = "https://lectorbrainbook.herokuapp.com/usuario/";
 
 Future<bool> registrarUsuario(User usuario, BuildContext context) async {
   SharedPreferences sp;
@@ -145,11 +146,11 @@ Future<bool> cambiarPreferenciasUsuario(
 }
 
 void getAndStoreUserInfo() async {
-  SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-  String key = sharedPreferences.getString("key");
-  String nombre = sharedPreferences.getString("nombreUsuario");
-  apiUrlGetUser = apiUrlGetUser + nombre;
-  Uri myUri = Uri.parse(apiUrlGetUser);
+  SessionManager s = new SessionManager();
+  String key = await s.getKey();
+  String nombre = await s.getNombreUsuario();
+  String api = apiUrlGetUser + nombre;
+  Uri myUri = Uri.parse(api);
 
   http.Response response =
       await http.get(myUri, headers: {'Authorization': 'Token $key'});
@@ -157,23 +158,24 @@ void getAndStoreUserInfo() async {
   jsonResponse = json.decode(utf8.decode(response.bodyBytes));
   User user = User.fromJson(jsonResponse);
   //Aqui parece que hay un error
-  sharedPreferences.setString("nombreUsuario", user.nombreUsuario);
-  sharedPreferences.setString("email", user.email);
+  s.setNombreUsuario(user.nombreUsuario);
+  s.setEmail(user.email);
+  s.setPathPhoto(user.pathFoto);
 }
 
 void updateUserInfo(String email, String pathPhoto, String username) async {
   SessionManager s = new SessionManager();
   String key = await s.getKey();
 
-  apiUrlGetUser = apiUrlGetUser + username;
   final toSend = {
     "email": email,
     "pathFoto": pathPhoto,
     "username": username,
   };
-  apiUrlGetUser = apiUrlGetUser + username;
-  Uri myUri = Uri.parse(apiUrlGetUser);
-  print(myUri);
+  print(username);
+  String api = apiUrlGetUserPhoto + username;
+  Uri myUri = Uri.parse(api);
+  print(api);
 
   http.Response response = await http.put(
     myUri,
@@ -183,7 +185,7 @@ void updateUserInfo(String email, String pathPhoto, String username) async {
   var jsonResponse = null;
   jsonResponse = json.decode(utf8.decode(response.bodyBytes));
   print(jsonResponse);
-  // s.setEmail(jsonResponse["email"]);
-  // s.setNombreUsuario(jsonResponse["username"]);
-  // s.setPathPhoto(jsonResponse["pathPhoto"]);
+  s.setEmail(jsonResponse["email"]);
+  s.setNombreUsuario(jsonResponse["username"]);
+  s.setPathPhoto(jsonResponse["pathFoto"]);
 }

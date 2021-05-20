@@ -19,6 +19,7 @@ class _ProfilePageState extends State<ProfilePage> {
   SessionManager session = new SessionManager();
   String _nombreUsuario = '';
   String _email = '';
+  String _pathFoto = '';
   _ProfilePageState() {
     getUserInfo();
   }
@@ -32,6 +33,11 @@ class _ProfilePageState extends State<ProfilePage> {
     session.getEmail().then((String result) {
       setState(() {
         _email = result;
+      });
+    });
+    session.getpathPhoto().then((String result) {
+      setState(() {
+        _pathFoto = result;
       });
     });
   }
@@ -63,14 +69,17 @@ class _ProfilePageState extends State<ProfilePage> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
                         Container(
-                            width: 190.0,
-                            height: 190.0,
-                            decoration: new BoxDecoration(
-                                shape: BoxShape.circle,
-                                image: new DecorationImage(
-                                    fit: BoxFit.cover,
-                                    image: new NetworkImage(
-                                        'https://img.huffingtonpost.com/asset/5ead5c6e2500006912eb0beb.png?cache=VGVQqRsEJs&ops=1200_630')))),
+                          width: 190.0,
+                          height: 190.0,
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(100),
+                            child: FadeInImage(
+                                fit: BoxFit.cover,
+                                placeholder:
+                                    AssetImage("assets/defaultProfile.png"),
+                                image: NetworkImage(_pathFoto)),
+                          ),
+                        ),
                         SizedBox(height: 20),
                         Text(_nombreUsuario, textScaleFactor: 1.8),
                         SizedBox(height: 10),

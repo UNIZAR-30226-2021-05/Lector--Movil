@@ -27,10 +27,23 @@ class EditPhoto extends StatefulWidget {
 
 //No incluir Scaffold (lo añade HomePage)
 class _EditPhotoState extends State<EditPhoto> {
+  SessionManager s = new SessionManager();
   PickedFile _image;
   File profilePicture;
   String accessToken;
   bool showInstruction = false;
+  String _pathFoto = "";
+  _EditPhotoState() {
+    getUserInfo();
+  }
+
+  getUserInfo() async {
+    s.getpathPhoto().then((String result) {
+      setState(() {
+        _pathFoto = result;
+      });
+    });
+  }
 
   var _controllerEmail = TextEditingController();
 
@@ -93,14 +106,17 @@ class _EditPhotoState extends State<EditPhoto> {
                       Padding(
                         padding: const EdgeInsets.only(top: 40.0),
                         child: Container(
-                            width: 200.0,
-                            height: 200.0,
-                            decoration: new BoxDecoration(
-                                shape: BoxShape.circle,
-                                image: new DecorationImage(
-                                    fit: BoxFit.cover,
-                                    image: new NetworkImage(
-                                        'https://img.huffingtonpost.com/asset/5ead5c6e2500006912eb0beb.png?cache=VGVQqRsEJs&ops=1200_630')))),
+                          width: 150.0,
+                          height: 150.0,
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(100),
+                            child: FadeInImage(
+                                fit: BoxFit.cover,
+                                placeholder:
+                                    AssetImage("assets/defaultProfile.png"),
+                                image: NetworkImage(_pathFoto)),
+                          ),
+                        ),
                       ),
                       SizedBox(height: 55),
                       Padding(
@@ -134,10 +150,7 @@ class _EditPhotoState extends State<EditPhoto> {
                               subirImagen(profilePicture, now);
                               SessionManager s = new SessionManager();
                               String username = await s.getNombreUsuario();
-                              print(username);
-
                               String email = await s.getEmail();
-                              print(email);
 
                               updateUserInfo(email,
                                   now.toString() + "." + "jpg", username);

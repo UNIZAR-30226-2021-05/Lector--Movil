@@ -38,6 +38,7 @@ class _ChangePasswordState extends State<ChangePassword> {
   SessionManager session = new SessionManager();
   String _nombreUsuario = '';
   String _email = '';
+  String _pathFoto = "";
   _ChangePasswordState() {
     getUserInfo();
   }
@@ -51,6 +52,11 @@ class _ChangePasswordState extends State<ChangePassword> {
     session.getEmail().then((String result) {
       setState(() {
         _email = result;
+      });
+    });
+    session.getpathPhoto().then((String result) {
+      setState(() {
+        _pathFoto = result;
       });
     });
   }

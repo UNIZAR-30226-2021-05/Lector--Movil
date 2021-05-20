@@ -45,13 +45,13 @@ class SessionManager {
 
   Future<void> setPathPhoto(String path) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setString("_pathPhoto", path);
+    prefs.setString("_pathFoto", path);
     _pathPhoto = path;
   }
 
   Future<String> getpathPhoto() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-    _pathPhoto = prefs.getString("pathPhoto");
+    _pathPhoto = prefs.getString("pathFoto");
     return _pathPhoto;
   }
 }

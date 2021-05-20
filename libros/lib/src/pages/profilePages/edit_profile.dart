@@ -17,6 +17,7 @@ class _EditProfileState extends State<EditProfile> {
   SessionManager session = new SessionManager();
   String _nombreUsuario = '';
   String _email = '';
+  String _pathFoto = '';
   _EditProfileState() {
     getUserInfo();
   }
@@ -30,6 +31,11 @@ class _EditProfileState extends State<EditProfile> {
     session.getEmail().then((String result) {
       setState(() {
         _email = result;
+      });
+    });
+    session.getpathPhoto().then((String result) {
+      setState(() {
+        _pathFoto = result;
       });
     });
   }
@@ -75,14 +81,17 @@ class _EditProfileState extends State<EditProfile> {
                       Padding(
                         padding: const EdgeInsets.only(top: 40.0),
                         child: Container(
-                            width: 120.0,
-                            height: 120.0,
-                            decoration: new BoxDecoration(
-                                shape: BoxShape.circle,
-                                image: new DecorationImage(
-                                    fit: BoxFit.cover,
-                                    image: new NetworkImage(
-                                        'https://img.huffingtonpost.com/asset/5ead5c6e2500006912eb0beb.png?cache=VGVQqRsEJs&ops=1200_630')))),
+                          width: 150.0,
+                          height: 150.0,
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(100),
+                            child: FadeInImage(
+                                fit: BoxFit.cover,
+                                placeholder:
+                                    AssetImage("assets/defaultProfile.png"),
+                                image: NetworkImage(_pathFoto)),
+                          ),
+                        ),
                       ),
                       SizedBox(height: 20),
                       Text(_nombreUsuario, textScaleFactor: 1.4),
