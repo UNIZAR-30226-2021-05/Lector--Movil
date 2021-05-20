@@ -17,45 +17,41 @@ class _ReadingPageState extends State<ReadingPage> {
   //List<Book> readingBooks = [];
   Future<List<Book>> readingBooks;
 
-
   @override
   void initState() {
     super.initState();
     //Actualizo los libros que está leyendo el usuario
     //TODO: Obtener el username de la sesion
     //readingBooks = GetBooksReading("Pepe");
-    readingBooks = GetBooksReading();
-    //TODO: CONECTAR CON GetBooksReading()cuando haya backend
-
+    readingBooks = getBooksReading();
   }
 
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.fromLTRB(20.0, 20.0, 30.0, 0.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Text(
-                      "Leyendo",
-                      style: TextStyle(
-                        fontSize: 25.0,
-                        letterSpacing: 1.0,
-                      ),
-                  ),
-                  Divider(
-                    height: 20.0,
-                    thickness: 2,
-                  ),
-                  Expanded(
-                    child: _buildReadingBooks(),
-                  )
-
-                ],
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(20.0, 20.0, 30.0, 0.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Text(
+              "Leyendo",
+              style: TextStyle(
+                fontSize: 25.0,
+                letterSpacing: 1.0,
               ),
             ),
-        );
+            Divider(
+              height: 20.0,
+              thickness: 2,
+            ),
+            Expanded(
+              child: _buildReadingBooks(),
+            )
+          ],
+        ),
+      ),
+    );
   }
 
   Widget _buildReadingBooks() {
@@ -66,10 +62,9 @@ class _ReadingPageState extends State<ReadingPage> {
             // return: show loading widget
             return Center(
                 child: SpinKitSquareCircle(
-                  color: Colors.blue,
-                  size: 50.0,
-                )
-            );
+              color: Colors.blue,
+              size: 50.0,
+            ));
           }
           if (snapshot.hasError) {
             // return: show error widget
@@ -83,7 +78,6 @@ class _ReadingPageState extends State<ReadingPage> {
               return bookCard(readingBooks[index], "book", context);
             },
           );
-        }
-    );
+        });
   }
 }

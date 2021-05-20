@@ -9,42 +9,90 @@ String apiUrlGetTextFromBook =
     "https://lectorbrainbook.herokuapp.com/libro/offset/Don_Quijote_de_la_Mancha-Cervantes_Miguel.epub";
 
 //TODO: ACTUALIZAR URL READING BOOKS
-String apiUrlGetReadingBooks = "https://lectorbrainbook.herokuapp"
-    ".com/libro/todos/";
+String apiUrlGetReadingBooks =
+    "http://lectorbrainbook.herokuapp.com/usuario/guardar/";
 /*
   Devuelve una lista con los libros que está leyendo el
   usuario "user"
  */
-Future<List<Book>> GetBooksReading() async {
-  List<Book> readingBooks = [];
+
+Future<List<Book>> getBooksReading() async {
+  List<Book> readingBooks =
+      []; //Aqui se guardan los libros que el usuario esta leyendo
+
+  List<String> isbnLeyendo =
+      []; //Aqui voy a guardar los isbn de los libros que se esten leyendo
+
+  List<UserBooks> allUserBooks =
+      []; //Aqui se guardan todos los libros del usuario
+
+  SessionManager s = new SessionManager();
+  String username = await s.getNombreUsuario();
+  Uri myUri = Uri.parse(apiUrlGetReadingBooks + "alonso");
+  http.Response response = await http.get(myUri);
+  print(response.body);
+
+  allUserBooks = (json.decode(utf8.decode(response.bodyBytes)) as List)
+      .map((data) => UserBooks.fromJson(data))
+      .toList();
+
+  //Ahora voy a iterar sobre la lista de libros para ver cuales se estan leyendo y añadirlos a la lista de isbnleyendo
+  for (int i = 0; i < allUserBooks.length; i++) {
+    if (allUserBooks[i].leyendo == true) {
+      isbnLeyendo.add(allUserBooks[i].libro);
+    }
+  }
+  //Ahora tengo todos los isbn de los libros que se estan leyendo en la lista isbnLeyendo
+  //Se itera en todos los libros extrayendo su informacion, se crea el libro, y se añade a la lista final -> readingBooks
+  print(isbnLeyendo.length);
+  for (int i = 0; i < isbnLeyendo.length; i++) {
+    Book aux = await crearLibro(isbnLeyendo[i]);
+    print(isbnLeyendo[i]);
+    readingBooks.add(aux);
+  }
+
+  return readingBooks;
+}
+
+Future<Book> crearLibro(String isbn) async {
   SessionManager s = new SessionManager();
   String key = await s.getKey();
-  //TODO:Llamar a parser, recibir un Map e iterar
+  Book aux;
 
-  //Simulación de libros recibidos
-  /*for (var i = 0; i < 10; i += 1) {
-    readingBooks.add(Book(
-        //Al título se le concatena el índice, (hasta obtener los libros
-        //del backend). Esto se hace para que el título de cada libro devuelto
-        // sea único y así funcione el widget "Hero" (animación entre
-        // pantallas)
-        "123456789",
-        "The Arrivals" + i.toString(),
-        "Patrick Jordan",
-        "https://d1csarkz8obe9u.cloudfront"
-            ".net/posterpreviews/sci-fi-book-cover-template-a1ec26573b7a71617c38ffc6e356eef9_screen.jpg?ts=1561547637",
-        'Hace mucho tiempo en una ciudad muy lejana un niño se encontraba'
-            ' paseando cuando derepente...'));
-    // ["accion", "comedia"]));
-  }*/
-  Uri myUri = Uri.parse(apiUrlGetReadingBooks);
+  String api = "http://lectorbrainbook.herokuapp.com/libro/";
+
+  Uri myUri = Uri.parse(api + isbn);
+
   http.Response response =
       await http.get(myUri, headers: {'Authorization': 'Token $key'});
+  var jsonResponse = null;
+  jsonResponse = json.decode(utf8.decode(response.bodyBytes));
+  print(jsonResponse);
 
-  readingBooks = (json.decode(utf8.decode(response.bodyBytes)) as List)
-      .map((data) => Book.fromJson(data))
-      .toList();
-  return readingBooks;
+  aux = Book.fromJson(jsonResponse);
+  return aux;
+}
+
+class UserBooks {
+  int currentOffset;
+  bool leyendo;
+  String libro;
+
+  UserBooks({this.currentOffset, this.leyendo, this.libro});
+
+  UserBooks.fromJson(Map<String, dynamic> json) {
+    currentOffset = json['currentOffset'];
+    leyendo = json['leyendo'];
+    libro = json['libro'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['currentOffset'] = this.currentOffset;
+    data['leyendo'] = this.leyendo;
+    data['libro'] = this.libro;
+    return data;
+  }
 }
 
 /*
