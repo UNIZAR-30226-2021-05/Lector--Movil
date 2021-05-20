@@ -122,6 +122,36 @@ List<Book> GetBooksSaved(String username) {
   return savedBooks;
 }
 
+//ESTO ME DA ERROR Y NO SE PORQUE**************************************************************
+
+//Future<List<Book>> getBooksSaved(String username) async {
+//   List<Book> savedBooks =
+//       []; //Aqui se guardan los libros que el usuario esta leyendo
+
+//   List<UserBooks> allUserBooks =
+//       []; //Aqui se guardan todos los libros del usuario
+
+//   SessionManager s = new SessionManager();
+//   Uri myUri = Uri.parse(apiUrlGetBooks + "alonso");
+//   http.Response response = await http.get(myUri);
+//   print(response.body);
+
+//   allUserBooks = (json.decode(utf8.decode(response.bodyBytes)) as List)
+//       .map((data) => UserBooks.fromJson(data))
+//       .toList();
+
+//   //Ahora tengo todos los isbn de los libros que se estan leyendo en la lista isbnLeyendo
+//   //Se itera en todos los libros extrayendo su informacion, se crea el libro, y se añade a la lista final -> readingBooks
+//   for (int i = 0; i < allUserBooks.length; i++) {
+//     Book aux = await crearLibro(allUserBooks[i].libro);
+//     savedBooks.add(aux);
+//   }
+
+//   return savedBooks;
+// }
+
+//ESTO ME DA ERROR Y NO SE PORQUE**************************************************************
+
 //Devuelve una lista de los libros que tiene el usuario de acuerdo con la busqueda
 List<Book> getBooksSearched(String username, String book) {
   List<Book> booksSearched = [];
