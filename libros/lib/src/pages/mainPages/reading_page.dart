@@ -22,7 +22,6 @@ class _ReadingPageState extends State<ReadingPage> {
     super.initState();
     //Actualizo los libros que está leyendo el usuario
     //TODO: Obtener el username de la sesion
-    //readingBooks = GetBooksReading("Pepe");
     readingBooks = getBooksReading();
   }
 

@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:libros/src/models/book.dart';
 import 'package:libros/src/models/bookFacade.dart';
 
 class BookDetailsPage extends StatefulWidget {
@@ -10,11 +11,22 @@ class BookDetailsPage extends StatefulWidget {
 class _BookDetailsPageState extends State<BookDetailsPage> {
   //Mapa para recibir argumentos
   Map data = {};
+  Book libro;
+
+  _BookDetailsPageState() {
+    data = ModalRoute.of(context).settings.arguments;
+    Book libro = Book(
+        data["book"].isbn,
+        data["book"].title,
+        data["book"].author,
+        data["book"].url,
+        data["book"].pathCover,
+        data["book"].synopsis);
+  }
 
   @override
   Widget build(BuildContext context) {
     //Libro recibido
-    data = ModalRoute.of(context).settings.arguments;
 
     return Scaffold(
       appBar: AppBar(
@@ -133,6 +145,9 @@ class _BookDetailsPageState extends State<BookDetailsPage> {
                       onPressed: () {
                         //TODO: LLAMAR A BACKEND UPDATE ESTADO LIBRO
                         //Se abre el libro, y además se actualiza el estado como leyendo = true, para que salga tambien en readingbooks
+                        Navigator.pushNamed(context, "book", arguments: {
+                          'book': libro,
+                        });
                       },
                     ),
                   ),

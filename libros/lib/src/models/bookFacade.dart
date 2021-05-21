@@ -6,7 +6,7 @@ import 'book.dart';
 
 String apiUrlGetAllBooks = "https://lectorbrainbook.herokuapp.com/libro/todos/";
 String apiUrlGetTextFromBook =
-    "https://lectorbrainbook.herokuapp.com/libro/offset/Don_Quijote_de_la_Mancha-Cervantes_Miguel.epub";
+    "https://lectorbrainbook.herokuapp.com/libro/offset/sample1.txt/20/90";
 
 //TODO: ACTUALIZAR URL READING BOOKS
 String apiUrlGetReadingBooks =
@@ -318,7 +318,6 @@ Future<Map<String, String>> getText(
       currentOffset.toString() +
       "/" +
       characters.toString();
-  //print("Esto es donde voy a pedirrrrrrrr " + url);
 
   Uri myUri = Uri.parse(url);
 
