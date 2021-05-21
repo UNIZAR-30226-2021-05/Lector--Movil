@@ -23,7 +23,9 @@ class SearchPageData extends StatefulWidget {
 class _SearchPageDataState extends State<SearchPageData> {
   String libro = '';
   List<Book> listaAMostrarLib = [];
+  bool loadedLib = false;
   List<Book> listaAMostrarDis = [];
+  bool loadedDis = false;
 
   _SearchPageDataState({@required this.libro}) {
     getBooksAuxDiscover();
@@ -33,6 +35,7 @@ class _SearchPageDataState extends State<SearchPageData> {
     getBooksDiscover().then((List<Book> result) {
       setState(() {
         listaAMostrarDis = result;
+        loadedDis = true;
       });
     });
   }
@@ -41,6 +44,7 @@ class _SearchPageDataState extends State<SearchPageData> {
     getBooksSearched(libro).then((List<Book> result) {
       setState(() {
         listaAMostrarLib = List.from(result);
+        loadedLib = true;
       });
     });
   }
@@ -173,7 +177,7 @@ class _SearchPageDataState extends State<SearchPageData> {
 
   Widget listarLibrosBiblioteca(String libro) {
     int count = 0;
-    if (listaAMostrarLib.isNotEmpty) {
+    if (loadedLib) if (listaAMostrarLib.isNotEmpty) {
       if (listaAMostrarLib.length >= 3) {
         count = 3;
       } else if (listaAMostrarLib.length == 2) {
@@ -196,32 +200,39 @@ class _SearchPageDataState extends State<SearchPageData> {
     } else {
       return Center(child: Text('No hay busquedas que coincidan :('));
     }
+    else {
+      return Center(child: CircularProgressIndicator());
+    }
   }
 
   Widget listarLibrosDescubre() {
     int count = 0;
-    if (listaAMostrarDis.isNotEmpty) {
-      if (listaAMostrarDis.length >= 3) {
-        count = 3;
-      } else if (listaAMostrarDis.length == 2) {
-        count = 2;
-      } else {
-        count = 1;
-      }
-      return Row(children: [
-        Expanded(
-          child: ListView.builder(
-            itemCount: count,
-            scrollDirection: Axis.horizontal,
-            itemBuilder: (context, index) {
-              return bookCardMin(
-                  listaAMostrarDis[index], "bookDetails", context);
-            },
+    if (loadedDis) {
+      if (listaAMostrarDis.isNotEmpty) {
+        if (listaAMostrarDis.length >= 3) {
+          count = 3;
+        } else if (listaAMostrarDis.length == 2) {
+          count = 2;
+        } else {
+          count = 1;
+        }
+        return Row(children: [
+          Expanded(
+            child: ListView.builder(
+              itemCount: count,
+              scrollDirection: Axis.horizontal,
+              itemBuilder: (context, index) {
+                return bookCardMin(
+                    listaAMostrarDis[index], "bookDetails", context);
+              },
+            ),
           ),
-        ),
-      ]);
+        ]);
+      } else {
+        return Center(child: Text('No hay busquedas que coincidan :('));
+      }
     } else {
-      return Center(child: Text('No hay busquedas que coincidan :('));
+      return Center(child: CircularProgressIndicator());
     }
   }
 }

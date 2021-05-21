@@ -23,6 +23,7 @@ class SearchedBookDiscover extends StatefulWidget {
 class _SearchedBookDiscoverState extends State<SearchedBookDiscover> {
   String libro = '';
   List<Book> listaAMostrar = [];
+  bool loadedDiscover = false;
   _SearchedBookDiscoverState({@required this.libro}) {
     getBooksAux();
   }
@@ -31,6 +32,7 @@ class _SearchedBookDiscoverState extends State<SearchedBookDiscover> {
     getBooksDiscover().then((List<Book> result) {
       setState(() {
         listaAMostrar = result;
+        loadedDiscover = true;
       });
     });
   }
@@ -99,20 +101,23 @@ class _SearchedBookDiscoverState extends State<SearchedBookDiscover> {
   }
 
   Widget listarLibrosDiscover() {
-    getBooksAux();
-    if (listaAMostrar.isNotEmpty) {
-      return Expanded(
-        child: ListView.builder(
-          itemCount: listaAMostrar.length,
-          scrollDirection: Axis.vertical,
-          itemBuilder: (context, index) {
-            return bookCard(
-                listaAMostrar[index], "bookDetailsDiscoverPage", context);
-          },
-        ),
-      );
+    if (loadedDiscover) {
+      if (listaAMostrar.isNotEmpty) {
+        return Expanded(
+          child: ListView.builder(
+            itemCount: listaAMostrar.length,
+            scrollDirection: Axis.vertical,
+            itemBuilder: (context, index) {
+              return bookCard(
+                  listaAMostrar[index], "bookDetailsDiscoverPage", context);
+            },
+          ),
+        );
+      } else {
+        return Center(child: Text('No hay busquedas que coincidan :('));
+      }
     } else {
-      return Center(child: Text('No hay busquedas que coincidan :('));
+      return Center(child: CircularProgressIndicator());
     }
   }
 }
