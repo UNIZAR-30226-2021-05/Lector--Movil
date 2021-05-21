@@ -23,7 +23,7 @@ class _CollectionAddState extends State<CollectionAdd> {
     super.initState();
     //Peticiónes a backend
     //TODO: Obtener el username de la sesion
-    savedBooks = GetBooksSaved("Pepe");
+    // savedBooks = getBooksSaved("Pepe");
   }
 
   @override

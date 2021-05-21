@@ -3,6 +3,7 @@ import 'package:flutter/widgets.dart';
 import '../components/bookCard.dart';
 import 'package:libros/src/models/bookFacade.dart';
 import 'package:libros/src/models/book.dart';
+
 /*
   Interfaz. Muestra libros guardados y colecciones del usuario.
   Gestionada por el Widget PageView del módulo HomePage
@@ -14,63 +15,81 @@ class LibraryPage extends StatefulWidget {
 }
 
 class Library_State extends State<LibraryPage> {
-  List<Book> _savedBooks = []; //Libros guardados por el usuario
   List<String> _collections = []; //Colecciones del usuario
   String _selectedCollectionName = ""; //Nombre colección seleccionada
   int tabIndex = 0; //Por defecto el tabBar muestra los libros (índice 0)
   Map data = {}; //Índice del tabBar especificado como argumento
+  List<Book> _savedBooks = []; //Libros guardados por el usuario
+  bool loaded = false;
 
   final List<Tab> tabs = <Tab>[
     Tab(text: 'Libros'),
     Tab(text: 'Colecciones'),
   ];
 
-  @override
-  void initState() {
-    super.initState();
-    //Peticiónes a backend
-    //TODO: Obtener el username de la sesion
-    _savedBooks = GetBooksSaved("Pepe");
-    _collections = GetCollections("Pepe");
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   //Peticiónes a backend
+  //   //TODO: Obtener el username de la sesion
+  //   pedirLibros();
+  //   _collections = GetCollections("Pepe");
+  // }
+
+  Library_State() {
+    pedirLibros();
+  }
+
+  pedirLibros() {
+    //TODO: Llamar a getBooksSaved no con pepe, si no con el current user
+    getBooksSaved("Pepe").then((List<Book> result) {
+      setState(() {
+        _savedBooks = List.from(result);
+        result = _savedBooks;
+        loaded = true;
+      });
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     data = ModalRoute.of(context).settings.arguments;
-
     if (data != null && data.containsKey('tabIndex')) {
       //Caso especifico el índice del tab que quiero mostrar
       tabIndex = data['tabIndex'];
       data.remove('tabIndex');
     }
-
-    return DefaultTabController(
-      length: tabs.length,
-      initialIndex: tabIndex,
-      child: Scaffold(
-        appBar: AppBar(
-          title: Padding(
-            padding: const EdgeInsets.fromLTRB(0.0, 10.0, 30.0, 0.0),
-            child: Text(
-              "Mis libros",
-              style: TextStyle(
-                fontSize: 25.0,
-                fontWeight: FontWeight.normal,
+    if (loaded)
+      return DefaultTabController(
+        length: tabs.length,
+        initialIndex: tabIndex,
+        child: Scaffold(
+          appBar: AppBar(
+            title: Padding(
+              padding: const EdgeInsets.fromLTRB(0.0, 10.0, 30.0, 0.0),
+              child: Text(
+                "Mis libros",
+                style: TextStyle(
+                  fontSize: 25.0,
+                  fontWeight: FontWeight.normal,
+                ),
               ),
             ),
+            bottom: TabBar(indicatorColor: Colors.blue, tabs: tabs),
           ),
-          bottom: TabBar(indicatorColor: Colors.blue, tabs: tabs),
+          body: Padding(
+              padding: const EdgeInsets.fromLTRB(20.0, 0.0, 30.0, 0.0),
+              child: TabBarView(
+                children: [
+                  _buildSavedBooks(),
+                  _builColections(),
+                ],
+              )),
         ),
-        body: Padding(
-            padding: const EdgeInsets.fromLTRB(20.0, 0.0, 30.0, 0.0),
-            child: TabBarView(
-              children: [
-                _buildSavedBooks(),
-                _builColections(),
-              ],
-            )),
-      ),
-    );
+      );
+    else {
+      return Center(child: CircularProgressIndicator());
+    }
   }
 
   //Muesta la lista de libros guardados por el usuario

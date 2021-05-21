@@ -99,26 +99,29 @@ class UserBooks {
   Devuelve una lista con los libros que guardados por el
   usuario "user"
  */
-List<Book> GetBooksSaved(String username) {
+Future<List<Book>> getBooksSaved(String username) async {
   List<Book> savedBooks = [];
   //TODO:Llamar a parser, recibir un Map e iterar
   //Simulación de libros recibidos
-  for (var i = 0; i < 10; i += 1) {
-    savedBooks.add(Book(
-        //Al título se le concatena el índice, (hasta obtener los libros
-        //del backend). Esto se hace para que el título de cada libro devuelto
-        // sea único y así funcione el widget "Hero" (animación entre
-        // pantallas)
-        "123456789",
-        "The Arrivals" + i.toString(),
-        "Patrick Jordan",
-        "url.com",
-        "https://d1csarkz8obe9u.cloudfront"
-            ".net/posterpreviews/sci-fi-book-cover-template-a1ec26573b7a71617c38ffc6e356eef9_screen.jpg?ts=1561547637",
-        'Hace mucho tiempo en una ciudad muy lejana un niño se encontraba'
-            ' paseando cuando derepente...'));
-    // ["accion", "comedia"]));
+
+  List<UserBooks> allUserBooks =
+      []; //Aqui se guardan todos los libros del usuario
+
+  SessionManager s = new SessionManager();
+  String username = await s.getNombreUsuario();
+  Uri myUri = Uri.parse(apiUrlGetReadingBooks + "alonso");
+  http.Response response = await http.get(myUri);
+  print(response.body);
+
+  allUserBooks = (json.decode(utf8.decode(response.bodyBytes)) as List)
+      .map((data) => UserBooks.fromJson(data))
+      .toList();
+
+  for (int i = 0; i < allUserBooks.length; i++) {
+    Book aux = await crearLibro(allUserBooks[i].libro);
+    savedBooks.add(aux);
   }
+  print("HE DEVUELTO EXACTAMENTE: " + savedBooks.length.toString());
   return savedBooks;
 }
 
