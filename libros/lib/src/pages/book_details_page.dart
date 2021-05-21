@@ -132,6 +132,7 @@ class _BookDetailsPageState extends State<BookDetailsPage> {
                       child: Text("Abrir libro"),
                       onPressed: () {
                         //TODO: LLAMAR A BACKEND UPDATE ESTADO LIBRO
+                        //Se abre el libro, y además se actualiza el estado como leyendo = true, para que salga tambien en readingbooks
                       },
                     ),
                   ),

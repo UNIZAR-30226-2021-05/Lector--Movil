@@ -17,48 +17,59 @@ class _CollectionAddState extends State<CollectionAdd> {
   Map data = {}; //Nombre de la colección. Recibido como argumento.
   List<Book> savedBooks = []; //Libros guardados por el usuario
   List<Book> selectedBooks = []; //Libros seleccionados para ser añadidos.
+  bool loaded = false;
 
-  @override
-  void initState() {
-    super.initState();
-    //Peticiónes a backend
-    //TODO: Obtener el username de la sesion
-    // savedBooks = getBooksSaved("Pepe");
+  _CollectionAddState() {
+    pedirLibros();
+  }
+
+  pedirLibros() {
+    //TODO: Llamar a getBooksSaved no con pepe, si no con el current user
+    getBooksSaved("Pepe").then((List<Book> result) {
+      setState(() {
+        savedBooks = List.from(result);
+        loaded = true;
+      });
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     data = ModalRoute.of(context).settings.arguments;
-
-    return Scaffold(
-        appBar: AppBar(
-          title: Text("Añadir libros a la colección"),
-          elevation: 0.0,
-        ),
-        body: Padding(
-          padding: const EdgeInsets.fromLTRB(20.0, 20.0, 30.0, 20.0),
-          child: Column(
-            children: [
-              Expanded(
-                child: ListView.builder(
-                  itemCount: savedBooks.length,
-                  physics: BouncingScrollPhysics(),
-                  itemBuilder: (context, index) {
-                    return _BookSelectionCard(savedBooks[index]);
-                  },
-                ),
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Text(selectedBooks.length.toString() +
-                      " libros seleccionados"),
-                  _CreateCollection(),
-                ],
-              ),
-            ],
+    if (loaded) {
+      return Scaffold(
+          appBar: AppBar(
+            title: Text("Añadir libros a la colección"),
+            elevation: 0.0,
           ),
-        ));
+          body: Padding(
+            padding: const EdgeInsets.fromLTRB(20.0, 20.0, 30.0, 20.0),
+            child: Column(
+              children: [
+                Expanded(
+                  child: ListView.builder(
+                    itemCount: savedBooks.length,
+                    physics: BouncingScrollPhysics(),
+                    itemBuilder: (context, index) {
+                      return _BookSelectionCard(savedBooks[index]);
+                    },
+                  ),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    Text(selectedBooks.length.toString() +
+                        " libros seleccionados"),
+                    _CreateCollection(),
+                  ],
+                ),
+              ],
+            ),
+          ));
+    } else {
+      return Scaffold(
+          body: Container(child: Center(child: CircularProgressIndicator())));
+    }
   }
 
   //Representación de un libro con el título y el autor.
