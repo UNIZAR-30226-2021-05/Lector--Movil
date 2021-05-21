@@ -23,7 +23,17 @@ class SearchedBookDiscover extends StatefulWidget {
 class _SearchedBookDiscoverState extends State<SearchedBookDiscover> {
   String libro = '';
   List<Book> listaAMostrar = [];
-  _SearchedBookDiscoverState({@required this.libro});
+  _SearchedBookDiscoverState({@required this.libro}) {
+    getBooksAux();
+  }
+
+  getBooksAux() {
+    getBooksDiscover().then((List<Book> result) {
+      setState(() {
+        listaAMostrar = result;
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -80,7 +90,7 @@ class _SearchedBookDiscoverState extends State<SearchedBookDiscover> {
                     SizedBox(
                       height: 15,
                     ),
-                    //  listarLibrosDiscover(libro),
+                    listarLibrosDiscover(),
                     SizedBox(
                       height: 15,
                     ),
@@ -88,29 +98,21 @@ class _SearchedBookDiscoverState extends State<SearchedBookDiscover> {
     );
   }
 
-  // Widget listarLibrosDiscover(String libro) {
-  //   getBooksAux();
-  //   if (listaAMostrar.isNotEmpty) {
-  //     return Expanded(
-  //       child: ListView.builder(
-  //         itemCount: listaAMostrar.length,
-  //         scrollDirection: Axis.vertical,
-  //         itemBuilder: (context, index) {
-  //           return bookCard(
-  //               listaAMostrar[index], "bookDetailsDiscoverPage", context);
-  //         },
-  //       ),
-  //     );
-  //   } else {
-  //     return Center(child: Text('No hay busquedas que coincidan :('));
-  //   }
-  // }
-
-  // getBooksAux() {
-  //   getBooksDiscover().then((List<Book> result) {
-  //     setState(() {
-  //       listaAMostrar = result;
-  //     });
-  //   });
-  // }
+  Widget listarLibrosDiscover() {
+    getBooksAux();
+    if (listaAMostrar.isNotEmpty) {
+      return Expanded(
+        child: ListView.builder(
+          itemCount: listaAMostrar.length,
+          scrollDirection: Axis.vertical,
+          itemBuilder: (context, index) {
+            return bookCard(
+                listaAMostrar[index], "bookDetailsDiscoverPage", context);
+          },
+        ),
+      );
+    } else {
+      return Center(child: Text('No hay busquedas que coincidan :('));
+    }
+  }
 }

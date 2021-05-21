@@ -25,7 +25,25 @@ class _SearchPageDataState extends State<SearchPageData> {
   List<Book> listaAMostrarLib = [];
   List<Book> listaAMostrarDis = [];
 
-  _SearchPageDataState({@required this.libro});
+  _SearchPageDataState({@required this.libro}) {
+    getBooksAuxDiscover();
+    getBooksAuxLib(libro);
+  }
+  getBooksAuxDiscover() {
+    getBooksDiscover().then((List<Book> result) {
+      setState(() {
+        listaAMostrarDis = result;
+      });
+    });
+  }
+
+  getBooksAuxLib(String libro) {
+    getBooksSearched(libro).then((List<Book> result) {
+      setState(() {
+        listaAMostrarLib = List.from(result);
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -131,7 +149,7 @@ class _SearchPageDataState extends State<SearchPageData> {
                     SizedBox(
                       height: 15,
                     ),
-                    // Container(height: 200, child: listarLibrosDescubre(libro)),
+                    Container(height: 200, child: listarLibrosDescubre()),
                   ]))),
     );
   }
@@ -154,13 +172,19 @@ class _SearchPageDataState extends State<SearchPageData> {
   }
 
   Widget listarLibrosBiblioteca(String libro) {
-    getBooksAuxLib(libro);
-
+    int count = 0;
     if (listaAMostrarLib.isNotEmpty) {
+      if (listaAMostrarLib.length >= 3) {
+        count = 3;
+      } else if (listaAMostrarLib.length == 2) {
+        count = 2;
+      } else {
+        count = 1;
+      }
       return Row(children: [
         Expanded(
           child: ListView.builder(
-            itemCount: 3,
+            itemCount: count,
             scrollDirection: Axis.horizontal,
             itemBuilder: (context, index) {
               return bookCardMin(
@@ -174,47 +198,30 @@ class _SearchPageDataState extends State<SearchPageData> {
     }
   }
 
-  // Widget listarLibrosDescubre(String libro) {
-  //   getBooksAuxDiscover();
-  //   int count = 0;
-  //   if (listaAMostrarDis.isNotEmpty) {
-  //     if (listaAMostrarDis.length >= 3) {
-  //       count = 3;
-  //     } else if (listaAMostrarDis.length == 2) {
-  //       count = 2;
-  //     } else {
-  //       count = 1;
-  //     }
-  //     return Row(children: [
-  //       Expanded(
-  //         child: ListView.builder(
-  //           itemCount: count,
-  //           scrollDirection: Axis.horizontal,
-  //           itemBuilder: (context, index) {
-  //             return bookCardMin(
-  //                 listaAMostrarDis[index], "bookDetails", context);
-  //           },
-  //         ),
-  //       ),
-  //     ]);
-  //   } else {
-  //     return Center(child: Text('No hay busquedas que coincidan :('));
-  //   }
-  // }
-
-  // getBooksAuxDiscover() {
-  //   getBooksDiscover().then((List<Book> result) {
-  //     setState(() {
-  //       listaAMostrarLib = result;
-  //     });
-  //   });
-  // }
-
-  getBooksAuxLib(String libro) {
-    getBooksSearched(libro).then((List<Book> result) {
-      setState(() {
-        listaAMostrarLib = result;
-      });
-    });
+  Widget listarLibrosDescubre() {
+    int count = 0;
+    if (listaAMostrarDis.isNotEmpty) {
+      if (listaAMostrarDis.length >= 3) {
+        count = 3;
+      } else if (listaAMostrarDis.length == 2) {
+        count = 2;
+      } else {
+        count = 1;
+      }
+      return Row(children: [
+        Expanded(
+          child: ListView.builder(
+            itemCount: count,
+            scrollDirection: Axis.horizontal,
+            itemBuilder: (context, index) {
+              return bookCardMin(
+                  listaAMostrarDis[index], "bookDetails", context);
+            },
+          ),
+        ),
+      ]);
+    } else {
+      return Center(child: Text('No hay busquedas que coincidan :('));
+    }
   }
 }

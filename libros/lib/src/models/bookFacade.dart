@@ -126,59 +126,58 @@ Future<List<Book>> getBooksSaved(String username) async {
 
 //Devuelve una lista de los libros que tiene el usuario de acuerdo con la busqueda
 Future<List<Book>> getBooksSearched(String book) async {
-  List<Book> showBook =
-      []; //Aqui se guardan los libros que el usuario esta leyendo
+  List<Book> savedBooks = [];
+  //TODO:Llamar a parser, recibir un Map e iterar
+  //Simulación de libros recibidos
 
-  List<UserBooks> allBooks = []; //Aqui se guardan todos los libros del usuario
+  List<UserBooks> allUserBooks =
+      []; //Aqui se guardan todos los libros del usuario
+
+  List<Book> finalBooks = [];
 
   SessionManager s = new SessionManager();
   String username = await s.getNombreUsuario();
   Uri myUri = Uri.parse(apiUrlGetReadingBooks + "alonso");
-  http.Response response = await http.get(myUri);
+  http.Response response = await http.get(myUri).timeout(Duration(seconds: 15));
   print(response.body);
 
-  allBooks = (json.decode(utf8.decode(response.bodyBytes)) as List)
+  allUserBooks = (json.decode(utf8.decode(response.bodyBytes)) as List)
       .map((data) => UserBooks.fromJson(data))
       .toList();
 
-  for (int i = 0; i < allBooks.length; i++) {
-    String isbn = allBooks[i].libro;
+  for (int i = 0; i < allUserBooks.length; i++) {
+    Book aux = await crearLibro(allUserBooks[i].libro);
+    savedBooks.add(aux);
+  }
+
+  for (int i = 0; i < allUserBooks.length; i++) {
+    String isbn = allUserBooks[i].libro;
     Book aux = await crearLibro(isbn);
     //Solo se añade si coincide la busqueda
     if (aux.title.toLowerCase().contains(book.toLowerCase())) {
-      showBook.add(aux);
+      finalBooks.add(aux);
     }
   }
-  return showBook;
+  return finalBooks;
 }
 
-// Future<List<Book>> getBooksDiscover() async {
-//   List<Book> showBook =
-//       []; //Aqui se guardan los libros que el usuario esta leyendo
+Future<List<Book>> getBooksDiscover() async {
+  List<Book> allBooks = []; //Aqui se guardan todos los libros del usuario
 
-//   List<UserBooks> allBooks = []; //Aqui se guardan todos los libros del usuario
+  SessionManager s = new SessionManager();
+  String username = await s.getNombreUsuario();
+  Uri myUri = Uri.parse(apiUrlGetAllBooks);
+  http.Response response = await http.get(myUri).timeout(Duration(seconds: 15));
+  ;
+  print("ESTO EEEEEES ->>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+  print(response.body);
 
-//   SessionManager s = new SessionManager();
-//   String username = await s.getNombreUsuario();
-//   Uri myUri = Uri.parse(apiUrlGetAllBooks);
-//   http.Response response = await http.get(myUri);
-//   print(response.body);
+  allBooks = (json.decode(utf8.decode(response.bodyBytes)) as List)
+      .map((data) => Book.fromJson(data))
+      .toList();
 
-//   allBooks = (json.decode(utf8.decode(response.bodyBytes)) as List)
-//       .map((data) => UserBooks.fromJson(data))
-//       .toList();
-
-//   //Ahora voy a iterar sobre la lista de libros para ver cuales se estan leyendo y añadirlos a la lista de isbnleyendo
-//   for (int i = 0; i < allBooks.length; i++) {
-//     String isbn = allBooks[i].libro;
-//     Book aux = await crearLibro(isbn);
-//     showBook.add(aux);
-//   }
-//   //Ahora tengo todos los isbn de los libros que se estan leyendo en la lista isbnLeyendo
-//   //Se itera en todos los libros extrayendo su informacion, se crea el libro, y se añade a la lista final -> readingBooks
-
-//   return showBook;
-// }
+  return allBooks;
+}
 
 //-------------------
 // COLECCIONES

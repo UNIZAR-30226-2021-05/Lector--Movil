@@ -23,7 +23,17 @@ class _SearchedBookLibraryState extends State<SearchedBookLibrary> {
   String libro = '';
   List<Book> listaAMostrar = [];
 
-  _SearchedBookLibraryState({@required this.libro});
+  _SearchedBookLibraryState({@required this.libro}) {
+    getBooksAux(libro);
+  }
+
+  getBooksAux(String libro) {
+    getBooksSearched(libro).then((List<Book> result) {
+      setState(() {
+        listaAMostrar = List.from(result);
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -103,13 +113,5 @@ class _SearchedBookLibraryState extends State<SearchedBookLibrary> {
     } else {
       return Center(child: Text('No hay busquedas que coincidan :('));
     }
-  }
-
-  getBooksAux(String libro) {
-    getBooksSearched(libro).then((List<Book> result) {
-      setState(() {
-        listaAMostrar = result;
-      });
-    });
   }
 }
