@@ -99,7 +99,6 @@ class _SearchedBookLibraryState extends State<SearchedBookLibrary> {
   }
 
   Widget listarLibrosBiblioteca(String libro) {
-    getBooksAux(libro);
     if (listaAMostrar.isNotEmpty) {
       return Expanded(
         child: ListView.builder(
