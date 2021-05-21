@@ -121,124 +121,64 @@ Future<List<Book>> getBooksSaved(String username) async {
     Book aux = await crearLibro(allUserBooks[i].libro);
     savedBooks.add(aux);
   }
-  print("HE DEVUELTO EXACTAMENTE: " + savedBooks.length.toString());
   return savedBooks;
 }
 
-//ESTO ME DA ERROR Y NO SE PORQUE**************************************************************
+//Devuelve una lista de los libros que tiene el usuario de acuerdo con la busqueda
+Future<List<Book>> getBooksSearched(String book) async {
+  List<Book> showBook =
+      []; //Aqui se guardan los libros que el usuario esta leyendo
 
-//Future<List<Book>> getBooksSaved(String username) async {
-//   List<Book> savedBooks =
+  List<UserBooks> allBooks = []; //Aqui se guardan todos los libros del usuario
+
+  SessionManager s = new SessionManager();
+  String username = await s.getNombreUsuario();
+  Uri myUri = Uri.parse(apiUrlGetReadingBooks + "alonso");
+  http.Response response = await http.get(myUri);
+  print(response.body);
+
+  allBooks = (json.decode(utf8.decode(response.bodyBytes)) as List)
+      .map((data) => UserBooks.fromJson(data))
+      .toList();
+
+  for (int i = 0; i < allBooks.length; i++) {
+    String isbn = allBooks[i].libro;
+    Book aux = await crearLibro(isbn);
+    //Solo se añade si coincide la busqueda
+    if (aux.title.toLowerCase().contains(book.toLowerCase())) {
+      showBook.add(aux);
+    }
+  }
+  return showBook;
+}
+
+// Future<List<Book>> getBooksDiscover() async {
+//   List<Book> showBook =
 //       []; //Aqui se guardan los libros que el usuario esta leyendo
 
-//   List<UserBooks> allUserBooks =
-//       []; //Aqui se guardan todos los libros del usuario
+//   List<UserBooks> allBooks = []; //Aqui se guardan todos los libros del usuario
 
 //   SessionManager s = new SessionManager();
-//   Uri myUri = Uri.parse(apiUrlGetBooks + "alonso");
+//   String username = await s.getNombreUsuario();
+//   Uri myUri = Uri.parse(apiUrlGetAllBooks);
 //   http.Response response = await http.get(myUri);
 //   print(response.body);
 
-//   allUserBooks = (json.decode(utf8.decode(response.bodyBytes)) as List)
+//   allBooks = (json.decode(utf8.decode(response.bodyBytes)) as List)
 //       .map((data) => UserBooks.fromJson(data))
 //       .toList();
 
+//   //Ahora voy a iterar sobre la lista de libros para ver cuales se estan leyendo y añadirlos a la lista de isbnleyendo
+//   for (int i = 0; i < allBooks.length; i++) {
+//     String isbn = allBooks[i].libro;
+//     Book aux = await crearLibro(isbn);
+//     showBook.add(aux);
+//   }
 //   //Ahora tengo todos los isbn de los libros que se estan leyendo en la lista isbnLeyendo
 //   //Se itera en todos los libros extrayendo su informacion, se crea el libro, y se añade a la lista final -> readingBooks
-//   for (int i = 0; i < allUserBooks.length; i++) {
-//     Book aux = await crearLibro(allUserBooks[i].libro);
-//     savedBooks.add(aux);
-//   }
 
-//   return savedBooks;
+//   return showBook;
 // }
-
-//ESTO ME DA ERROR Y NO SE PORQUE**************************************************************
-
-//Devuelve una lista de los libros que tiene el usuario de acuerdo con la busqueda
-List<Book> getBooksSearched(String username, String book) {
-  List<Book> booksSearched = [];
-  List<Book> libros = [];
-  //TODO:Llamar a parser, recibir un Map e iterar
-
-  //Simulación de libros recibidos
-  for (var i = 0; i < 10; i += 1) {
-    Book libro = Book(
-        //Al título se le concatena el índice, (hasta obtener los libros
-        //del backend). Esto se hace para que el título de cada libro devuelto
-        // sea único y así funcione el widget "Hero" (animación entre
-        // pantallas)
-        "123456789",
-        "The Arrivals" + i.toString(),
-        "Patrick Jordan",
-        "url.com",
-        "https://d1csarkz8obe9u.cloudfront"
-            ".net/posterpreviews/sci-fi-book-cover-template-a1ec26573b7a71617c38ffc6e356eef9_screen.jpg?ts=1561547637",
-        'Hace mucho tiempo en una ciudad muy lejana un niño se encontraba'
-            ' paseando cuando derepente...');
-    // ["accion", "comedia"]));
-    libros.add(libro);
-  }
-  for (var i = 0; i < 10; i += 1) {
-    String titulo = libros[i].title;
-    if (titulo.toLowerCase().contains(book.toLowerCase())) {
-      booksSearched.add(libros[i]);
-    }
-  }
-  return booksSearched;
-}
-
-//Lista los libros que coinciden con book
-
-Future<List<Book>> getBooksDiscover(String book) async {
-  List<Book> discoverBooks = []; //Aqui se introducen aquellos que coinciden
-  List<Book> libros = []; //Aqui se reciben todos los libros
-  //TODO:Llamar a parser, recibir un Map e iterar
-
-  SessionManager s = new SessionManager();
-  String key = await s.getKey();
-
-  apiUrlGetAllBooks = apiUrlGetAllBooks;
-  Uri myUri = Uri.parse(apiUrlGetAllBooks);
-
-  http.Response response =
-      await http.get(myUri, headers: {'Authorization': 'Token $key'});
-  var jsonResponse = null;
-  jsonResponse = json.decode(utf8.decode(response.bodyBytes));
-  print(jsonResponse);
-
-  libros = (json.decode(utf8.decode(response.bodyBytes)) as List)
-      .map((data) => Book.fromJson(data))
-      .toList();
-
-//ESTO ES UNA SIMULACION PARA PODER VER LOS LIBROS DE ALGUNA MANERA
-
-  // //Simulación de libros recibidos
-  // for (var i = 0; i < 10; i += 1) {
-  //   Book libro = Book(
-  //       //Al título se le concatena el índice, (hasta obtener los libros
-  //       //del backend). Esto se hace para que el título de cada libro devuelto
-  //       // sea único y así funcione el widget "Hero" (animación entre
-  //       // pantallas)
-  //       "123456789",
-  //       "The Arrivals" + i.toString(),
-  //       "Patrick Jordan",
-  //       "https://d1csarkz8obe9u.cloudfront"
-  //           ".net/posterpreviews/sci-fi-book-cover-template-a1ec26573b7a71617c38ffc6e356eef9_screen.jpg?ts=1561547637",
-  //       'Hace mucho tiempo en una ciudad muy lejana un niño se encontraba'
-  //           ' paseando cuando derepente...',
-  //       ["accion", "comedia"]);
-  //   libros.add(libro);
-  // }
-
-  for (var i = 0; i < libros.length; i += 1) {
-    String titulo = libros[i].title;
-    if (titulo.toLowerCase().contains(book.toLowerCase())) {
-      discoverBooks.add(libros[i]);
-    }
-  }
-  return discoverBooks;
-}
 
 //-------------------
 // COLECCIONES

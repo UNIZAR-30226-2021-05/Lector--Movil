@@ -10,6 +10,7 @@ import 'package:libros/src/pages/components/bookCard.dart';
 
 class SearchedBookLibrary extends StatefulWidget {
   String book = '';
+
   SearchedBookLibrary({Key key, @required this.book}) : super(key: key);
 
   @override
@@ -20,6 +21,8 @@ class SearchedBookLibrary extends StatefulWidget {
 //No incluir Scaffold (lo añade HomePage)
 class _SearchedBookLibraryState extends State<SearchedBookLibrary> {
   String libro = '';
+  List<Book> listaAMostrar = [];
+
   _SearchedBookLibraryState({@required this.libro});
 
   @override
@@ -86,8 +89,7 @@ class _SearchedBookLibraryState extends State<SearchedBookLibrary> {
   }
 
   Widget listarLibrosBiblioteca(String libro) {
-    List<Book> listaAMostrar = getBooksSearched("Pepe", libro);
-
+    getBooksAux(libro);
     if (listaAMostrar.isNotEmpty) {
       return Expanded(
         child: ListView.builder(
@@ -101,5 +103,13 @@ class _SearchedBookLibraryState extends State<SearchedBookLibrary> {
     } else {
       return Center(child: Text('No hay busquedas que coincidan :('));
     }
+  }
+
+  getBooksAux(String libro) {
+    getBooksSearched(libro).then((List<Book> result) {
+      setState(() {
+        listaAMostrar = result;
+      });
+    });
   }
 }

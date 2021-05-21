@@ -80,7 +80,7 @@ class _SearchedBookDiscoverState extends State<SearchedBookDiscover> {
                     SizedBox(
                       height: 15,
                     ),
-                    listarLibrosDiscover(libro),
+                    //  listarLibrosDiscover(libro),
                     SizedBox(
                       height: 15,
                     ),
@@ -88,29 +88,29 @@ class _SearchedBookDiscoverState extends State<SearchedBookDiscover> {
     );
   }
 
-  Widget listarLibrosDiscover(String libro) {
-    getBooksAux();
-    if (listaAMostrar.isNotEmpty) {
-      return Expanded(
-        child: ListView.builder(
-          itemCount: listaAMostrar.length,
-          scrollDirection: Axis.vertical,
-          itemBuilder: (context, index) {
-            return bookCard(
-                listaAMostrar[index], "bookDetailsDiscoverPage", context);
-          },
-        ),
-      );
-    } else {
-      return Center(child: Text('No hay busquedas que coincidan :('));
-    }
-  }
+  // Widget listarLibrosDiscover(String libro) {
+  //   getBooksAux();
+  //   if (listaAMostrar.isNotEmpty) {
+  //     return Expanded(
+  //       child: ListView.builder(
+  //         itemCount: listaAMostrar.length,
+  //         scrollDirection: Axis.vertical,
+  //         itemBuilder: (context, index) {
+  //           return bookCard(
+  //               listaAMostrar[index], "bookDetailsDiscoverPage", context);
+  //         },
+  //       ),
+  //     );
+  //   } else {
+  //     return Center(child: Text('No hay busquedas que coincidan :('));
+  //   }
+  // }
 
-  getBooksAux() {
-    getBooksDiscover(libro).then((List<Book> result) {
-      setState(() {
-        listaAMostrar = result;
-      });
-    });
-  }
+  // getBooksAux() {
+  //   getBooksDiscover().then((List<Book> result) {
+  //     setState(() {
+  //       listaAMostrar = result;
+  //     });
+  //   });
+  // }
 }
