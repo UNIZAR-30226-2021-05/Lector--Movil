@@ -11,6 +11,9 @@ String apiUrlGetTextFromBook =
 //TODO: ACTUALIZAR URL READING BOOKS
 String apiUrlGetReadingBooks =
     "http://lectorbrainbook.herokuapp.com/usuario/guardar/";
+
+String apiAddBookToUser =
+    "http://lectorbrainbook.herokuapp.com/usuario/guardar/";
 /*
   Devuelve una lista con los libros que está leyendo el
   usuario "user"
@@ -28,7 +31,7 @@ Future<List<Book>> getBooksReading() async {
 
   SessionManager s = new SessionManager();
   String username = await s.getNombreUsuario();
-  Uri myUri = Uri.parse(apiUrlGetReadingBooks + "alonso");
+  Uri myUri = Uri.parse(apiUrlGetReadingBooks + username);
   http.Response response = await http.get(myUri);
   print(response.body);
 
@@ -39,7 +42,7 @@ Future<List<Book>> getBooksReading() async {
   //Ahora voy a iterar sobre la lista de libros para ver cuales se estan leyendo y añadirlos a la lista de isbnleyendo
   for (int i = 0; i < allUserBooks.length; i++) {
     if (allUserBooks[i].leyendo == true) {
-      isbnLeyendo.add(allUserBooks[i].libro);
+      isbnLeyendo.add(allUserBooks[i].isbn);
     }
   }
   //Ahora tengo todos los isbn de los libros que se estan leyendo en la lista isbnLeyendo
@@ -76,21 +79,21 @@ Future<Book> crearLibro(String isbn) async {
 class UserBooks {
   int currentOffset;
   bool leyendo;
-  String libro;
+  String isbn;
 
-  UserBooks({this.currentOffset, this.leyendo, this.libro});
+  UserBooks({this.currentOffset, this.leyendo, this.isbn});
 
   UserBooks.fromJson(Map<String, dynamic> json) {
     currentOffset = json['currentOffset'];
     leyendo = json['leyendo'];
-    libro = json['libro'];
+    isbn = json['ISBN'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['currentOffset'] = this.currentOffset;
     data['leyendo'] = this.leyendo;
-    data['libro'] = this.libro;
+    data['ISBN'] = this.isbn;
     return data;
   }
 }
@@ -109,7 +112,7 @@ Future<List<Book>> getBooksSaved(String username) async {
 
   SessionManager s = new SessionManager();
   String username = await s.getNombreUsuario();
-  Uri myUri = Uri.parse(apiUrlGetReadingBooks + "alonso");
+  Uri myUri = Uri.parse(apiUrlGetReadingBooks + username);
   http.Response response = await http.get(myUri);
   print(response.body);
 
@@ -118,7 +121,7 @@ Future<List<Book>> getBooksSaved(String username) async {
       .toList();
 
   for (int i = 0; i < allUserBooks.length; i++) {
-    Book aux = await crearLibro(allUserBooks[i].libro);
+    Book aux = await crearLibro(allUserBooks[i].isbn);
     savedBooks.add(aux);
   }
   return savedBooks;
@@ -137,7 +140,7 @@ Future<List<Book>> getBooksSearched(String book) async {
 
   SessionManager s = new SessionManager();
   String username = await s.getNombreUsuario();
-  Uri myUri = Uri.parse(apiUrlGetReadingBooks + "alonso");
+  Uri myUri = Uri.parse(apiUrlGetReadingBooks + username);
   http.Response response = await http.get(myUri).timeout(Duration(seconds: 15));
   print(response.body);
 
@@ -146,12 +149,12 @@ Future<List<Book>> getBooksSearched(String book) async {
       .toList();
 
   for (int i = 0; i < allUserBooks.length; i++) {
-    Book aux = await crearLibro(allUserBooks[i].libro);
+    Book aux = await crearLibro(allUserBooks[i].isbn);
     savedBooks.add(aux);
   }
 
   for (int i = 0; i < allUserBooks.length; i++) {
-    String isbn = allUserBooks[i].libro;
+    String isbn = allUserBooks[i].isbn;
     Book aux = await crearLibro(isbn);
     //Solo se añade si coincide la busqueda
     if (aux.title.toLowerCase().contains(book.toLowerCase())) {
@@ -238,11 +241,16 @@ void deleteBookFromUser(String isbn) async {
   print("Se  va a borrar el libro: " + isbn + " del usuario: " + nombreUsuario);
 }
 
-void addBookFromUser(String isbn) async {
+void addBookToUser(String isbn) async {
   SessionManager s = new SessionManager();
-  String nombreUsuario = await s.getNombreUsuario();
+  String username = await s.getNombreUsuario();
 
-  print("Se  va a añadir el libro: " + isbn + " al usuario: " + nombreUsuario);
+  Uri myUri = Uri.parse(apiAddBookToUser + username + "/" + isbn);
+  final toSend = {"currentOffset": "0"};
+
+  http.Response response = await http.post(myUri, body: toSend);
+  print("ESTO EEEEEES ->>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+  print(response.body);
 }
 
 // currentOffset: offset de lectura actual

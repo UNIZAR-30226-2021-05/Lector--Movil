@@ -75,19 +75,6 @@ class _BookDetailsDiscoverPage extends State<BookDetailsDiscoverPage> {
                           ),
                           SizedBox(height: 10.0),
                           SizedBox(height: 5.0),
-                          // for (var i = 0; i < data["book"].genres.length; i++)
-                          //   Container(
-                          //     padding:
-                          //         EdgeInsets.fromLTRB(20.0, 2.0, 20.0, 2.0),
-                          //     decoration: BoxDecoration(
-                          //       border: Border.all(
-                          //         color: Colors.blue,
-                          //       ),
-                          //       borderRadius: BorderRadius.circular(8.0),
-                          //     ),
-                          //     child: Text(data["book"].genres[i]),
-                          //   )
-                          //Text( data["book"].genres.toString()),
                         ],
                       )
                     ]),
@@ -162,7 +149,7 @@ class _BookDetailsDiscoverPage extends State<BookDetailsDiscoverPage> {
                   )),
               onPressed: () {
                 //Aqui hay que hablar con back para ver si se le pasa el titulo del libro o que otro paramaetro para que ellos hagan la busqueda
-                addBookFromUser(data['book'].isbn);
+                addBookToUser(data['book'].isbn);
                 //Mensaje ok
                 final snackBar = SnackBar(
                     backgroundColor: Colors.green,
