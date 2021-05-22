@@ -22,7 +22,7 @@ String apiUrlGetPreferences =
     "http://lectorbrainbook.herokuapp.com/usuario/preferencias/";
 
 String apiUrlGetUser = "https://lectorbrainbook.herokuapp.com/usuario/";
-String apiUrlGetUserPhoto = "https://lectorbrainbook.herokuapp.com/usuario/";
+String apiUrlGetUserInfo = "https://lectorbrainbook.herokuapp.com/usuario/";
 String obtenerFoto = "http://lectorbrainbook.herokuapp.com/usuario/image/";
 
 Future<bool> registrarUsuario(User usuario, BuildContext context) async {
@@ -165,32 +165,29 @@ void getAndStoreUserInfo() async {
   s.setPathPhoto(user.pathFoto);
 }
 
-void updateUserInfo(String email, String pathPhoto, String username) async {
-  SessionManager s = new SessionManager();
-  String key = await s.getKey();
+// void updateUserInfo(String email, String pathPhoto, String username) async {
+//   SessionManager s = new SessionManager();
+//   String key = await s.getKey();
+//   print("Le paso: " + username + " " + pathPhoto + " " + email);
+//   final toSend = {"username": username, "pathFoto": pathPhoto, "email": email};
+//   print(username);
+//   String api = apiUrlGetUserInfo + username;
+//   Uri myUri = Uri.parse(api);
+//   print(api);
 
-  final toSend = {
-    "email": email,
-    "pathFoto": pathPhoto,
-    "username": username,
-  };
-  print(username);
-  String api = apiUrlGetUserPhoto + username;
-  Uri myUri = Uri.parse(api);
-  print(api);
-
-  http.Response response = await http.put(
-    myUri,
-    body: toSend,
-    headers: {'Authorization': 'Token $key'},
-  );
-  var jsonResponse = null;
-  jsonResponse = json.decode(utf8.decode(response.bodyBytes));
-  print(jsonResponse);
-  s.setEmail(jsonResponse["email"]);
-  s.setNombreUsuario(jsonResponse["username"]);
-  s.setPathPhoto(jsonResponse["pathFoto"]);
-}
+//   http.Response response = await http.put(
+//     myUri,
+//     body: toSend,
+//     headers: {'Authorization': 'Token $key'},
+//   );
+//   var jsonResponse = null;
+//   print(response.body);
+//   jsonResponse = json.decode(response.body);
+//   print(jsonResponse);
+//   s.setEmail(jsonResponse["email"]);
+//   s.setNombreUsuario(jsonResponse["username"]);
+//   s.setPathPhoto(jsonResponse["pathFoto"]);
+// }
 
 void obtenerFotoDePerfil(String nombreFoto) async {
   SessionManager s = new SessionManager();
@@ -210,5 +207,5 @@ void obtenerFotoDePerfil(String nombreFoto) async {
   var jsonResponse = null;
   jsonResponse = json.decode(utf8.decode(response.bodyBytes));
   print(jsonResponse);
-  updateUserInfo(email, jsonResponse["url"], username);
+  getAndStoreUserInfo();
 }
