@@ -41,7 +41,7 @@ Future<List<Book>> getBooksReading() async {
 
   //Ahora voy a iterar sobre la lista de libros para ver cuales se estan leyendo y añadirlos a la lista de isbnleyendo
   for (int i = 0; i < allUserBooks.length; i++) {
-    if (allUserBooks[i].leyendo == true) {
+    if (allUserBooks[i].leyendo) {
       isbnLeyendo.add(allUserBooks[i].isbn);
     }
   }
@@ -246,7 +246,7 @@ void addBookToUser(String isbn) async {
   String username = await s.getNombreUsuario();
 
   Uri myUri = Uri.parse(apiAddBookToUser + username + "/" + isbn);
-  final toSend = {"currentOffset": "0"};
+  final toSend = {"currentOffset": "0", "leyendo": "false"};
 
   http.Response response = await http.post(myUri, body: toSend);
   print("ESTO EEEEEES ->>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
