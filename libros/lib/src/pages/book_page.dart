@@ -185,9 +185,10 @@ class _BookPageState extends State<BookPage> {
                                 onPressed: Navigator.of(context).pop,
                               ),
                               FlatButton(
-                                child: Text('OK'),
+                                child: Text('EVALUAR'),
                                 onPressed: () {
                                   Navigator.of(context).pop(_stars);
+                                  enviarValoracion(data["book"].isbn, _stars);
                                 },
                               )
                             ],
@@ -215,7 +216,7 @@ class _BookPageState extends State<BookPage> {
                       child: SizedBox(
                           height: 610,
                           width: 350,
-                          child: Text(
+                          child: SelectableText(
                             texto,
                             style: TextStyle(
                                 color: Color(colorLetra), fontSize: 15.0),
