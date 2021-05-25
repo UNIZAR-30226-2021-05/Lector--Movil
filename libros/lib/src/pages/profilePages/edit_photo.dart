@@ -70,7 +70,7 @@ class _EditPhotoState extends State<EditPhoto> {
       String username = await s.getNombreUsuario();
       String email = await s.getEmail();
 
-      updateUserInfo(email, now.toString() + "." + "jpg", username);
+      //updateUserInfo(email, now.toString() + "." + "jpg", username);
       obtenerFotoDePerfil(now.toString());
     } on Exception catch (_) {
       print("Error IMPOSIBLE TO UPLOAD");

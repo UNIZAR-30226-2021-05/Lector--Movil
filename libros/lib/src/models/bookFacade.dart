@@ -7,7 +7,7 @@ import 'book.dart';
 String apiUrlGetAllBooks = "https://lectorbrainbook.herokuapp.com/libro/todos/";
 String apiUrlGetTextFromBook =
     "https://lectorbrainbook.herokuapp.com/libro/offset/sample1.txt/20/90";
-
+String apiUrlColeccion= "https://lectorbrainbook.herokuapp.com/usuario/coleccion/";
 //TODO: ACTUALIZAR URL READING BOOKS
 String apiUrlGetReadingBooks =
     "http://lectorbrainbook.herokuapp.com/usuario/guardar/";
@@ -210,28 +210,74 @@ List<Book> GetCollectionBooks(String username, String collectionName) {
 }
 
 //Crear nueva colección "colection" con libros "books" para el usuario "username"
-void PostCollection(String username, String collection, List<Book> books) {
+void PostCollection(String collection, List<Book> books) async{
   //Simulación de creación de colección
   print("bookFacade-postcollection");
   print(collection);
-  collections[collection] = books;
+  //update bakend
+  String librosString = "";
+  for (Book book in books) {
+    librosString += book.isbn + ",";
+  }
+  librosString = librosString.substring(0, librosString.length-1);
+  final toSend = {
+    "titulo": collection,
+    "libros": librosString,
+  };
+  SessionManager s = new SessionManager();
+  String username = await s.getNombreUsuario();
+  Uri myUri = Uri.parse(apiUrlColeccion + username);
+  http.Response response = await http.put(myUri, body: toSend);
+  var jsonResponse = null;
+  jsonResponse = json.decode(utf8.decode(response.bodyBytes));
+  print(jsonResponse);
+  if (response.statusCode == 200) {
+    //update cache
+    collections[collection] = books;
+  }
 }
 
 //Renombrar la coleccion "Oldcollection" del usuario "username" por
 // "NewCollectionName
-void RenameCollection(
-    String username, String OldCollectionName, String NewCollectionName) {
-  //Simulación renombrar colección
-  List<Book> collectionBooks = [];
-  collectionBooks = collections[OldCollectionName];
-  collections.remove(OldCollectionName);
-  collections[NewCollectionName] = collectionBooks;
+void RenameCollection( String OldCollectionName, String NewCollectionName) async{
+  //update backend
+  final toSend = {
+    "oldTitulo": OldCollectionName,
+    "newTitulo": NewCollectionName,
+  };
+  SessionManager s = new SessionManager();
+  String username = await s.getNombreUsuario();
+  Uri myUri = Uri.parse(apiUrlColeccion + "rename/" + username);
+  http.Response response = await http.put(myUri, body: toSend);
+  var jsonResponse = null;
+  jsonResponse = json.decode(utf8.decode(response.bodyBytes));
+  print(jsonResponse);
+  if (response.statusCode == 200) {
+    //update cache
+    List<Book> collectionBooks = [];
+    collectionBooks = collections[OldCollectionName];
+    collections.remove(OldCollectionName);
+    collections[NewCollectionName] = collectionBooks;
+  }
 }
 
 //Eliminar la coleccion "collectionName" del usuario "username"
-void DeleteCollection(String username, String collectionName) {
-  //Simulación renombrar colección
-  collections.remove(collectionName);
+void DeleteCollection(String collectionName) async{
+  //update backend
+  final toSend = {
+    "titulo": collectionName,
+  };
+  SessionManager s = new SessionManager();
+  String username = await s.getNombreUsuario();
+  Uri myUri = Uri.parse(apiUrlColeccion + "delete/" + username);
+  http.Response response = await http.put(myUri, body: toSend);
+  var jsonResponse = null;
+  jsonResponse = json.decode(utf8.decode(response.bodyBytes));
+  print(jsonResponse);
+  if (response.statusCode == 200) {
+    //update cache
+    collections.remove(collectionName);
+  }
 }
 
 void deleteBookFromUser(String isbn) async {

@@ -187,7 +187,7 @@ class Library_State extends State<LibraryPage> {
       case 'Eliminar':
         //TODO:ELIMINAR COLECCIÓN DEL USUARIO
         setState(() {
-          DeleteCollection("paco", _selectedCollectionName);
+          DeleteCollection(_selectedCollectionName);
           //Actualizo las colecciones de la caché
           _collections = GetCollections("Pepe");
           Navigator.pushReplacementNamed(context, 'library',
@@ -336,12 +336,11 @@ class Library_State extends State<LibraryPage> {
                   ),
                   onPressed: _newCollectionName.isEmpty
                       ? null
-                      : () {
+                      : (){
                           //Mostrar libros que puede seleccionar el usuario
                           //Le paso el título de la nueva colección como argumento
-                          setState(() {
-                            RenameCollection(
-                                "Pepe", oldName, _newCollectionName);
+                          setState(() async{
+                            await RenameCollection(oldName, _newCollectionName);
                             //Actualizo las colecciones de la caché
                             _collections = GetCollections("Pepe");
                             Navigator.pushReplacementNamed(context, 'library',

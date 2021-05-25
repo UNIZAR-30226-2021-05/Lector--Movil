@@ -141,7 +141,7 @@ class _CollectionAddState extends State<CollectionAdd> {
     return OutlineButton(
       splashColor: Colors.grey,
       highlightedBorderColor: Colors.black,
-      onPressed: () {
+      onPressed: () async{
         SnackBar snackBar;
         if (selectedBooks.length == 0) {
           //Caso no ha seleccionado ningún libro
@@ -149,7 +149,7 @@ class _CollectionAddState extends State<CollectionAdd> {
               backgroundColor: Colors.orange,
               content: Text('Selecciona al menos un libro'));
         } else {
-          PostCollection("paco", data["collectionName"], selectedBooks);
+          await PostCollection(data["collectionName"], selectedBooks);
           Navigator.pushReplacementNamed(context, 'library',
               arguments: {'tabIndex': 1});
           snackBar = SnackBar(
