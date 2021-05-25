@@ -109,7 +109,7 @@ class UserBooks {
   Devuelve una lista con los libros que guardados por el
   usuario "user"
  */
-Future<List<Book>> getBooksSaved(String username) async {
+Future<List<Book>> getBooksSaved() async {
   List<Book> savedBooks = [];
   //TODO:Llamar a parser, recibir un Map e iterar
   //Simulación de libros recibidos
@@ -202,17 +202,64 @@ Future<List<Book>> getBooksDiscover() async {
 Map collections = new Map<String, List<Book>>();
 
 //Lista con el nombre de las colecciones del usuario "username".
-List<String> GetCollections(String username) {
+Future<List<String>> GetCollections() async{
   //Simulación de colecciones recibidas
-  print("bookFacade-getCollections");
-  print(collections.keys);
-  List<String> collectionsName = collections.keys.toList();
+  print("GET COLLECTIONSSSSSSSSSSSSSSSSSSSSSSS");
+  List<String> collectionsName = new List<String>();
+  if (collections.isEmpty) {
+    //Obtener colecciones de backend
+    SessionManager s = new SessionManager();
+    String username = await s.getNombreUsuario();
+    print(username);
+    Uri myUri = Uri.parse(apiUrlColeccion + username);
+    http.Response response = await http.get(myUri);
+    var jsonResponse = null;
+    jsonResponse = json.decode(utf8.decode(response.bodyBytes));
+
+    for(Map map in jsonResponse) {
+      print(map["titulo"]);
+      collectionsName.add(map["titulo"]);
+      collections[map["titulo"]] = new List<Book>(); //Actualizo cache titulos
+    }
+  } else {
+    //Obtener colecciones de cache
+    print(collections.keys);
+    collectionsName = collections.keys.toList();
+  }
   return collectionsName;
+
 }
 
 //Lista de libros de la colección llamada "collectionName" de usuario "username"
-List<Book> GetCollectionBooks(String username, String collectionName) {
+Future<List<Book>> GetCollectionBooks(String collectionName) async{
+  print("OBTENER LIBROS  $collectionName");
   //Simulacion de coleccion devuelta
+  if (collections[collectionName] == null) {
+    //Actualizo libros del backend pq no hay en movil
+    SessionManager s = new SessionManager();
+    String username = await s.getNombreUsuario();
+    print(username);
+    Uri myUri = Uri.parse(apiUrlColeccion + username + "/" + collectionName);
+    http.Response response = await http.get(myUri);
+    var jsonResponse = null;
+    jsonResponse = json.decode(utf8.decode(response.bodyBytes));
+    print(jsonResponse.toString());
+    List<Book> lista = new List<Book>();
+    for (Map mapaLibro in jsonResponse["libros"]) {
+      lista.add(Book(
+          mapaLibro["ISBN"],
+          mapaLibro["titulo"],
+          mapaLibro["autor"],
+          mapaLibro["pathLibro"],
+          mapaLibro["portada"],
+          mapaLibro["sinopsis"],
+      )
+      );
+    }
+    collections[collectionName] = lista;
+    return lista;
+  }
+  //Caso coleccion ya tiene libros en movil
   return collections[collectionName];
 }
 
@@ -228,16 +275,16 @@ void PostCollection(String collection, List<Book> books) async {
   }
   librosString = librosString.substring(0, librosString.length - 1);
   final toSend = {
-    "titulo": collection,
     "libros": librosString,
   };
   SessionManager s = new SessionManager();
   String username = await s.getNombreUsuario();
-  Uri myUri = Uri.parse(apiUrlColeccion + username);
+  print(username);
+  Uri myUri = Uri.parse(apiUrlColeccion + username + "/" + collection);
   http.Response response = await http.put(myUri, body: toSend);
   var jsonResponse = null;
   jsonResponse = json.decode(utf8.decode(response.bodyBytes));
-  print(jsonResponse);
+  print("CREAR COLECCION ->" + jsonResponse.toString());
   if (response.statusCode == 200) {
     //update cache
     collections[collection] = books;
@@ -259,7 +306,7 @@ void RenameCollection(
   http.Response response = await http.put(myUri, body: toSend);
   var jsonResponse = null;
   jsonResponse = json.decode(utf8.decode(response.bodyBytes));
-  print(jsonResponse);
+  print("RENOMBRAR COLECCION->" +jsonResponse);
   if (response.statusCode == 200) {
     //update cache
     List<Book> collectionBooks = [];
@@ -281,7 +328,7 @@ void DeleteCollection(String collectionName) async {
   http.Response response = await http.put(myUri, body: toSend);
   var jsonResponse = null;
   jsonResponse = json.decode(utf8.decode(response.bodyBytes));
-  print(jsonResponse);
+  print("ELIMINAR COLECCION ->" +jsonResponse);
   if (response.statusCode == 200) {
     //update cache
     collections.remove(collectionName);

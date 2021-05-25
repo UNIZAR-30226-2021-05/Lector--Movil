@@ -25,7 +25,7 @@ class _CollectionAddState extends State<CollectionAdd> {
 
   pedirLibros() {
     //TODO: Llamar a getBooksSaved no con pepe, si no con el current user
-    getBooksSaved("Pepe").then((List<Book> result) {
+    getBooksSaved().then((List<Book> result) {
       setState(() {
         savedBooks = List.from(result);
         loaded = true;
