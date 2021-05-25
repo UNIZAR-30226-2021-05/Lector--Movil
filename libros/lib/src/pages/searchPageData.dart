@@ -223,7 +223,8 @@ class _SearchPageDataState extends State<SearchPageData> {
               scrollDirection: Axis.horizontal,
               itemBuilder: (context, index) {
                 return bookCardMin(
-                    listaAMostrarDis[index], "bookDetails", context);
+                    listaAMostrarDis[index], "bookDetailsDiscoverPage",
+                    context);
               },
             ),
           ),

@@ -11,26 +11,15 @@ class BookDetailsPage extends StatefulWidget {
 class _BookDetailsPageState extends State<BookDetailsPage> {
   //Mapa para recibir argumentos
   Map data = {};
-  Book libro;
-
-  _BookDetailsPageState() {
-    data = ModalRoute.of(context).settings.arguments;
-    Book libro = Book(
-        data["book"].isbn,
-        data["book"].title,
-        data["book"].author,
-        data["book"].url,
-        data["book"].pathCover,
-        data["book"].synopsis);
-  }
 
   @override
   Widget build(BuildContext context) {
     //Libro recibido
+    data = ModalRoute.of(context).settings.arguments;
 
     return Scaffold(
       appBar: AppBar(
-        elevation: 0.0,
+      elevation: 0.0,
         actions: <Widget>[
           PopupMenuButton<String>(
             onSelected: handleClick,
@@ -45,6 +34,7 @@ class _BookDetailsPageState extends State<BookDetailsPage> {
           ),
         ],
       ),
+
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.fromLTRB(30.0, 30.0, 30.0, 0.0),
@@ -86,19 +76,6 @@ class _BookDetailsPageState extends State<BookDetailsPage> {
                           ),
                           SizedBox(height: 10.0),
                           SizedBox(height: 5.0),
-                          // for (var i = 0; i < data["book"].genres.length; i++)
-                          //   Container(
-                          //     padding:
-                          //         EdgeInsets.fromLTRB(20.0, 2.0, 20.0, 2.0),
-                          //     decoration: BoxDecoration(
-                          //       border: Border.all(
-                          //         color: Colors.blue,
-                          //       ),
-                          //       borderRadius: BorderRadius.circular(8.0),
-                          //     ),
-                          //     child: Text(data["book"].genres[i]),
-                          //   )
-                          //Text( data["book"].genres.toString()),
                         ],
                       )
                     ]),
@@ -118,42 +95,26 @@ class _BookDetailsPageState extends State<BookDetailsPage> {
                 maxLines: 10,
               ),
               SizedBox(height: 30.0),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  SizedBox(
-                    width: 120,
-                    child: ElevatedButton(
-                      style: ButtonStyle(
-                        backgroundColor:
-                            MaterialStateProperty.all<Color>(Colors.red),
-                      ),
-                      child: Text("Eliminar libro"),
-                      onPressed: () {
-                        deleteConfirmation();
-                      },
-                    ),
+              Center(
+                child: SizedBox(
+                  width: 120,
+                  child: ElevatedButton(
+                  style: ButtonStyle(
+                  backgroundColor:
+                  MaterialStateProperty.all<Color>(Colors.blue),
                   ),
-                  SizedBox(
-                    width: 120,
-                    child: ElevatedButton(
-                      style: ButtonStyle(
-                        backgroundColor:
-                            MaterialStateProperty.all<Color>(Colors.blue),
-                      ),
-                      child: Text("Abrir libro"),
-                      onPressed: () {
-                        //TODO: LLAMAR A BACKEND UPDATE ESTADO LIBRO
-                        //Se abre el libro, y además se actualiza el estado como leyendo = true, para que salga tambien en readingbooks
-                        Navigator.pushNamed(context, "book", arguments: {
-                          'book': libro,
-                        });
-                      },
-                    ),
+                  child: Text("Abrir libro"),
+                  onPressed: () {
+                  //TODO: LLAMAR A BACKEND UPDATE ESTADO LIBRO
+                  //Se abre el libro, y además se actualiza el estado
+                    Navigator.pushNamed(context, "book", arguments: {'book' :
+                    data["book"]});
+                    }
+                    //addBookToUser(data["book"].isbn);
                   ),
-                ],
+                ),
               ),
-            ],
+                  ],
           ),
         ),
       ),
@@ -165,20 +126,20 @@ class _BookDetailsPageState extends State<BookDetailsPage> {
       case 'Eliminar':
         print("handleCLIK");
         //Mensaje de confirmación de eliminación
-        deleteConfirmation();
+        anyadirConfirmacion();
         //TODO:LLAMAR A BACKEND PARA ELIMINAR LIBRO DE BIBLIOTECA DEL USUARIO
         break;
     }
   }
 
-  dynamic deleteConfirmation() {
+  dynamic anyadirConfirmacion() {
     return showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('¿Seguro que desea eliminar ' +
+          title: Text('¿Seguro que desea añadir ' +
               data["book"].title +
-              " de su biblioteca?"),
+              " a su biblioteca?"),
           actions: <Widget>[
             FlatButton(
               child: Text('Cancelar'),
@@ -187,16 +148,17 @@ class _BookDetailsPageState extends State<BookDetailsPage> {
               },
             ),
             FlatButton(
-              child: Text('Eliminar',
+              child: Text('Añadir',
                   style: TextStyle(
                     color: Colors.red,
                   )),
               onPressed: () {
-                deleteBookFromUser(data["book"].isbn);
+                //Aqui hay que hablar con back para ver si se le pasa el titulo del libro o que otro paramaetro para que ellos hagan la busqueda
+                addBookToUser(data['book'].isbn);
                 //Mensaje ok
                 final snackBar = SnackBar(
                     backgroundColor: Colors.green,
-                    content: Text('¡Eliminado correctamente!'));
+                    content: Text('¡Añadido correctamente!'));
                 ScaffoldMessenger.of(context).showSnackBar(snackBar);
                 Navigator.of(context).pop(); //cerrar confirmación
                 Navigator.of(context).pop(); //volver a pantalla library_page

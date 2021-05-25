@@ -232,7 +232,7 @@ class _BookPageState extends State<BookPage> {
     await getUserPreferences();
     var currentOffset = 0; //TODO: Obtener el actual offset backend
     buffer = new CircularBuffer(
-        "ljkl", currentOffset, getPageCharacters(tamanyoLetra));
+        data["book"].url, currentOffset, getPageCharacters(tamanyoLetra));
     numPagina = (buffer.GetCurrentOffset() / pageCharacters).floor() + 1;
     buffer.leerDcha().then((String t) {
       setState(() {

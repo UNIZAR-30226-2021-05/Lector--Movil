@@ -6,7 +6,7 @@ import 'book.dart';
 
 String apiUrlGetAllBooks = "https://lectorbrainbook.herokuapp.com/libro/todos/";
 String apiUrlGetTextFromBook =
-    "https://lectorbrainbook.herokuapp.com/libro/offset/sample1.txt/20/90";
+    "https://lectorbrainbook.herokuapp.com/libro/offset/";
 String apiUrlColeccion= "https://lectorbrainbook.herokuapp.com/usuario/coleccion/";
 //TODO: ACTUALIZAR URL READING BOOKS
 String apiUrlGetReadingBooks =
@@ -14,6 +14,9 @@ String apiUrlGetReadingBooks =
 
 String apiAddBookToUser =
     "http://lectorbrainbook.herokuapp.com/usuario/guardar/";
+
+String apiDownloadBook = "http://lectorbrainbook.herokuapp"
+    ".com/libro/download/";
 /*
   Devuelve una lista con los libros que está leyendo el
   usuario "user"
@@ -306,23 +309,32 @@ Future<Map<String, String>> getText(
   Map map = new Map<String, String>();
   SessionManager s = new SessionManager();
   String key = await s.getKey();
-  String url = apiUrlGetTextFromBook +
-      "/" +
-      currentOffset.toString() +
-      "/" +
-      characters.toString();
+  String url2 = apiDownloadBook + path;
+  Uri myUri2 = Uri.parse(url2);
+  //Pedir la descarga del libro en back
+  http.Response response2 =
+  await http.get(myUri2, headers: {'Authorization': 'Token $key'});
+  if (response2.statusCode == 200) {
+    //Pedir offset del libro
+    String url = apiUrlGetTextFromBook + path +"/"+
+        currentOffset.toString() +
+        "/" +
+        characters.toString();
 
-  Uri myUri = Uri.parse(url);
+    Uri myUri = Uri.parse(url);
 
-  http.Response response =
-      await http.get(myUri, headers: {'Authorization': 'Token $key'});
-  if (response.statusCode == 200) {
-    var jsonResponse = null;
-    jsonResponse = json.decode(utf8.decode(response.bodyBytes));
-    print(jsonResponse);
-    map['text'] = jsonResponse['text'];
-    map['realCharacters'] = jsonResponse['realCharacters'].toString();
-    return map;
+    http.Response response =
+    await http.get(myUri, headers: {'Authorization': 'Token $key'});
+    if (response.statusCode == 200) {
+      var jsonResponse = null;
+      jsonResponse = json.decode(utf8.decode(response.bodyBytes));
+      print(jsonResponse);
+      map['text'] = jsonResponse['text'];
+      map['realCharacters'] = jsonResponse['realCharacters'].toString();
+      return map;
+    } else {
+      return null;
+    }
   } else {
     return null;
   }
