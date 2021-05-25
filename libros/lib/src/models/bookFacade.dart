@@ -7,7 +7,8 @@ import 'book.dart';
 String apiUrlGetAllBooks = "https://lectorbrainbook.herokuapp.com/libro/todos/";
 String apiUrlGetTextFromBook =
     "https://lectorbrainbook.herokuapp.com/libro/offset/";
-String apiUrlColeccion= "https://lectorbrainbook.herokuapp.com/usuario/coleccion/";
+String apiUrlColeccion =
+    "https://lectorbrainbook.herokuapp.com/usuario/coleccion/";
 //TODO: ACTUALIZAR URL READING BOOKS
 String apiUrlGetReadingBooks =
     "http://lectorbrainbook.herokuapp.com/usuario/guardar/";
@@ -17,6 +18,9 @@ String apiAddBookToUser =
 
 String apiDownloadBook = "http://lectorbrainbook.herokuapp"
     ".com/libro/download/";
+
+String apiBookmark = "https://lectorbrainbook.herokuapp.com/bookmark/crear/";
+
 /*
   Devuelve una lista con los libros que está leyendo el
   usuario "user"
@@ -213,7 +217,7 @@ List<Book> GetCollectionBooks(String username, String collectionName) {
 }
 
 //Crear nueva colección "colection" con libros "books" para el usuario "username"
-void PostCollection(String collection, List<Book> books) async{
+void PostCollection(String collection, List<Book> books) async {
   //Simulación de creación de colección
   print("bookFacade-postcollection");
   print(collection);
@@ -222,7 +226,7 @@ void PostCollection(String collection, List<Book> books) async{
   for (Book book in books) {
     librosString += book.isbn + ",";
   }
-  librosString = librosString.substring(0, librosString.length-1);
+  librosString = librosString.substring(0, librosString.length - 1);
   final toSend = {
     "titulo": collection,
     "libros": librosString,
@@ -242,7 +246,8 @@ void PostCollection(String collection, List<Book> books) async{
 
 //Renombrar la coleccion "Oldcollection" del usuario "username" por
 // "NewCollectionName
-void RenameCollection( String OldCollectionName, String NewCollectionName) async{
+void RenameCollection(
+    String OldCollectionName, String NewCollectionName) async {
   //update backend
   final toSend = {
     "oldTitulo": OldCollectionName,
@@ -265,7 +270,7 @@ void RenameCollection( String OldCollectionName, String NewCollectionName) async
 }
 
 //Eliminar la coleccion "collectionName" del usuario "username"
-void DeleteCollection(String collectionName) async{
+void DeleteCollection(String collectionName) async {
   //update backend
   final toSend = {
     "titulo": collectionName,
@@ -295,10 +300,30 @@ void addBookToUser(String isbn) async {
   String username = await s.getNombreUsuario();
 
   Uri myUri = Uri.parse(apiAddBookToUser + username + "/" + isbn);
-  final toSend = {"currentOffset": "0", "leyendo": "false"};
+  final toSend = {
+    "libro": isbn,
+    "currentOffset": "0",
+    "leyendo": "false",
+  };
 
   http.Response response = await http.post(myUri, body: toSend);
   print("ESTO EEEEEES ->>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+  print(response.body);
+}
+
+void saveBookOffset(String isbn, int offset) async {
+  SessionManager s = new SessionManager();
+  String username = await s.getNombreUsuario();
+
+  Uri myUri = Uri.parse(apiAddBookToUser + username + "/" + isbn);
+  final toSend = {
+    "libro": isbn,
+    "currentOffset": offset,
+    "leyendo": "true",
+  };
+
+  http.Response response = await http.post(myUri, body: toSend);
+  print("acabo de guardar el libro otra vez para back");
   print(response.body);
 }
 
@@ -313,10 +338,12 @@ Future<Map<String, String>> getText(
   Uri myUri2 = Uri.parse(url2);
   //Pedir la descarga del libro en back
   http.Response response2 =
-  await http.get(myUri2, headers: {'Authorization': 'Token $key'});
+      await http.get(myUri2, headers: {'Authorization': 'Token $key'});
   if (response2.statusCode == 200) {
     //Pedir offset del libro
-    String url = apiUrlGetTextFromBook + path +"/"+
+    String url = apiUrlGetTextFromBook +
+        path +
+        "/" +
         currentOffset.toString() +
         "/" +
         characters.toString();
@@ -324,7 +351,7 @@ Future<Map<String, String>> getText(
     Uri myUri = Uri.parse(url);
 
     http.Response response =
-    await http.get(myUri, headers: {'Authorization': 'Token $key'});
+        await http.get(myUri, headers: {'Authorization': 'Token $key'});
     if (response.statusCode == 200) {
       var jsonResponse = null;
       jsonResponse = json.decode(utf8.decode(response.bodyBytes));
@@ -338,4 +365,21 @@ Future<Map<String, String>> getText(
   } else {
     return null;
   }
+}
+
+void postBookmark(
+    String isbn, String titulo, String cuerpo, String offset) async {
+  SessionManager s = new SessionManager();
+  String nombreUsuario = await s.getNombreUsuario();
+  String api = apiBookmark + nombreUsuario + "/" + isbn;
+  Uri myUri = Uri.parse(api);
+
+  final toSend = {
+    "titulo": titulo,
+    "offset": offset,
+    "cuerpo": cuerpo,
+  };
+
+  http.Response response = await http.post(myUri, body: toSend);
+  print(response.body);
 }

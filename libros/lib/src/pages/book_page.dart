@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import 'package:libros/src/models/CircularBuffer.dart';
 import 'package:libros/src/models/userFacade.dart';
+import 'package:libros/src/models/bookFacade.dart';
 import 'package:libros/src/storeUserInfo/SessionManager.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
@@ -147,8 +148,14 @@ class _BookPageState extends State<BookPage> {
                                       FlatButton(
                                         child: Text('Añadir'),
                                         onPressed: () {
-                                          //AÑADIR EL BOOKMARK
-                                          Navigator.of(context).pop(_stars);
+                                          String isbn = data["book"].isbn;
+                                          String offset =
+                                              '0'; //Aqui hay que llamar al currentOffset segun el libro
+
+                                          postBookmark(isbn, tituloBookmark,
+                                              cuerpoBookmark, offset);
+
+                                          Navigator.of(context).pop();
                                         },
                                       )
                                     ]);
@@ -233,7 +240,7 @@ class _BookPageState extends State<BookPage> {
     var currentOffset = 0; //TODO: Obtener el actual offset backend
     buffer = new CircularBuffer(
         data["book"].url, currentOffset, getPageCharacters(tamanyoLetra));
-    numPagina = (buffer.GetCurrentOffset() / pageCharacters).floor() + 1;
+    numPagina = (buffer.getCurrentOffset() / pageCharacters).floor() + 1;
     buffer.leerDcha().then((String t) {
       setState(() {
         texto = t;
