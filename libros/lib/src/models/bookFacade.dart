@@ -202,7 +202,7 @@ Future<List<Book>> getBooksDiscover() async {
 Map collections = new Map<String, List<Book>>();
 
 //Lista con el nombre de las colecciones del usuario "username".
-Future<List<String>> GetCollections() async{
+Future<List<String>> GetCollections() async {
   //Simulación de colecciones recibidas
   print("GET COLLECTIONSSSSSSSSSSSSSSSSSSSSSSS");
   List<String> collectionsName = new List<String>();
@@ -216,7 +216,7 @@ Future<List<String>> GetCollections() async{
     var jsonResponse = null;
     jsonResponse = json.decode(utf8.decode(response.bodyBytes));
 
-    for(Map map in jsonResponse) {
+    for (Map map in jsonResponse) {
       print(map["titulo"]);
       collectionsName.add(map["titulo"]);
       collections[map["titulo"]] = new List<Book>(); //Actualizo cache titulos
@@ -227,11 +227,10 @@ Future<List<String>> GetCollections() async{
     collectionsName = collections.keys.toList();
   }
   return collectionsName;
-
 }
 
 //Lista de libros de la colección llamada "collectionName" de usuario "username"
-Future<List<Book>> GetCollectionBooks(String collectionName) async{
+Future<List<Book>> GetCollectionBooks(String collectionName) async {
   print("OBTENER LIBROS  $collectionName");
   print("ANTES DE CHECK "+collections[collectionName].toString());
   //Simulacion de coleccion devuelta
@@ -249,14 +248,13 @@ Future<List<Book>> GetCollectionBooks(String collectionName) async{
     List<Book> lista = new List<Book>();
     for (Map mapaLibro in jsonResponse["libros"]) {
       lista.add(Book(
-          mapaLibro["ISBN"],
-          mapaLibro["titulo"],
-          mapaLibro["autor"],
-          mapaLibro["pathLibro"],
-          mapaLibro["portada"],
-          mapaLibro["sinopsis"],
-      )
-      );
+        mapaLibro["ISBN"],
+        mapaLibro["titulo"],
+        mapaLibro["autor"],
+        mapaLibro["pathLibro"],
+        mapaLibro["portada"],
+        mapaLibro["sinopsis"],
+      ));
     }
     collections[collectionName] = lista;
     return lista;
@@ -430,5 +428,16 @@ void postBookmark(
   };
 
   http.Response response = await http.post(myUri, body: toSend);
+  print(response.body);
+}
+
+void enviarValoracion(String isbn, int valor) async {
+  String api = "http://lectorbrainbook.herokuapp.com/twitter/" +
+      isbn +
+      "/" +
+      valor.toString();
+
+  Uri myUri = Uri.parse(api);
+  http.Response response = await http.put(myUri);
   print(response.body);
 }
