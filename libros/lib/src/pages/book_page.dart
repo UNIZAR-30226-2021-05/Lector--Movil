@@ -180,6 +180,7 @@ class _BookPageState extends State<BookPage> {
                                 Padding(
                                   padding: const EdgeInsets.only(top: 20.0),
                                   child: TextField(
+                                    keyboardType: TextInputType.emailAddress,
                                     onChanged: (value) {
                                       setState(() {
                                         destino = value;
