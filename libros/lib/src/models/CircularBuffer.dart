@@ -45,7 +45,7 @@ class CircularBuffer {
   int headptr; //Offset relativo del frente del buffer
   int tailptr; //Offset relativo de la cola del buffer
 
-  String lastDirection; //Direccion ultima lectura: "derecha" o "izquierda"
+  String lastDirection = ""; //Direccion ultima lectura: "derecha" o "izquierda"
   String buffer; //string base para el buffer circular
 
   CircularBuffer(this.filePath, this.currentOffset, this.pageCharacters) {
@@ -62,10 +62,11 @@ class CircularBuffer {
 
   //Obtener el offset de lectura absoluto para actualizar el backend
   int getCurrentOffset() {
-    if(lastDirection == "derecha") {
-      return currentOffset +currentptr;
+    if (lastDirection == "" || lastDirection == "derecha") {
+      return currentOffset + currentptr - pageCharacters;
+    } else if (lastDirection == "izquierda") {
+      return currentOffset + currentptr + pageCharacters;
     }
-    return currentOffset + currentptr;
   }
 
   //Actualiza el extremo derecho del buffer
@@ -88,8 +89,12 @@ class CircularBuffer {
   //Actualiza el extremo izquierdo del buffer
   Future escribirIzda() async {
     print("escribirIzda");
-    await getText(filePath, currentOffset - tailptr - insertLength,
-            pageCharacters * 6)
+    int desde = currentOffset - insertLength;
+    if ( desde < 0) {
+      //Caso el libro en backend no tiene tanto offset izquierdo
+      desde = 0;
+    }
+    await getText(filePath, desde, pageCharacters * 6)
         .then((Map<String, String> map) {
       buffer = map['text'] + buffer;
       realCharacters = int.parse(map['realCharacters']);
@@ -116,6 +121,7 @@ class CircularBuffer {
       await escribirDcha();
     }
     if (lastDirection == "izquierda") {
+      print("LEERDCHA antes izq");
       //Caso último sentido de lectura distinto
       page = buffer.substring(
           currentptr + pageCharacters, currentptr + 2 * pageCharacters);
@@ -149,16 +155,21 @@ class CircularBuffer {
         "currentOffset: " +
         currentOffset.toString());
     String page;
-    if ((currentptr - tailptr < pageCharacters) &&
-        (currentOffset >= insertLength)) {
+    if (currentptr <= pageCharacters) {
+      //Caso buffer insuficiente, pedir mas
       print("leerIzda - if1");
       await escribirIzda();
     }
     if (currentOffset + currentptr >= pageCharacters) {
+      //Puedo leer una pagina para atras
       print("leerIzda - if2");
       if (lastDirection == "derecha") {
+        int desde = currentptr - 2*pageCharacters;
+        if (desde < 0) {
+          desde = 0;
+        }
         page = buffer.substring(
-            currentptr - 2 * pageCharacters, currentptr - pageCharacters);
+            desde, currentptr - pageCharacters);
         currentptr -= 2 * pageCharacters;
       } else {
         print("leerIzda - ELSE normal");
@@ -172,6 +183,8 @@ class CircularBuffer {
         }
       }
     } else {
+      //Estoy en primera pagina del libro
+      print("PRIMERA PAGINA DEL LIBRO");
       page = buffer.substring(currentptr, pageCharacters);
     }
     print(" END leerIzda: buffer -> " +
