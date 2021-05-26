@@ -6,6 +6,7 @@ import 'package:libros/src/models/bookFacade.dart';
 import 'package:libros/src/storeUserInfo/SessionManager.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:url_launcher/url_launcher.dart';
 
 //TODO: DISEÑAR LA GESTIÓN DEL BUFFER DE TEXTO
 //TODO: IMPLEMENTAR BUFFER CON COLA CIRCULAR
@@ -23,6 +24,8 @@ class _BookPageState extends State<BookPage> {
   int _stars = 0;
   String tituloBookmark = "";
   String cuerpoBookmark = "";
+  String asunto = "Fragmento obtenido del libro ";
+  String destino = "";
 
   //Variables de preferencias del usuario
   int colorBg;
@@ -163,11 +166,64 @@ class _BookPageState extends State<BookPage> {
                         }), //Este es el boton para añadir bookmarks
                     SizedBox(width: 1),
                     IconButton(
+                        icon: Icon(Icons.send),
+                        onPressed: () {
+                          AlertDialog alert = AlertDialog(
+                            title: Center(
+                              child: Text('Envía tu fragmento'),
+                            ),
+                            content: Column(
+                              children: [
+                                Text(
+                                    "Atención! Usted va a ser redirigido a su plataforma de "
+                                    "correo electrónico. Asegurese de copiar el fragmento de texto que quiere enviar."),
+                                Padding(
+                                  padding: const EdgeInsets.only(top: 20.0),
+                                  child: TextField(
+                                    onChanged: (value) {
+                                      setState(() {
+                                        destino = value;
+                                      });
+                                    },
+                                    decoration: InputDecoration(
+                                        //border: OutlineInputBorder(),
+                                        hintText: 'Destino...'),
+                                  ),
+                                )
+                              ],
+                            ),
+                            actions: <Widget>[
+                              FlatButton(
+                                child: Text('IR'),
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                  final Uri _emailLaunchUri = Uri(
+                                      scheme: 'mailto',
+                                      path: destino,
+                                      queryParameters: {
+                                        'subject': asunto +
+                                            data["book"].title +
+                                            " desde BrainBook"
+                                      });
+                                  print(_emailLaunchUri);
+                                  launch(_emailLaunchUri.toString());
+                                },
+                              )
+                            ],
+                          );
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return alert;
+                            },
+                          );
+                        }),
+                    IconButton(
                         icon: Icon(Icons.rate_review),
                         onPressed: () {
                           AlertDialog alert = AlertDialog(
                             title: Center(
-                              child: Text('Evalua este libro'),
+                              child: Text('Evalúa este libro'),
                             ),
                             content: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
