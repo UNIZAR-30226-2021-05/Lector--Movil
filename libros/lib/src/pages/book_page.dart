@@ -103,6 +103,8 @@ class _BookPageState extends State<BookPage> {
                     IconButton(
                         icon: Icon(Icons.arrow_back_ios),
                         onPressed: () {
+                          updateUserBookState(data["book"].isbn, buffer
+                              .getCurrentOffset(), true);
                           Navigator.pop(context);
                         }), //Este es el boton para ir hacia atrás
 
@@ -129,7 +131,7 @@ class _BookPageState extends State<BookPage> {
                                             tituloBookmark = value;
                                           },
                                           decoration: InputDecoration(
-                                              //border: OutlineInputBorder(),
+                                            //border: OutlineInputBorder(),
                                               hintText: 'Titulo'),
                                         ),
                                         SizedBox(height: 30),
@@ -138,7 +140,7 @@ class _BookPageState extends State<BookPage> {
                                             cuerpoBookmark = value;
                                           },
                                           decoration: InputDecoration(
-                                              //border: OutlineInputBorder(),
+                                            //border: OutlineInputBorder(),
                                               hintText: 'Cuerpo'),
                                         ),
                                       ],
@@ -176,7 +178,7 @@ class _BookPageState extends State<BookPage> {
                               children: [
                                 Text(
                                     "Atención! Usted va a ser redirigido a su plataforma de "
-                                    "correo electrónico. Asegurese de copiar el fragmento de texto que quiere enviar."),
+                                        "correo electrónico. Asegurese de copiar el fragmento de texto que quiere enviar."),
                                 Padding(
                                   padding: const EdgeInsets.only(top: 20.0),
                                   child: TextField(
@@ -187,7 +189,7 @@ class _BookPageState extends State<BookPage> {
                                       });
                                     },
                                     decoration: InputDecoration(
-                                        //border: OutlineInputBorder(),
+                                      //border: OutlineInputBorder(),
                                         hintText: 'Destino...'),
                                   ),
                                 )
@@ -266,7 +268,7 @@ class _BookPageState extends State<BookPage> {
                   child: Container(
                     padding: EdgeInsets.all(12),
                     decoration: BoxDecoration(
-                        //color: Color(colorBg),
+                      //color: Color(colorBg),
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(12)),
                     child: Center(
@@ -295,7 +297,11 @@ class _BookPageState extends State<BookPage> {
 
   void startBuffer() async {
     await getUserPreferences();
-    var currentOffset = 0; //TODO: Obtener el actual offset backend
+    await getCurrentOffset(data["book"].isbn).then((int result) {
+      // setState(() {
+      currentOffset = result;
+      //});
+    });
     buffer = new CircularBuffer(
         data["book"].url, currentOffset, getPageCharacters(tamanyoLetra));
     numPagina = (buffer.getCurrentOffset() / pageCharacters).floor() + 1;

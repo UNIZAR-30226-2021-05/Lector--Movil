@@ -62,6 +62,9 @@ class CircularBuffer {
 
   //Obtener el offset de lectura absoluto para actualizar el backend
   int getCurrentOffset() {
+    if(lastDirection == "derecha") {
+      return currentOffset +currentptr;
+    }
     return currentOffset + currentptr;
   }
 

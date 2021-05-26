@@ -111,9 +111,6 @@ class UserBooks {
  */
 Future<List<Book>> getBooksSaved() async {
   List<Book> savedBooks = [];
-  //TODO:Llamar a parser, recibir un Map e iterar
-  //Simulación de libros recibidos
-
   List<UserBooks> allUserBooks =
       []; //Aqui se guardan todos los libros del usuario
 
@@ -132,6 +129,28 @@ Future<List<Book>> getBooksSaved() async {
     savedBooks.add(aux);
   }
   return savedBooks;
+}
+
+Future<int> getCurrentOffset(String isbn) async {
+  int currentOffset = 0;
+  List<UserBooks> allUserBooks = [];
+  SessionManager s = new SessionManager();
+  String username = await s.getNombreUsuario();
+  Uri myUri = Uri.parse(apiUrlGetReadingBooks + username);
+  http.Response response = await http.get(myUri);
+  print(response.body);
+
+  allUserBooks = (json.decode(utf8.decode(response.bodyBytes)) as List)
+      .map((data) => UserBooks.fromJson(data))
+      .toList();
+  for (int i = 0; i < allUserBooks.length; i++) {
+    if(allUserBooks[i].isbn == isbn) {
+      print("getCurrentOffset -> ENCONTRADO ISBN, OFFSET: "+ allUserBooks[i]
+          .currentOffset.toString());
+      currentOffset = allUserBooks[i].currentOffset;
+    }
+  }
+  return currentOffset;
 }
 
 //Devuelve una lista de los libros que tiene el usuario de acuerdo con la busqueda
@@ -352,10 +371,21 @@ void addBookToUser(String isbn) async {
     "currentOffset": "0",
     "leyendo": "false",
   };
+}
 
-  http.Response response = await http.post(myUri, body: toSend);
-  print("ESTO EEEEEES ->>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
-  print(response.body);
+void updateUserBookState(String isbn, int currentOffset, bool leyendo) async {
+      SessionManager s = new SessionManager();
+      String username = await s.getNombreUsuario();
+      print("UPDATEUSERBOOK OFFSET: " + currentOffset.toString());
+      Uri myUri = Uri.parse(apiAddBookToUser + username + "/" + isbn);
+      final toSend = {
+        "libro": isbn,
+        "currentOffset": currentOffset.toString(),
+        "leyendo": leyendo.toString(),
+      };
+
+      http.Response response = await http.post(myUri, body: toSend);
+      print(response.body);
 }
 
 void saveBookOffset(String isbn, int offset) async {
