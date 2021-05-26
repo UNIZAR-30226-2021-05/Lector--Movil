@@ -182,20 +182,18 @@ class Library_State extends State<LibraryPage> {
   }
 
   //Eliminar colección del usuario
-  void handleClickCollectionCard(String value) {
+  void handleClickCollectionCard (String value) async{
     switch (value) {
       case 'Renombrar':
         _AlertRenameCollection(_selectedCollectionName);
         break;
       case 'Eliminar':
         //TODO:ELIMINAR COLECCIÓN DEL USUARIO
-        setState(() {
-          DeleteCollection(_selectedCollectionName);
+          await DeleteCollection(_selectedCollectionName);
           //Actualizo las colecciones de la caché
           pedirColecciones();
-          Navigator.pushReplacementNamed(context, 'library',
-              arguments: {'tabIndex': 1});
-        });
+          //Navigator.of(context).pop(); //cerrar confirmación
+
         final snackBar = SnackBar(
             backgroundColor: Colors.blue,
             content: Text('¡Eliminado correctamente!'));
@@ -339,16 +337,17 @@ class Library_State extends State<LibraryPage> {
                   ),
                   onPressed: _newCollectionName.isEmpty
                       ? null
-                      : (){
+                      : ()async{
                           //Mostrar libros que puede seleccionar el usuario
                           //Le paso el título de la nueva colección como argumento
-                          setState(() async{
+                          //setState(() async{
                             await RenameCollection(oldName, _newCollectionName);
                             //Actualizo las colecciones de la caché
                             pedirColecciones();
-                            Navigator.pushReplacementNamed(context, 'library',
-                                arguments: {'tabIndex': 1});
-                          });
+                            /*Navigator.pushReplacementNamed(context, 'library',
+                                arguments: {'tabIndex': 1});*/
+                            Navigator.of(context).pop(); //cerrar confirmación
+                    // });
                         },
                 ),
               ],

@@ -233,8 +233,10 @@ Future<List<String>> GetCollections() async{
 //Lista de libros de la colección llamada "collectionName" de usuario "username"
 Future<List<Book>> GetCollectionBooks(String collectionName) async{
   print("OBTENER LIBROS  $collectionName");
+  print("ANTES DE CHECK "+collections[collectionName].toString());
   //Simulacion de coleccion devuelta
-  if (collections[collectionName] == null) {
+  if (collections[collectionName].length == 0) {
+    print("NO HAY LIBROS EN MOVIL");
     //Actualizo libros del backend pq no hay en movil
     SessionManager s = new SessionManager();
     String username = await s.getNombreUsuario();
@@ -306,7 +308,6 @@ void RenameCollection(
   http.Response response = await http.put(myUri, body: toSend);
   var jsonResponse = null;
   jsonResponse = json.decode(utf8.decode(response.bodyBytes));
-  print("RENOMBRAR COLECCION->" +jsonResponse);
   if (response.statusCode == 200) {
     //update cache
     List<Book> collectionBooks = [];
@@ -328,9 +329,10 @@ void DeleteCollection(String collectionName) async {
   http.Response response = await http.put(myUri, body: toSend);
   var jsonResponse = null;
   jsonResponse = json.decode(utf8.decode(response.bodyBytes));
-  print("ELIMINAR COLECCION ->" +jsonResponse);
+  print("ELIMINAR COLECCION ->" +jsonResponse.toString());
   if (response.statusCode == 200) {
     //update cache
+    print("ELIMINACION CORRECTA");
     collections.remove(collectionName);
   }
 }
