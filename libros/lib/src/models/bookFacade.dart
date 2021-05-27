@@ -11,12 +11,12 @@ String apiUrlColeccion =
     "https://lectorbrainbook.herokuapp.com/usuario/coleccion/";
 //TODO: ACTUALIZAR URL READING BOOKS
 String apiUrlGetReadingBooks =
-    "http://lectorbrainbook.herokuapp.com/usuario/guardar/";
+    "https://lectorbrainbook.herokuapp.com/usuario/guardar/";
 
 String apiAddBookToUser =
-    "http://lectorbrainbook.herokuapp.com/usuario/guardar/";
+    "https://lectorbrainbook.herokuapp.com/usuario/guardar/";
 
-String apiDownloadBook = "http://lectorbrainbook.herokuapp"
+String apiDownloadBook = "https://lectorbrainbook.herokuapp"
     ".com/libro/download/";
 
 String apiBookmark = "https://lectorbrainbook.herokuapp.com/bookmark/crear/";
@@ -69,7 +69,7 @@ Future<Book> crearLibro(String isbn) async {
   String key = await s.getKey();
   Book aux;
 
-  String api = "http://lectorbrainbook.herokuapp.com/libro/";
+  String api = "https://lectorbrainbook.herokuapp.com/libro/";
 
   Uri myUri = Uri.parse(api + isbn);
 
@@ -362,6 +362,7 @@ void deleteBookFromUser(String isbn) async {
 }
 
 void addBookToUser(String isbn) async {
+  print("addbooktouser");
   SessionManager s = new SessionManager();
   String username = await s.getNombreUsuario();
 
@@ -371,6 +372,9 @@ void addBookToUser(String isbn) async {
     "currentOffset": "0",
     "leyendo": "false",
   };
+  http.Response response = await http.post(myUri, body: toSend);
+  print(response.body);
+
 }
 
 void updateUserBookState(String isbn, int currentOffset, bool leyendo) async {
@@ -462,7 +466,7 @@ void postBookmark(
 }
 
 void enviarValoracion(String isbn, int valor) async {
-  String api = "http://lectorbrainbook.herokuapp.com/twitter/" +
+  String api = "https://lectorbrainbook.herokuapp.com/twitter/" +
       isbn +
       "/" +
       valor.toString();

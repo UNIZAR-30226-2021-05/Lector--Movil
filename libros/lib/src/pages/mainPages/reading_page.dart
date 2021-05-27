@@ -65,10 +65,10 @@ class _ReadingPageState extends State<ReadingPage> {
               size: 50.0,
             ));
           }
-          if (snapshot.hasError) {
+          /*if (snapshot.hasError) {
             // return: show error widget
             return Text("Error al cargar lista");
-          }
+          }*/
           List<Book> readingBooks = snapshot.data ?? [];
           return ListView.builder(
             itemCount: readingBooks.length,

@@ -17,13 +17,13 @@ String apiUrlRegister =
 String apiUrlChangePass =
     "https://lectorbrainbook.herokuapp.com/rest-auth/password/change/";
 String apiUrlChangePreferences =
-    "http://lectorbrainbook.herokuapp.com/usuario/preferencias/";
+    "https://lectorbrainbook.herokuapp.com/usuario/preferencias/";
 String apiUrlGetPreferences =
-    "http://lectorbrainbook.herokuapp.com/usuario/preferencias/";
+    "https://lectorbrainbook.herokuapp.com/usuario/preferencias/";
 
 String apiUrlGetUser = "https://lectorbrainbook.herokuapp.com/usuario/";
 String apiUrlGetUserInfo = "https://lectorbrainbook.herokuapp.com/usuario/";
-String obtenerFoto = "http://lectorbrainbook.herokuapp.com/usuario/image/";
+String obtenerFoto = "https://lectorbrainbook.herokuapp.com/usuario/image/";
 
 Future<bool> registrarUsuario(User usuario, BuildContext context) async {
   SharedPreferences sp;

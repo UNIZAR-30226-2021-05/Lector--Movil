@@ -34,7 +34,7 @@ class Library_State extends State<LibraryPage> {
 
   pedirLibros() {
     //TODO: Llamar a getBooksSaved no con pepe, si no con el current user
-    getBooksSaved().then((List<Book> result) {
+     getBooksSaved().then((List<Book> result) {
       setState(() {
         _savedBooks = List.from(result);
         result = _savedBooks;
