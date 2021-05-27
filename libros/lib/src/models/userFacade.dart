@@ -165,29 +165,30 @@ void getAndStoreUserInfo() async {
   s.setPathPhoto(user.pathFoto);
 }
 
- void updateUserInfo(String email, String pathPhoto, String username) async {
-   SessionManager s = new SessionManager();
-   String key = await s.getKey();
-   print("Le paso: " + username + " " + pathPhoto + " " + email);
-   final toSend = {"username": username, "pathFoto": pathPhoto, "email": email};
-   print(username);
-   String api = apiUrlGetUserInfo + username;
-   Uri myUri = Uri.parse(api);
-   print(api);
+void updateUserInfo(String email, String pathPhoto, String username) async {
+  SessionManager s = new SessionManager();
+  String key = await s.getKey();
+  print(key);
+  print("Le paso: " + username + " " + pathPhoto + " " + email);
+  final toSend = {"username": username, "email": email};
+  print(username);
+  String api = apiUrlGetUserInfo + username;
+  Uri myUri = Uri.parse(api);
+  print(api);
 
-   http.Response response = await http.put(
-     myUri,
-     body: toSend,
-     headers: {'Authorization': 'Token $key'},
-   );
-   var jsonResponse = null;
-   print(response.body);
-   jsonResponse = json.decode(response.body);
-   print(jsonResponse);
-   s.setEmail(jsonResponse["email"]);
-   s.setNombreUsuario(jsonResponse["username"]);
-   s.setPathPhoto(jsonResponse["pathFoto"]);
- }
+  http.Response response = await http.put(
+    myUri,
+    body: toSend,
+    headers: {'Authorization': 'Token $key'},
+  );
+  var jsonResponse = null;
+  print(response.body);
+  jsonResponse = json.decode(response.body);
+  print(jsonResponse);
+  s.setEmail(jsonResponse["email"]);
+  s.setNombreUsuario(jsonResponse["username"]);
+  s.setPathPhoto(jsonResponse["pathFoto"]);
+}
 
 void obtenerFotoDePerfil(String nombreFoto) async {
   SessionManager s = new SessionManager();

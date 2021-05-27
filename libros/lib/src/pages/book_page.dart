@@ -293,8 +293,8 @@ class _BookPageState extends State<BookPage> {
                   child: Container(
                     padding: EdgeInsets.all(12),
                     decoration: BoxDecoration(
-                        //color: Color(colorBg),
-                        color: Colors.white,
+                        color: Color(colorBg),
+                        //color: Colors.white,
                         borderRadius: BorderRadius.circular(12)),
                     child: Center(
                       child: SizedBox(

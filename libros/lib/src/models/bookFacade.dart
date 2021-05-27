@@ -507,3 +507,5 @@ Future<List<Bookmark>> getBookmarks(String isbn) async {
 
   return bm;
 }
+
+void cambiarEmail() {}
