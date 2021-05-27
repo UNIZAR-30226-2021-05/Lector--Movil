@@ -61,53 +61,48 @@ class _LoginPageState extends State<LoginPage> {
                       SizedBox(height: 15),
                       _ponerContrasenya(),
                       SizedBox(height: 80),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          SizedBox(
-                            width: 140,
-                            child: RaisedButton(
-                              color: Colors.white,
-                              shape: RoundedRectangleBorder(
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(20.0))),
-                              onPressed: () {
-                                Navigator.pop(context);
-                              },
-                              child: Icon(Icons.arrow_back_ios_sharp),
-                            ),
-                          ),
-                          SizedBox(
-                            width: 140,
-                            child: RaisedButton(
-                              color: Colors.green,
-                              shape: RoundedRectangleBorder(
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(20.0))),
-                              onPressed: () async {
-                                print("Voy a hacer login");
-                                if (_loginKey.currentState.validate()) {
-                                  //Caso formulario correcto
-                                  print(_controllerUsername);
-                                  print(_controllerContrasenya);
-                                  //Comprobación login correcto en backend
-                                  bool backendOk = await loginUsuario(
-                                      _controllerUsername.text,
-                                      _controllerContrasenya.text);
-                                  if (backendOk) {
-                                    //Caso login correcto en backend
-                                    print("Te mando al homepage");
-                                    Navigator.pushReplacementNamed(
-                                        context, 'home');
-                                  } else {
-                                    _errorLoginBackend();
-                                  }
-                                }
-                              },
-                              child: Text('Iniciar sesión'),
-                            ),
-                          ),
-                        ],
+                      SizedBox(
+                        width: 140,
+                        child: RaisedButton(
+                          color: Colors.white,
+                          shape: RoundedRectangleBorder(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(20.0))),
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          child: Icon(Icons.arrow_back_ios_sharp),
+                        ),
+                      ),
+                      SizedBox(
+                        width: 140,
+                        child: RaisedButton(
+                          color: Colors.green,
+                          shape: RoundedRectangleBorder(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(20.0))),
+                          onPressed: () async {
+                            print("Voy a hacer login");
+                            if (_loginKey.currentState.validate()) {
+                              //Caso formulario correcto
+                              print(_controllerUsername);
+                              print(_controllerContrasenya);
+                              //Comprobación login correcto en backend
+                              bool backendOk = await loginUsuario(
+                                  _controllerUsername.text,
+                                  _controllerContrasenya.text);
+                              if (backendOk) {
+                                //Caso login correcto en backend
+                                print("Te mando al homepage");
+                                Navigator.pushReplacementNamed(
+                                    context, 'home');
+                              } else {
+                                _errorLoginBackend();
+                              }
+                            }
+                          },
+                          child: Text('Iniciar sesión'),
+                        ),
                       ),
                     ],
                   ),

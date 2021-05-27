@@ -60,12 +60,6 @@ class _EditPhotoState extends State<EditPhoto> {
           (uploaded, total) {
         print('progress $uploaded / $total');
       });
-      CoolAlert.show(
-        context: context,
-        type: CoolAlertType.success,
-        text: 'Foto cambiada!',
-        autoCloseDuration: Duration(seconds: 2),
-      );
       SessionManager s = new SessionManager();
       String username = await s.getNombreUsuario();
       String email = await s.getEmail();
@@ -167,6 +161,8 @@ class _EditPhotoState extends State<EditPhoto> {
                               var now =
                                   new DateTime.now().millisecondsSinceEpoch;
                               subirImagen(profilePicture, now);
+                              Navigator.pushReplacementNamed(context,'home',arguments:
+                              {'currentIndex': 4});
                             },
                             elevation: 4,
                             textColor: Colors.white,

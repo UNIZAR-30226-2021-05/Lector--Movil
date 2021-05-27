@@ -73,59 +73,54 @@ class _RegisterPageState extends State<RegisterPage> {
                       SizedBox(height: 15),
                       _crearPass2(_controllerPass1),
                       SizedBox(height: 80),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          SizedBox(
-                            width: 140,
-                            child: RaisedButton(
-                              elevation: 4,
-                              color: Colors.white,
-                              shape: RoundedRectangleBorder(
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(20.0))),
-                              onPressed: () {
-                                Navigator.pop(context);
-                              },
-                              child: Icon(Icons.arrow_back_ios_sharp),
-                            ),
-                          ),
-                          SizedBox(
-                            width: 140,
-                            child: RaisedButton(
-                              color: Colors.blue,
-                              shape: RoundedRectangleBorder(
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(20.0))),
-                              onPressed: () async {
-                                if (_registerKey.currentState.validate()) {
-                                  //Caso formulario correcto
-                                  // final passFinal = Crypt.sha256(
-                                  //     _pass1); //Encriptamos la contrasenya
-                                  //print(_pass1);
-                                  print("Voy a registrar al usuario");
-                                  //Comprobación registro correcto en backend
-                                  User usuario = new User(
-                                      nombreUsuario: _controllerUsername.text,
-                                      email: _controllerEmail.text,
-                                      pass: _controllerPass1.text,
-                                      pathFoto: null);
-                                  bool backendOK =
-                                      await registrarUsuario(usuario, context);
-                                  if (backendOK) {
-                                    //Caso login correcto en backend
-                                    print("Te mando al homepage");
-                                    Navigator.pushReplacementNamed(
-                                        context, 'home');
-                                  } else {
-                                    _errorRegisterBackend();
-                                  }
-                                }
-                              },
-                              child: Text('Registrarse'),
-                            ),
-                          ),
-                        ],
+                      SizedBox(
+                        width: 140,
+                        child: RaisedButton(
+                          elevation: 4,
+                          color: Colors.white,
+                          shape: RoundedRectangleBorder(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(20.0))),
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          child: Icon(Icons.arrow_back_ios_sharp),
+                        ),
+                      ),
+                      SizedBox(
+                        width: 140,
+                        child: RaisedButton(
+                          color: Colors.blue,
+                          shape: RoundedRectangleBorder(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(20.0))),
+                          onPressed: () async {
+                            if (_registerKey.currentState.validate()) {
+                              //Caso formulario correcto
+                              // final passFinal = Crypt.sha256(
+                              //     _pass1); //Encriptamos la contrasenya
+                              //print(_pass1);
+                              print("Voy a registrar al usuario");
+                              //Comprobación registro correcto en backend
+                              User usuario = new User(
+                                  nombreUsuario: _controllerUsername.text,
+                                  email: _controllerEmail.text,
+                                  pass: _controllerPass1.text,
+                                  pathFoto: null);
+                              bool backendOK =
+                                  await registrarUsuario(usuario, context);
+                              if (backendOK) {
+                                //Caso login correcto en backend
+                                print("Te mando al homepage");
+                                Navigator.pushReplacementNamed(
+                                    context, 'home');
+                              } else {
+                                _errorRegisterBackend();
+                              }
+                            }
+                          },
+                          child: Text('Registrarse'),
+                        ),
                       ),
                     ],
                   ),

@@ -47,36 +47,35 @@ class _BookDetailsPageState extends State<BookDetailsPage> {
                 child: Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: <Widget>[
-                      Hero(
-                        tag: data["book"].title,
-                        child: Image.network(data["book"].pathCover),
-                      ),
+                      Image.network(data["book"].pathCover),
                       SizedBox(width: 20.0),
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Text(
-                            data["book"].title,
-                            overflow: TextOverflow.ellipsis,
-                            maxLines: 3,
-                            style: TextStyle(
-                              fontSize: 20.0,
-                              fontWeight: FontWeight.bold,
+                      Flexible(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Text(
+                              data["book"].title,
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 3,
+                              style: TextStyle(
+                                fontSize: 20.0,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
-                          ),
-                          SizedBox(height: 10.0),
-                          Text(
-                            data["book"].author,
-                            style: TextStyle(
-                              fontSize: 17.0,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.grey,
+                            SizedBox(height: 10.0),
+                            Text(
+                              data["book"].author,
+                              style: TextStyle(
+                                fontSize: 17.0,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.grey,
+                              ),
                             ),
-                          ),
-                          SizedBox(height: 10.0),
-                          SizedBox(height: 5.0),
-                        ],
+                            SizedBox(height: 10.0),
+                            SizedBox(height: 5.0),
+                          ],
+                        ),
                       )
                     ]),
               ),
@@ -121,12 +120,16 @@ class _BookDetailsPageState extends State<BookDetailsPage> {
     );
   }
 
-  void handleClick(String value) {
+  void handleClick(String value) async{
     switch (value) {
       case 'Eliminar':
         print("handleCLIK");
         //Mensaje de confirmación de eliminación
-        anyadirConfirmacion();
+        await delBookToUser(data["book"].isbn);
+        setState(() {
+          Navigator.pushReplacementNamed(context,'home',arguments:
+          {'currentIndex': 1});
+        });
         //TODO:LLAMAR A BACKEND PARA ELIMINAR LIBRO DE BIBLIOTECA DEL USUARIO
         break;
     }

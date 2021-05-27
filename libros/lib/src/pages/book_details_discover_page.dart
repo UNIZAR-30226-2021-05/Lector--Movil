@@ -20,23 +20,10 @@ class _BookDetailsDiscoverPage extends State<BookDetailsDiscoverPage> {
     return Scaffold(
       appBar: AppBar(
         elevation: 0.0,
-        actions: <Widget>[
-          PopupMenuButton<String>(
-            onSelected: handleClick,
-            itemBuilder: (BuildContext context) {
-              return {'Eliminar'}.map((String opcion) {
-                return PopupMenuItem<String>(
-                  value: opcion,
-                  child: Text(opcion),
-                );
-              }).toList();
-            },
-          ),
-        ],
       ),
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.fromLTRB(30.0, 30.0, 30.0, 0.0),
+          padding: const EdgeInsets.fromLTRB(30.0, 30.0, 10.0, 0.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
@@ -46,36 +33,35 @@ class _BookDetailsDiscoverPage extends State<BookDetailsDiscoverPage> {
                 child: Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: <Widget>[
-                      Hero(
-                        tag: data["book"].title,
-                        child: Image.network(data["book"].pathCover),
-                      ),
+                      Image.network(data["book"].pathCover),
                       SizedBox(width: 20.0),
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Text(
-                            data["book"].title,
-                            overflow: TextOverflow.ellipsis,
-                            maxLines: 3,
-                            style: TextStyle(
-                              fontSize: 20.0,
-                              fontWeight: FontWeight.bold,
+                      Flexible(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Text(
+                              data["book"].title,
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 3,
+                              style: TextStyle(
+                                fontSize: 20.0,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
-                          ),
-                          SizedBox(height: 10.0),
-                          Text(
-                            data["book"].author,
-                            style: TextStyle(
-                              fontSize: 17.0,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.grey,
+                            SizedBox(height: 10.0),
+                            Text(
+                              data["book"].author,
+                              style: TextStyle(
+                                fontSize: 17.0,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.grey,
+                              ),
                             ),
-                          ),
-                          SizedBox(height: 10.0),
-                          SizedBox(height: 5.0),
-                        ],
+                            SizedBox(height: 10.0),
+                            SizedBox(height: 5.0),
+                          ],
+                        ),
                       )
                     ]),
               ),
@@ -115,18 +101,6 @@ class _BookDetailsDiscoverPage extends State<BookDetailsDiscoverPage> {
       ),
     );
   }
-
-  void handleClick(String value) {
-    switch (value) {
-      case 'Eliminar':
-        print("handleCLIK");
-        //Mensaje de confirmación de eliminación
-        anyadirConfirmacion();
-        //TODO:LLAMAR A BACKEND PARA ELIMINAR LIBRO DE BIBLIOTECA DEL USUARIO
-        break;
-    }
-  }
-
   dynamic anyadirConfirmacion() {
     return showDialog(
       context: context,
@@ -156,7 +130,6 @@ class _BookDetailsDiscoverPage extends State<BookDetailsDiscoverPage> {
                     content: Text('¡Añadido correctamente!'));
                 ScaffoldMessenger.of(context).showSnackBar(snackBar);
                 Navigator.of(context).pop(); //cerrar confirmación
-                Navigator.of(context).pop(); //volver a pantalla library_page
               },
             ),
           ],
