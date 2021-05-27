@@ -41,7 +41,6 @@ dev_dependencies:
   material_floating_search_bar: ^0.3.4
   snapping_page_scroll: ^2.0.1
   flutter_spinkit: "^4.1.2"
-  flutter_launcher_icons: ^0.9.0
   flutter_pdfview: ^1.0.4
   path_provider: any
   synchronized: ^3.0.0
@@ -49,6 +48,7 @@ dev_dependencies:
   cool_alert: ^1.1.0
   dart_twitter_api: ^0.5.3
   url_launcher: ^6.0.4
+  webfeed: ^0.4.2
 
 
 
