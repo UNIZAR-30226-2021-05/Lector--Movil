@@ -110,73 +110,75 @@ class Library_State extends State<LibraryPage> {
       //Caso usuario no tiene colecciones
       return _EmptyCollectionMessage();
     } else {
-      return Column(
-        children: [
-          Container(
-            height:500,
-            child: ListView.builder(
-              scrollDirection: Axis.vertical,
-              shrinkWrap: true,
-              itemCount: _collections.length,
-              physics: BouncingScrollPhysics(),
-              itemBuilder: (context, index) {
-                return GestureDetector(
-                  onTap: () {
-                    //Mostrar libros de la colección llamada _collections[index]
-                    //Se pasa el nombre de la colección como argumento
-                    Navigator.pushNamed(context, 'collectionBooks',
-                        arguments: {'collectionName': _collections[index]});
-                  },
-                  child: Container(
-                    margin: EdgeInsets.fromLTRB(30.0, 20.0, 30.0, 0.0),
-                    height: 70,
-                    child: Card(
-                        color: Colors.blue,
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10)),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: <Widget>[
-                                SizedBox(width: 30.0),
-                                Text(
-                                  _collections[index],
-                                  style: TextStyle(
-                                    fontSize: 20.0,
-                                    color: Colors.white,
+      return SingleChildScrollView(
+        child: Column(
+          children: [
+            Container(
+              height:400,
+              child: ListView.builder(
+                scrollDirection: Axis.vertical,
+                shrinkWrap: true,
+                itemCount: _collections.length,
+                physics: BouncingScrollPhysics(),
+                itemBuilder: (context, index) {
+                  return GestureDetector(
+                    onTap: () {
+                      //Mostrar libros de la colección llamada _collections[index]
+                      //Se pasa el nombre de la colección como argumento
+                      Navigator.pushNamed(context, 'collectionBooks',
+                          arguments: {'collectionName': _collections[index]});
+                    },
+                    child: Container(
+                      margin: EdgeInsets.fromLTRB(30.0, 20.0, 30.0, 0.0),
+                      height: 70,
+                      child: Card(
+                          color: Colors.blue,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10)),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: <Widget>[
+                                  SizedBox(width: 30.0),
+                                  Text(
+                                    _collections[index],
+                                    style: TextStyle(
+                                      fontSize: 20.0,
+                                      color: Colors.white,
+                                    ),
                                   ),
-                                ),
-                                PopupMenuButton<String>(
-                                  onSelected: handleClickCollectionCard,
-                                  icon: Icon(
-                                    Icons.menu_sharp,
-                                    color: Colors.white,
+                                  PopupMenuButton<String>(
+                                    onSelected: handleClickCollectionCard,
+                                    icon: Icon(
+                                      Icons.menu_sharp,
+                                      color: Colors.white,
+                                    ),
+                                    itemBuilder: (BuildContext context) {
+                                      _selectedCollectionName = _collections[index];
+                                      return {'Renombrar', 'Eliminar'}
+                                          .map((String opcion) {
+                                        return PopupMenuItem<String>(
+                                          value: opcion,
+                                          child: Text(opcion),
+                                        );
+                                      }).toList();
+                                    },
                                   ),
-                                  itemBuilder: (BuildContext context) {
-                                    _selectedCollectionName = _collections[index];
-                                    return {'Renombrar', 'Eliminar'}
-                                        .map((String opcion) {
-                                      return PopupMenuItem<String>(
-                                        value: opcion,
-                                        child: Text(opcion),
-                                      );
-                                    }).toList();
-                                  },
-                                ),
-                              ],
-                            ),
-                          ],
-                        )),
-                  ),
-                );
-              },
+                                ],
+                              ),
+                            ],
+                          )),
+                    ),
+                  );
+                },
+              ),
             ),
-          ),
-          SizedBox(height: 20.0),
-          _buttonAddCollection(),
-        ],
+            SizedBox(height: 20.0),
+            _buttonAddCollection(),
+          ],
+        ),
       );
     }
   }
