@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
+import 'package:libros/src/models/Bookmarks.dart';
 import 'package:libros/src/models/CircularBuffer.dart';
 import 'package:libros/src/models/userFacade.dart';
 import 'package:libros/src/models/bookFacade.dart';
+import 'package:libros/src/pages/theme/all_bookmarks.dart';
 import 'package:libros/src/storeUserInfo/SessionManager.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
@@ -117,7 +119,9 @@ class _BookPageState extends State<BookPage> {
                     ),
                     IconButton(
                         icon: Icon(Icons.bookmark),
-                        onPressed: () {
+                        onPressed: () async {
+                          List<Bookmark> bm = [];
+                          bm = await getBookmarks(data["book"].isbn);
                           showDialog(
                               context: context,
                               builder: (BuildContext context) {
@@ -143,6 +147,22 @@ class _BookPageState extends State<BookPage> {
                                               //border: OutlineInputBorder(),
                                               hintText: 'Cuerpo'),
                                         ),
+                                        Padding(
+                                          padding:
+                                              const EdgeInsets.only(top: 12.0),
+                                          child: ElevatedButton(
+                                            child: Text('Mis bookmarks'),
+                                            onPressed: () {
+                                              Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          AllBookmarks(
+                                                              data["book"]
+                                                                  .isbn)));
+                                            },
+                                          ),
+                                        )
                                       ],
                                     ),
                                     actions: <Widget>[
@@ -152,13 +172,18 @@ class _BookPageState extends State<BookPage> {
                                       ),
                                       FlatButton(
                                         child: Text('Añadir'),
-                                        onPressed: () {
+                                        onPressed: () async {
                                           String isbn = data["book"].isbn;
-                                          String offset =
-                                              '0'; //Aqui hay que llamar al currentOffset segun el libro
+                                          int ofset = 0;
+                                          await getCurrentOffset(isbn)
+                                              .then((int result) {
+                                            // setState(() {
+                                            ofset = result;
+                                            //});
+                                          });
 
                                           postBookmark(isbn, tituloBookmark,
-                                              cuerpoBookmark, offset);
+                                              cuerpoBookmark, ofset.toString());
 
                                           Navigator.of(context).pop();
                                         },
