@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:dart_twitter_api/twitter_api.dart';
 import 'package:libros/src/models/RSSReader.dart';
 import 'package:libros/src/pages/components/tweetCard.dart';
+import 'package:libros/src/storeUserInfo/SessionManager.dart';
 
 class FeedPage extends StatefulWidget {
   FeedPage({Key key}) : super(key: key);

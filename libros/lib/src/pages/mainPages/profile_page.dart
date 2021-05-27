@@ -38,7 +38,6 @@ class _ProfilePageState extends State<ProfilePage> {
     session.getpathPhoto().then((String result) {
       setState(() {
         _pathFoto = result;
-        print("Este es el path de la foto" + _pathFoto);
       });
     });
   }
@@ -97,8 +96,8 @@ class _ProfilePageState extends State<ProfilePage> {
                                           builder: (context) => EditProfile()));
                                 },
                                 shape: RoundedRectangleBorder(
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(12.0))),
+                                    borderRadius: BorderRadius.all(
+                                        Radius.circular(12.0))),
                                 elevation: 4,
                                 textColor: Colors.white,
                                 color: Colors.blue[900],
@@ -138,7 +137,8 @@ class _ProfilePageState extends State<ProfilePage> {
                                 Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (context) => PreferencesPage()));
+                                        builder: (context) =>
+                                            PreferencesPage()));
                               },
                               elevation: 4,
                               shape: RoundedRectangleBorder(

@@ -65,7 +65,29 @@ class SessionManager {
   }
 
   Future<List<String>> getBlackList() async {
+    print("Me dicen que de la puta lista");
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-    return prefs.getStringList("blacklist");
+    List<String> bl = prefs.getStringList("blacklist");
+    print("He cogido esta bl que estaba en cache desde getBlackList: ");
+    for (var i = 0; i < bl.length; i++) {
+      print(bl[i]);
+    }
+    return bl;
+  }
+
+  Future<void> addUrlToList(String url) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    List<String> bl = prefs.getStringList("blacklist");
+    print("He cogido esta bl que estaba en cache: ");
+    for (var i = 0; i < bl.length; i++) {
+      print(bl[i]);
+    }
+    bl.add(url);
+    print("Añado esta url y queda asi:  " + url);
+    for (var i = 0; i < bl.length; i++) {
+      print(bl[i]);
+    }
+    print("Voy a añadirla toda a cache");
+    prefs.setStringList("blacklist", bl);
   }
 }
