@@ -8,13 +8,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "3.1.2"
-  args:
-    dependency: transitive
-    description:
-      name: args
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "2.0.0"
   async:
     dependency: transitive
     description:
@@ -57,6 +50,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.15.0"
+  convert:
+    dependency: transitive
+    description:
+      name: convert
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.1.1"
   cool_alert:
     dependency: "direct dev"
     description:
@@ -132,13 +132,6 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
-  flutter_launcher_icons:
-    dependency: "direct dev"
-    description:
-      name: flutter_launcher_icons
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.9.0"
   flutter_pdfview:
     dependency: "direct dev"
     description:
@@ -191,13 +184,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "4.0.0"
-  image:
-    dependency: transitive
-    description:
-      name: image
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "3.0.2"
   image_picker:
     dependency: "direct dev"
     description:
@@ -337,7 +323,7 @@ packages:
       name: petitparser
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "4.1.0"
+    version: "3.1.0"
   platform:
     dependency: transitive
     description:
@@ -518,6 +504,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.1.0"
+  webfeed:
+    dependency: "direct dev"
+    description:
+      name: webfeed
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.4.2"
   win32:
     dependency: transitive
     description:
@@ -538,14 +531,7 @@ packages:
       name: xml
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "5.1.0"
-  yaml:
-    dependency: transitive
-    description:
-      name: yaml
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "3.1.0"
+    version: "3.7.0"
 sdks:
   dart: ">=2.12.0 <3.0.0"
   flutter: ">=1.22.0"
