@@ -5,6 +5,7 @@ class SessionManager {
   String _nombreUsuario = '';
   String _email = '';
   String _pathPhoto = '';
+  List<String> _blacklist = [];
 
   dynamic setKey(String key) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -55,5 +56,16 @@ class SessionManager {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     _pathPhoto = prefs.getString("pathFoto");
     return _pathPhoto;
+  }
+
+  Future<void> setBlackList(List<String> bl) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setStringList("blacklist", bl);
+    _blacklist = List.from(bl);
+  }
+
+  Future<List<String>> getBlackList() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.getStringList("blacklist");
   }
 }

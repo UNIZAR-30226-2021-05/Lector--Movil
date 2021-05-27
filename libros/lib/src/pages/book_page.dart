@@ -230,49 +230,48 @@ class _BookPageState extends State<BookPage> {
                                   )
                                 ],
                               ),
-                              actions: <Widget>[
-                                FlatButton(
-                                  child: Text('IR'),
-                                  onPressed: () {
-                                    Navigator.of(context).pop();
-                                    final Uri _emailLaunchUri = Uri(
-                                        scheme: 'mailto',
-                                        path: destino,
-                                        queryParameters: {
-                                          'subject': asunto +
-                                              data["book"].title +
-                                              " desde BrainBook"
-                                        });
-                                    print(_emailLaunchUri);
-                                    launch(_emailLaunchUri.toString());
-                                  },
-                                )
+                            actions: <Widget>[
+                              FlatButton(
+                                child: Text('IR'),
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                  final Uri _emailLaunchUri = Uri(
+                                      scheme: 'mailto',
+                                      path: destino,
+                                      queryParameters: {
+                                        'subject': asunto +
+                                            data["book"].title +
+                                            " desde BrainBook"
+                                      });
+                                  launch(_emailLaunchUri.toString());
+                                },
+                              )
+                            ],
+                          );
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return alert;
+                            },
+                          );
+                        }),
+                    IconButton(
+                        icon: Icon(Icons.rate_review),
+                        onPressed: () {
+                          AlertDialog alert = AlertDialog(
+                            title: Center(
+                              child: Text('Evalúa este libro'),
+                            ),
+                            content: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: <Widget>[
+                                _buildStar(1),
+                                _buildStar(2),
+                                _buildStar(3),
+                                _buildStar(4),
+                                _buildStar(5),
                               ],
-                            );
-                            showDialog(
-                              context: context,
-                              builder: (BuildContext context) {
-                                return alert;
-                              },
-                            );
-                          }),
-                      IconButton(
-                          icon: Icon(Icons.rate_review),
-                          onPressed: () {
-                            AlertDialog alert = AlertDialog(
-                              title: Center(
-                                child: Text('Evalúa este libro'),
-                              ),
-                              content: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                children: <Widget>[
-                                  _buildStar(1),
-                                  _buildStar(2),
-                                  _buildStar(3),
-                                  _buildStar(4),
-                                  _buildStar(5),
-                                ],
-                              ),
+                            ),
                               actions: <Widget>[
                                 FlatButton(
                                   child: Text('Cancelar'),
