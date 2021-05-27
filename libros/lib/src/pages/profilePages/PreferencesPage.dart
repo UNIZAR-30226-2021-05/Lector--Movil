@@ -37,10 +37,7 @@ class _PreferencesPageState extends State<PreferencesPage> {
                         icon:
                             new Icon(Icons.arrow_back_ios_rounded, size: 40.0),
                         onPressed: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => ProfilePage()));
+                          Navigator.of(context).pop(); //cerrar confirmación
                         },
                       ),
                       Text(

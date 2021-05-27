@@ -1,3 +1,4 @@
+import 'package:libros/src/models/Bookmarks.dart';
 import 'package:libros/src/storeUserInfo/SessionManager.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -9,7 +10,6 @@ String apiUrlGetTextFromBook =
     "https://lectorbrainbook.herokuapp.com/libro/offset/";
 String apiUrlColeccion =
     "https://lectorbrainbook.herokuapp.com/usuario/coleccion/";
-//TODO: ACTUALIZAR URL READING BOOKS
 String apiUrlGetReadingBooks =
     "https://lectorbrainbook.herokuapp.com/usuario/guardar/";
 
@@ -20,6 +20,8 @@ String apiDownloadBook = "https://lectorbrainbook.herokuapp"
     ".com/libro/download/";
 
 String apiBookmark = "https://lectorbrainbook.herokuapp.com/bookmark/crear/";
+
+String getBookmark = "https://lectorbrainbook.herokuapp.com/bookmark/";
 
 /*
   Devuelve una lista con los libros que está leyendo el
@@ -144,9 +146,9 @@ Future<int> getCurrentOffset(String isbn) async {
       .map((data) => UserBooks.fromJson(data))
       .toList();
   for (int i = 0; i < allUserBooks.length; i++) {
-    if(allUserBooks[i].isbn == isbn) {
-      print("getCurrentOffset -> ENCONTRADO ISBN, OFFSET: "+ allUserBooks[i]
-          .currentOffset.toString());
+    if (allUserBooks[i].isbn == isbn) {
+      print("getCurrentOffset -> ENCONTRADO ISBN, OFFSET: " +
+          allUserBooks[i].currentOffset.toString());
       currentOffset = allUserBooks[i].currentOffset;
     }
   }
@@ -197,7 +199,7 @@ Future<List<Book>> getBooksDiscover() async {
   String username = await s.getNombreUsuario();
   Uri myUri = Uri.parse(apiUrlGetAllBooks);
   http.Response response = await http.get(myUri).timeout(Duration(seconds: 15));
-  ;
+
   print("ESTO EEEEEES ->>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
   print(response.body);
 
@@ -251,7 +253,7 @@ Future<List<String>> GetCollections() async {
 //Lista de libros de la colección llamada "collectionName" de usuario "username"
 Future<List<Book>> GetCollectionBooks(String collectionName) async {
   print("OBTENER LIBROS  $collectionName");
-  print("ANTES DE CHECK "+collections[collectionName].toString());
+  print("ANTES DE CHECK " + collections[collectionName].toString());
   //Simulacion de coleccion devuelta
   if (collections[collectionName].length == 0) {
     print("NO HAY LIBROS EN MOVIL");
@@ -346,7 +348,7 @@ void DeleteCollection(String collectionName) async {
   http.Response response = await http.put(myUri, body: toSend);
   var jsonResponse = null;
   jsonResponse = json.decode(utf8.decode(response.bodyBytes));
-  print("ELIMINAR COLECCION ->" +jsonResponse.toString());
+  print("ELIMINAR COLECCION ->" + jsonResponse.toString());
   if (response.statusCode == 200) {
     //update cache
     print("ELIMINACION CORRECTA");
@@ -374,7 +376,6 @@ void addBookToUser(String isbn) async {
   };
   http.Response response = await http.post(myUri, body: toSend);
   print(response.body);
-
 }
 
 void delBookToUser(String isbn) async {
@@ -388,18 +389,18 @@ void delBookToUser(String isbn) async {
 }
 
 void updateUserBookState(String isbn, int currentOffset, bool leyendo) async {
-      SessionManager s = new SessionManager();
-      String username = await s.getNombreUsuario();
-      print("UPDATEUSERBOOK OFFSET: " + currentOffset.toString());
-      Uri myUri = Uri.parse(apiAddBookToUser + username + "/" + isbn);
-      final toSend = {
-        "libro": isbn,
-        "currentOffset": currentOffset.toString(),
-        "leyendo": leyendo.toString(),
-      };
+  SessionManager s = new SessionManager();
+  String username = await s.getNombreUsuario();
+  print("UPDATEUSERBOOK OFFSET: " + currentOffset.toString());
+  Uri myUri = Uri.parse(apiAddBookToUser + username + "/" + isbn);
+  final toSend = {
+    "libro": isbn,
+    "currentOffset": currentOffset.toString(),
+    "leyendo": leyendo.toString(),
+  };
 
-      http.Response response = await http.post(myUri, body: toSend);
-      print(response.body);
+  http.Response response = await http.post(myUri, body: toSend);
+  print(response.body);
 }
 
 void saveBookOffset(String isbn, int offset) async {
@@ -485,3 +486,26 @@ void enviarValoracion(String isbn, int valor) async {
   http.Response response = await http.put(myUri);
   print(response.body);
 }
+
+Future<List<Bookmark>> getBookmarks(String isbn) async {
+  List<Bookmark> bm = [];
+  SessionManager s = new SessionManager();
+  String nombreUsuario = await s.getNombreUsuario();
+  String api = getBookmark + nombreUsuario + "/" + isbn;
+  Uri myUri = Uri.parse(api);
+  print(myUri);
+  http.Response response = await http.get(myUri);
+  print(response.body);
+
+  bm = (json.decode(utf8.decode(response.bodyBytes)) as List)
+      .map((data) => Bookmark.fromJson(data))
+      .toList();
+
+  for (var i in bm) {
+    print(i.offset);
+  }
+
+  return bm;
+}
+
+void cambiarEmail() {}

@@ -161,8 +161,8 @@ class _EditPhotoState extends State<EditPhoto> {
                               var now =
                                   new DateTime.now().millisecondsSinceEpoch;
                               subirImagen(profilePicture, now);
-                              Navigator.pushReplacementNamed(context,'home',arguments:
-                              {'currentIndex': 4});
+                              Navigator.pushReplacementNamed(context, 'home',
+                                  arguments: {'currentIndex': 4});
                             },
                             elevation: 4,
                             textColor: Colors.white,

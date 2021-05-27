@@ -75,7 +75,7 @@ class CircularBuffer {
     if (buffer.length > freeSpaceMinLength) {
       //Caso liberar espacio en el extremo opuesto
       print("escribirDcha - if");
-      borrarIzda();
+      //borrarIzda();
     }
     await getText(filePath, currentOffset + headptr, insertLength)
         .then((Map<String, String> map) {
@@ -93,6 +93,9 @@ class CircularBuffer {
     if ( desde < 0) {
       //Caso el libro en backend no tiene tanto offset izquierdo
       desde = 0;
+      currentOffset = 0;
+    } else {
+      currentOffset -= realCharacters;
     }
     await getText(filePath, desde, pageCharacters * 6)
         .then((Map<String, String> map) {
@@ -100,7 +103,6 @@ class CircularBuffer {
       realCharacters = int.parse(map['realCharacters']);
       tailptr = 0;
       currentptr += realCharacters;
-      currentOffset -= realCharacters;
       headptr += realCharacters;
     });
   }
@@ -114,7 +116,9 @@ class CircularBuffer {
         " c:" +
         currentptr.toString() +
         " h:" +
-        headptr.toString());
+        headptr.toString()+
+        "currentOffset: " +
+        currentOffset.toString());
     String page;
     if (headptr - currentptr < pageCharacters) {
       //Caso actualizar buffer por la derecha
@@ -144,8 +148,7 @@ class CircularBuffer {
 
   //Lectura del buffer en sentido izquierdo
   Future<String> leerIzda() async {
-    print(" BEGIN leerIzda: buffer -> " +
-        buffer.length.toString() +
+    print(" BEGIN leerIzda: buffer -> " + buffer.length.toString() +
         "t: " +
         tailptr.toString() +
         " c:" +
@@ -184,7 +187,7 @@ class CircularBuffer {
       }
     } else {
       //Estoy en primera pagina del libro
-      print("PRIMERA PAGINA DEL LIBRO");
+      print("primera pagina buffer -> " + buffer.length.toString());
       page = buffer.substring(currentptr, pageCharacters);
     }
     print(" END leerIzda: buffer -> " +

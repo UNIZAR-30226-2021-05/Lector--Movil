@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
+import 'package:libros/src/models/Bookmarks.dart';
 import 'package:libros/src/models/CircularBuffer.dart';
 import 'package:libros/src/models/userFacade.dart';
 import 'package:libros/src/models/bookFacade.dart';
+import 'package:libros/src/pages/theme/all_bookmarks.dart';
 import 'package:libros/src/storeUserInfo/SessionManager.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
@@ -28,10 +30,12 @@ class _BookPageState extends State<BookPage> {
   String destino = "";
 
   //Variables de preferencias del usuario
-  int colorBg;
+  Color colorBg;
   int colorLetra;
   int tamanyoLetra;
   String tipoLetra;
+
+
   bool loaded = false;
   TextEditingController _textFieldController = TextEditingController();
   TextEditingController _textFieldController2 = TextEditingController();
@@ -59,242 +63,261 @@ class _BookPageState extends State<BookPage> {
     data = ModalRoute.of(context).settings.arguments;
     if (loaded) {
       return Scaffold(
-        body: SafeArea(
-          child: GestureDetector(
-            onHorizontalDragStart: (details) {
-              setState(() {
-                print("dragStart");
-                numRebotes = 0; //Reseteo rebotes
-                drag = true; //Permiso para hacer drag
-              });
-            },
-            onHorizontalDragUpdate: (details) {
-              int sensitivity = 8;
-              if (details.delta.dx < -sensitivity) {
+        backgroundColor: colorBg,
+        body: SingleChildScrollView(
+          child: SafeArea(
+            child: GestureDetector(
+              onHorizontalDragStart: (details) {
                 setState(() {
-                  if (drag)
-                    buffer.leerDcha().then((String t) {
-                      numPagina++;
-                      texto = t;
-                    });
-                  numRebotes++; //Recibido rebote
-                  drag = numRebotes < 1; //Actualizo permiso
+                  print("dragStart");
+                  numRebotes = 0; //Reseteo rebotes
+                  drag = true; //Permiso para hacer drag
                 });
-              } else if (details.delta.dx > sensitivity) {
-                setState(() {
-                  if (drag) {
-                    buffer.leerIzda().then((String t) {
-                      texto = t;
-                      if (numPagina > 1) numPagina--;
-                    });
-                    numRebotes++; //Recibido rebote
-                    drag = numRebotes < 1; //Actualizo permiso
-                  }
-                });
-              }
-            },
-            child: Column(
-              children: [
-                Container(
-                  height: 600,
-                  child: ListView(
+              },
+              onHorizontalDragUpdate: (details) {
+                int sensitivity = 8;
+                if (details.delta.dx < -sensitivity) {
+                    if (drag)
+                      buffer.leerDcha().then((String t) {
+                        setState(() {
+                          print("REBOTE DCHAA");
+                          numPagina++;
+                          texto = t;
+                          numRebotes++; //Recibido rebote
+                          drag = numRebotes < 1; //Actualizo permiso
+                        });
+                      });
+
+                } else if (details.delta.dx > sensitivity){
+                    if (drag) {
+                      print("REBOTE IZDAA");
+                       buffer.leerIzda().then((String t) {
+                        setState(() {
+                          texto = t;
+                          if (numPagina > 1) numPagina--;
+                          numRebotes++; //Recibido rebote
+                          drag = numRebotes < 1; //Actualizo permiso
+                        });
+                      });
+                    }
+                }
+              },
+              child: Column(
+                children: [
+                  SizedBox(height: 1),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      SizedBox(height: 1),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          SizedBox(width: 1),
-                          IconButton(
-                              icon: Icon(Icons.arrow_back_ios),
-                              onPressed: () {
-                                updateUserBookState(data["book"].isbn,
-                                    buffer.getCurrentOffset(), true);
-                                Navigator.pop(context);
-                              }), //Este es el boton para ir hacia atrás
+                      SizedBox(width: 1),
+                      IconButton(
+                          icon: Icon(Icons.arrow_back_ios),
+                          onPressed: () {
+                            updateUserBookState(data["book"].isbn,
+                                buffer.getCurrentOffset(), true);
+                            Navigator.pop(context);
+                          }), //Este es el boton para ir hacia atrás
 
-                          Text(
-                            data["book"].title,
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: Colors.blue[800],
-                                fontSize: 25),
-                          ),
-                          IconButton(
-                              icon: Icon(Icons.bookmark),
-                              onPressed: () {
-                                showDialog(
-                                    context: context,
-                                    builder: (BuildContext context) {
-                                      return AlertDialog(
-                                          title: Center(
-                                              child: Text("Añadir un bookmark")),
-                                          content: Column(
-                                            children: [
-                                              TextField(
-                                                onChanged: (value) {
-                                                  tituloBookmark = value;
-                                                },
-                                                decoration: InputDecoration(
-                                                    //border: OutlineInputBorder(),
-                                                    hintText: 'Titulo'),
-                                              ),
-                                              SizedBox(height: 30),
-                                              TextField(
-                                                onChanged: (value) {
-                                                  cuerpoBookmark = value;
-                                                },
-                                                decoration: InputDecoration(
-                                                    //border: OutlineInputBorder(),
-                                                    hintText: 'Cuerpo'),
-                                              ),
-                                            ],
-                                          ),
-                                          actions: <Widget>[
-                                            FlatButton(
-                                              child: Text('Cancelar'),
-                                              onPressed: Navigator.of(context).pop,
-                                            ),
-                                            FlatButton(
-                                              child: Text('Añadir'),
-                                              onPressed: () {
-                                                String isbn = data["book"].isbn;
-                                                String offset =
-                                                    '0'; //Aqui hay que llamar al currentOffset segun el libro
-
-                                                postBookmark(isbn, tituloBookmark,
-                                                    cuerpoBookmark, offset);
-
-                                                Navigator.of(context).pop();
-                                              },
-                                            )
-                                          ]);
-                                    });
-                              }), //Este es el boton para añadir bookmarks
-                          SizedBox(width: 1),
-                          IconButton(
-                              icon: Icon(Icons.send),
-                              onPressed: () {
-                                AlertDialog alert = AlertDialog(
-                                  title: Center(
-                                    child: Text('Envía tu fragmento'),
-                                  ),
-                                  content: Column(
-                                    children: [
-                                      Text(
-                                          "Atención! Usted va a ser redirigido a su plataforma de "
-                                          "correo electrónico. Asegurese de copiar el fragmento de texto que quiere enviar."),
-                                      Padding(
-                                        padding: const EdgeInsets.only(top: 20.0),
-                                        child: TextField(
-                                          keyboardType: TextInputType.emailAddress,
-                                          onChanged: (value) {
-                                            setState(() {
-                                              destino = value;
-                                            });
-                                          },
-                                          decoration: InputDecoration(
-                                              //border: OutlineInputBorder(),
-                                              hintText: 'Destino...'),
-                                        ),
-                                      )
-                                    ],
-                                  ),
-                                  actions: <Widget>[
-                                    FlatButton(
-                                      child: Text('IR'),
-                                      onPressed: () {
-                                        Navigator.of(context).pop();
-                                        final Uri _emailLaunchUri = Uri(
-                                            scheme: 'mailto',
-                                            path: destino,
-                                            queryParameters: {
-                                              'subject': asunto +
-                                                  data["book"].title +
-                                                  " desde BrainBook"
-                                            });
-                                        print(_emailLaunchUri);
-                                        launch(_emailLaunchUri.toString());
-                                      },
-                                    )
-                                  ],
-                                );
-                                showDialog(
-                                  context: context,
-                                  builder: (BuildContext context) {
-                                    return alert;
-                                  },
-                                );
-                              }),
-                          IconButton(
-                              icon: Icon(Icons.rate_review),
-                              onPressed: () {
-                                AlertDialog alert = AlertDialog(
-                                  title: Center(
-                                    child: Text('Evalúa este libro'),
-                                  ),
-                                  content: Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                    children: <Widget>[
-                                      _buildStar(1),
-                                      _buildStar(2),
-                                      _buildStar(3),
-                                      _buildStar(4),
-                                      _buildStar(5),
-                                    ],
-                                  ),
-                                  actions: <Widget>[
-                                    FlatButton(
-                                      child: Text('Cancelar'),
-                                      onPressed: Navigator.of(context).pop,
-                                    ),
-                                    FlatButton(
-                                      child: Text('EVALUAR'),
-                                      onPressed: () {
-                                        Navigator.of(context).pop(_stars);
-                                        enviarValoracion(data["book"].isbn, _stars);
-                                      },
-                                    )
-                                  ],
-                                );
-                                showDialog(
-                                  context: context,
-                                  builder: (BuildContext context) {
-                                    return alert;
-                                  },
-                                );
-                              }), //Este es el boton para añadir bookmarks
-                          SizedBox(width: 1),
-                        ],
-                      ),
-                      SizedBox(height: 18),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Container(
-                          padding: EdgeInsets.all(12),
-                          decoration: BoxDecoration(
-                              //color: Color(colorBg),
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(12)),
-                          child: Center(
-                            child: SizedBox(
-                                height: 610,
-                                width: 350,
-                                child: SelectableText(
-                                  texto,
-                                  style: TextStyle(
-                                      color: Color(colorLetra), fontSize: 15.0),
-                                )),
-                          ),
+                      Container(
+                        width: 150,
+                        child: Text(
+                          data["book"].title,
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: Colors.blue[800],
+                              fontSize: 25),
                         ),
                       ),
+                      IconButton(
+                          icon: Icon(Icons.bookmark),
+                          onPressed: () async {
+                            List<Bookmark> bm = [];
+                            bm = await getBookmarks(data["book"].isbn);
+                            showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return AlertDialog(
+                                      title: Center(
+                                          child: Text("Añadir un bookmark")),
+                                      content: Column(
+                                        children: [
+                                          TextField(
+                                            onChanged: (value) {
+                                              tituloBookmark = value;
+                                            },
+                                            decoration: InputDecoration(
+                                              //border: OutlineInputBorder(),
+                                                hintText: 'Titulo'),
+                                          ),
+                                          SizedBox(height: 30),
+                                          TextField(
+                                            onChanged: (value) {
+                                              cuerpoBookmark = value;
+                                            },
+                                            decoration: InputDecoration(
+                                              //border: OutlineInputBorder(),
+                                                hintText: 'Cuerpo'),
+                                          ),
+                                          Padding(
+                                            padding:
+                                            const EdgeInsets.only(top: 12.0),
+                                            child: ElevatedButton(
+                                              child: Text('Mis bookmarks'),
+                                              onPressed: () {
+                                                Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                        builder: (context) =>
+                                                            AllBookmarks(
+                                                                data["book"]
+                                                                    .isbn)));
+                                              },
+                                            ),
+                                          )
+                                        ],
+                                      ),
+                                      actions: <Widget>[
+                                        FlatButton(
+                                          child: Text('Cancelar'),
+                                          onPressed: Navigator.of(context).pop,
+                                        ),
+                                        FlatButton(
+                                          child: Text('Añadir'),
+                                          onPressed: () async {
+                                            String isbn = data["book"].isbn;
+                                            int ofset = 0;
+                                            await getCurrentOffset(isbn)
+                                                .then((int result) {
+                                              // setState(() {
+                                              ofset = result;
+                                              //});
+                                            });
 
+                                            postBookmark(isbn, tituloBookmark,
+                                                cuerpoBookmark, ofset.toString());
+
+                                            Navigator.of(context).pop();
+                                          },
+                                        )
+                                      ]);
+                                });
+                          }), //Este es el boton para añadir bookmarks
+                      SizedBox(width: 1),
+                      IconButton(
+                          icon: Icon(Icons.send),
+                          onPressed: () {
+                            AlertDialog alert = AlertDialog(
+                              title: Center(
+                                child: Text('Envía tu fragmento'),
+                              ),
+                              content: Column(
+                                children: [
+                                  Text(
+                                      "Atención! Usted va a ser redirigido a su plataforma de "
+                                          "correo electrónico. Asegurese de copiar el fragmento de texto que quiere enviar."),
+                                  Padding(
+                                    padding: const EdgeInsets.only(top: 20.0),
+                                    child: TextField(
+                                      keyboardType: TextInputType.emailAddress,
+                                      onChanged: (value) {
+                                        setState(() {
+                                          destino = value;
+                                        });
+                                      },
+                                      decoration: InputDecoration(
+                                        //border: OutlineInputBorder(),
+                                          hintText: 'Destino...'),
+                                    ),
+                                  )
+                                ],
+                              ),
+                              actions: <Widget>[
+                                FlatButton(
+                                  child: Text('IR'),
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                    final Uri _emailLaunchUri = Uri(
+                                        scheme: 'mailto',
+                                        path: destino,
+                                        queryParameters: {
+                                          'subject': asunto +
+                                              data["book"].title +
+                                              " desde BrainBook"
+                                        });
+                                    print(_emailLaunchUri);
+                                    launch(_emailLaunchUri.toString());
+                                  },
+                                )
+                              ],
+                            );
+                            showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return alert;
+                              },
+                            );
+                          }),
+                      IconButton(
+                          icon: Icon(Icons.rate_review),
+                          onPressed: () {
+                            AlertDialog alert = AlertDialog(
+                              title: Center(
+                                child: Text('Evalúa este libro'),
+                              ),
+                              content: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                children: <Widget>[
+                                  _buildStar(1),
+                                  _buildStar(2),
+                                  _buildStar(3),
+                                  _buildStar(4),
+                                  _buildStar(5),
+                                ],
+                              ),
+                              actions: <Widget>[
+                                FlatButton(
+                                  child: Text('Cancelar'),
+                                  onPressed: Navigator.of(context).pop,
+                                ),
+                                FlatButton(
+                                  child: Text('EVALUAR'),
+                                  onPressed: () {
+                                    Navigator.of(context).pop(_stars);
+                                    enviarValoracion(data["book"].isbn, _stars);
+                                  },
+                                )
+                              ],
+                            );
+                            showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return alert;
+                              },
+                            );
+                          }), //Este es el boton para añadir bookmarks
+                      SizedBox(width: 1),
                     ],
-
                   ),
-                ),
-                SizedBox(height: 4),
-                Center(child: Text(numPagina.toString())),
-              ],
+                  SizedBox(height: 18),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Container(
+                      height: 500,
+                      padding: EdgeInsets.all(12),
+                      decoration: BoxDecoration(
+                          color: colorBg,
+                          //color: Colors.white,
+                          borderRadius: BorderRadius.circular(12)),
+                      child: SelectableText(
+                        texto,
+                        style: TextStyle(
+                            color: Color(colorLetra), fontSize: tamanyoLetra.toDouble()),
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 4),
+                  Center(child: Text(numPagina.toString())),
+                ],
+              ),
             ),
           ),
         ),
@@ -335,24 +358,32 @@ class _BookPageState extends State<BookPage> {
     jsonResponse = json.decode(response.body);
     print(jsonResponse);
     setState(() {
-      tamanyoLetra = 14; //jsonResponse["tamanoLetra"];
-      tipoLetra = jsonResponse["tipoLetra"];
+    /*  colorBg = jsonResponse["colorBg"];
+      colorLetra = jsonResponse["colorLetra"];
+      tamanyoLetra = jsonResponse["tamanoLetra"];
+      tipoLetra = jsonResponse["tipoLetra"];*/
+
+      tamanyoLetra = jsonResponse["tamanoLetra"];
+      if(tamanyoLetra < 10 || tamanyoLetra > 15) {
+        tamanyoLetra=14;
+      }
+
       if (jsonResponse["colorBg"] == "Blanco") {
-        colorBg = Colors.white.value;
+        colorBg = Colors.white;
       } else if (jsonResponse["colorBg"] == "Negro") {
-        colorBg = Colors.black.value;
+        colorBg = Colors.black;
       } else if (jsonResponse["colorBg"] == "Verde") {
-        colorBg = Colors.green.value;
+        colorBg = Colors.green;
       } else if (jsonResponse["colorBg"] == "Azul") {
-        colorBg = Colors.blue.value;
+        colorBg = Colors.blue;
       } else if (jsonResponse["colorBg"] == "Rojo") {
-        colorBg = Colors.red.value;
+        colorBg = Colors.red;
       } else if (jsonResponse["colorBg"] == "white") {
-        colorBg = Colors.white.value;
+        colorBg = Colors.white;
       } else if (jsonResponse["colorBg"] == "black") {
-        colorBg = Colors.black.value;
+        colorBg = Colors.black;
       } else {
-        colorBg = Colors.orange.value;
+        colorBg = Colors.orange;
       }
 
       if (jsonResponse["colorLetra"] == "Blanco") {
@@ -372,6 +403,7 @@ class _BookPageState extends State<BookPage> {
       } else {
         colorLetra = Colors.orange.value;
       }
+
       loaded = true;
     });
   }

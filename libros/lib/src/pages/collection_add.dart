@@ -43,7 +43,7 @@ class _CollectionAddState extends State<CollectionAdd> {
             elevation: 0.0,
           ),
           body: Padding(
-            padding: const EdgeInsets.fromLTRB(20.0, 20.0, 30.0, 20.0),
+            padding: const EdgeInsets.fromLTRB(10.0, 20.0, 30.0, 10.0),
             child: Column(
               children: [
                 Expanded(
@@ -77,7 +77,7 @@ class _CollectionAddState extends State<CollectionAdd> {
     return Column(
       children: [
         Container(
-          margin: EdgeInsets.fromLTRB(30.0, 20.0, 30.0, 0.0),
+          margin: EdgeInsets.fromLTRB(15.0, 20.0, 10.0, 0.0),
           height: 70,
           child: Column(
             children: [
