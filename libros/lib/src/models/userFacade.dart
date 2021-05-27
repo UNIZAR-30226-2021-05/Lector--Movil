@@ -45,12 +45,15 @@ Future<bool> registrarUsuario(User usuario, BuildContext context) async {
   print("Esto era el json response");
   if (response.statusCode == 201) {
     print(jsonResponse['key']);
+    List<String> bl = [];
+
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     sharedPreferences.setString("key", jsonResponse['key']);
     sharedPreferences.setString("nombreUsuario", usuario.nombreUsuario);
     sharedPreferences.setString("email", usuario.email);
     sharedPreferences.setString("contrasenya", usuario.pass);
     sharedPreferences.setString("pathFoto", "kk.jpg");
+    sharedPreferences.setStringList("blacklist", bl);
 
     return true;
   } else {
@@ -73,11 +76,13 @@ Future<bool> loginUsuario(String username, String pass) async {
 
   //El codigo de respuesta para si hay usuario correcto o incorrecto, es 200 para OK y 400 para credenciales invalidas
   if (response.statusCode == 200) {
+    List<String> bl = [];
     print(jsonResponse['key']);
     sharedPreferences.setString("key", jsonResponse['key']);
     sharedPreferences.setString("nombreUsuario", username);
     getAndStoreUserInfo();
     sharedPreferences.setString("contrasenya", pass);
+    sharedPreferences.setStringList("blacklist", bl);
     return true;
   } else {
     print('Usuario o contraseña incorrecto');
@@ -171,6 +176,31 @@ void updateUserInfo(String email, String pathPhoto, String username) async {
   print(key);
   print("Le paso: " + username + " " + pathPhoto + " " + email);
   final toSend = {"username": username, "email": email};
+  print(username);
+  String api = apiUrlGetUserInfo + username;
+  Uri myUri = Uri.parse(api);
+  print(api);
+
+  http.Response response = await http.put(
+    myUri,
+    body: toSend,
+    headers: {'Authorization': 'Token $key'},
+  );
+  var jsonResponse = null;
+  print(response.body);
+  jsonResponse = json.decode(response.body);
+  print(jsonResponse);
+  s.setEmail(jsonResponse["email"]);
+  s.setNombreUsuario(jsonResponse["username"]);
+  s.setPathPhoto(jsonResponse["pathFoto"]);
+}
+
+void updatePhoto(String email, String pathPhoto, String username) async {
+  SessionManager s = new SessionManager();
+  String key = await s.getKey();
+  print(key);
+  print("Le paso: " + username + " " + pathPhoto + " " + email);
+  final toSend = {"username": username, "email": email, "pathFoto": pathPhoto};
   print(username);
   String api = apiUrlGetUserInfo + username;
   Uri myUri = Uri.parse(api);

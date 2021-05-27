@@ -233,7 +233,6 @@ class _BookPageState extends State<BookPage> {
                                             data["book"].title +
                                             " desde BrainBook"
                                       });
-                                  print(_emailLaunchUri);
                                   launch(_emailLaunchUri.toString());
                                 },
                               )
