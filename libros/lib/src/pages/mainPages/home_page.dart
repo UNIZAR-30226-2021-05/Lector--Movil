@@ -23,12 +23,14 @@ import 'profile_page.dart';
 class HomePage extends StatefulWidget {
   @override
   _HomePageState createState() => _HomePageState();
+
 }
 
 class _HomePageState extends State<HomePage> {
   //Índice inicial del NavigationBar
   int currentIndex = 0;
-
+  bool firstTime = true;
+  Map data = {};
   PageController pageController = PageController(
     initialPage: 0,
     keepPage: true,
@@ -97,11 +99,19 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    data = ModalRoute.of(context).settings.arguments;
+    /*if(data != null && data.isNotEmpty && firstTime){
+      print("INDICE PASADO A HOME " + data["currentIndex"].toString());
+      currentIndex = data["currentIndex"];
+      data.isEmpty;
+      firstTime = false;
+    }*/
     return Scaffold(
       body: buildPageView(),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: currentIndex,
         onTap: (index) {
+          print("INDICEE;" + index.toString());
           bottomTapped(index);
         },
         items: buildItems(),

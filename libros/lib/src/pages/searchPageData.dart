@@ -53,81 +53,47 @@ class _SearchPageDataState extends State<SearchPageData> {
   Widget build(BuildContext context) {
     var editingController;
     return Scaffold(
-      body: SafeArea(
-          child: Padding(
-              padding: const EdgeInsets.fromLTRB(20.0, 20.0, 30.0, 0.0),
-              child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        IconButton(
-                          icon: Icon(Icons.arrow_back_ios),
-                          onPressed: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => SearchPage()));
-                          },
-                        ),
-                        Text(
-                          "Busqueda",
-                          style: TextStyle(
-                            fontSize: 25.0,
-                            letterSpacing: 1.0,
-                          ),
-                        ),
-                      ],
-                    ),
-                    Divider(
-                      height: 20.0,
-                      thickness: 2,
-                    ),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    barraBusqueda(editingController, libro),
-                    Padding(
-                      padding: const EdgeInsets.only(
-                          top: 30.0, left: 8.0, right: 8.0),
-                      child: Row(
+      body: SingleChildScrollView(
+        child: SafeArea(
+            child: Padding(
+                padding: const EdgeInsets.fromLTRB(20.0, 20.0, 30.0, 0.0),
+                child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text(
-                            "En tu biblioteca",
-                            style: TextStyle(fontSize: 25),
-                          ),
-                          InkWell(
-                            child: Text(
-                              "Ver todo >>",
-                              style: TextStyle(fontSize: 15),
-                            ),
-                            onTap: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) =>
-                                          SearchedBookLibrary(book: libro)));
+                          IconButton(
+                            icon: Icon(Icons.arrow_back_ios),
+                            onPressed: () {
+                              Navigator.of(context).pop();
                             },
+                          ),
+                          Text(
+                            "Busqueda",
+                            style: TextStyle(
+                              fontSize: 25.0,
+                              letterSpacing: 1.0,
+                            ),
                           ),
                         ],
                       ),
-                    ),
-                    SizedBox(
-                      height: 15,
-                    ),
-                    Container(
-                        height: 200, child: listarLibrosBiblioteca(libro)),
-                    Padding(
-                      padding: const EdgeInsets.only(
-                          top: 30.0, left: 8.0, right: 8.0),
-                      child: Container(
+                      Divider(
+                        height: 20.0,
+                        thickness: 2,
+                      ),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      barraBusqueda(editingController, libro),
+                      Padding(
+                        padding: const EdgeInsets.only(
+                            top: 30.0, left: 8.0, right: 8.0),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
-                              "Descubre",
+                              "En tu biblioteca",
                               style: TextStyle(fontSize: 25),
                             ),
                             InkWell(
@@ -140,21 +106,54 @@ class _SearchPageDataState extends State<SearchPageData> {
                                     context,
                                     MaterialPageRoute(
                                         builder: (context) =>
-                                            SearchedBookDiscover(book: libro)));
+                                            SearchedBookLibrary(book: libro)));
                               },
                             ),
-                            //LISTAR TODOS AQUELLOS LIBROS
-                            //
                           ],
                         ),
-                        //SE LISTAN LOS LIBROS DE LA BUSQUEDA EN ROW
                       ),
-                    ),
-                    SizedBox(
-                      height: 15,
-                    ),
-                    Container(height: 200, child: listarLibrosDescubre()),
-                  ]))),
+                      SizedBox(
+                        height: 15,
+                      ),
+                      Container(
+                          height: 200, child: listarLibrosBiblioteca(libro)),
+                      Padding(
+                        padding: const EdgeInsets.only(
+                            top: 30.0, left: 8.0, right: 8.0),
+                        child: Container(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                "Descubre",
+                                style: TextStyle(fontSize: 25),
+                              ),
+                              InkWell(
+                                child: Text(
+                                  "Ver todo >>",
+                                  style: TextStyle(fontSize: 15),
+                                ),
+                                onTap: () {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              SearchedBookDiscover(book: libro)));
+                                },
+                              ),
+                              //LISTAR TODOS AQUELLOS LIBROS
+                              //
+                            ],
+                          ),
+                          //SE LISTAN LOS LIBROS DE LA BUSQUEDA EN ROW
+                        ),
+                      ),
+                      SizedBox(
+                        height: 15,
+                      ),
+                      Container(height: 200, child: listarLibrosDescubre()),
+                    ]))),
+      ),
     );
   }
 

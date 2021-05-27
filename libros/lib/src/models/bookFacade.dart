@@ -378,6 +378,16 @@ void addBookToUser(String isbn) async {
   print(response.body);
 }
 
+void delBookToUser(String isbn) async {
+  print("delbooktouser");
+  SessionManager s = new SessionManager();
+  String username = await s.getNombreUsuario();
+
+  Uri myUri = Uri.parse(apiAddBookToUser + "delete/" + username + "/" + isbn);
+  http.Response response = await http.post(myUri);
+  print(response.body);
+}
+
 void updateUserBookState(String isbn, int currentOffset, bool leyendo) async {
   SessionManager s = new SessionManager();
   String username = await s.getNombreUsuario();

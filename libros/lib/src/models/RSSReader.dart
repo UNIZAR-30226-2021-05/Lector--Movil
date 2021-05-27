@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:webfeed/domain/rss_feed.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'NewsModel.dart';
+import 'newsModel.dart';
 import 'package:http/http.dart' as http;
 
 class RSSReader extends StatelessWidget {
