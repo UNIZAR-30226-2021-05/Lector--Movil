@@ -38,6 +38,7 @@ class _BookDetailsDiscoverPage extends State<BookDetailsDiscoverPage> {
                         width: 120,
                         child: Image.network(
                           data["book"].pathCover,
+                          fit: BoxFit.fitHeight,
                         ),
                       ),
                       SizedBox(width: 20.0),
