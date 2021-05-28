@@ -33,7 +33,14 @@ class _BookDetailsDiscoverPage extends State<BookDetailsDiscoverPage> {
                 child: Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: <Widget>[
-                      Image.network(data["book"].pathCover),
+                      SizedBox(
+                        height: 220,
+                        width: 120,
+                        child: Image.network(
+                          data["book"].pathCover,
+                          fit: BoxFit.fitHeight,
+                        ),
+                      ),
                       SizedBox(width: 20.0),
                       Flexible(
                         child: Column(
@@ -101,6 +108,7 @@ class _BookDetailsDiscoverPage extends State<BookDetailsDiscoverPage> {
       ),
     );
   }
+
   dynamic anyadirConfirmacion() {
     return showDialog(
       context: context,
