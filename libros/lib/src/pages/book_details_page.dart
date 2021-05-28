@@ -47,7 +47,9 @@ class _BookDetailsPageState extends State<BookDetailsPage> {
                 child: Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: <Widget>[
-                      Image.network(data["book"].pathCover),
+                      Container(
+                          width: 150,
+                          child: Image.network(data["book"].pathCover)),
                       SizedBox(width: 20.0),
                       Flexible(
                         child: Column(
